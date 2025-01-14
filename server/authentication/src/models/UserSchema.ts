@@ -1,8 +1,11 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { UserType } from "../Types/types";
 
 const UserSchema: Schema = new Schema(
     {
+        name: {
+            type: String,
+        },
         email: {
             type: String,
             required: true,
@@ -13,15 +16,20 @@ const UserSchema: Schema = new Schema(
         },
         role: {
             type: String,
-            required: true
+            required: true,
+            enum: ['student', 'recruiter', 'admin']
         },
         status: {
             type: String,
-            required: true
+            required: true,
+            enum: ['active', 'blocked', 'deleted'],
+            default: 'active'
         },
         subscriptionType: {
             type: String,
-            required: true
+            required: true,
+            enum: ['free', 'premium'],
+            default: 'free'
         }
     },
     {

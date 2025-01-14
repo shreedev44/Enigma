@@ -1,13 +1,26 @@
 import User from '../models/UserSchema'
 import { UserType } from '../Types/types';
+import { IUserRepository } from '../interfaces/user/IUserRepository';
 
-class UserRepository{
-    async create(user: Partial<UserType>): Promise<UserType> {
-        return User.create(user)
+class UserRepository implements IUserRepository{
+    async create(user: UserType): Promise<UserType> {
+        try{
+            const userData = await User.create(user)
+            return userData
+        } catch(err) {
+            console.error(err)
+            throw new Error("Error creating user")
+        }
     }
 
     async findByEmail(email: string): Promise<UserType | null> {
-        return User.findOne({email})
+        try {
+            const user = await User.findOne({email})
+            return user
+        } catch (err) {
+            console.error(err)
+            throw new Error("Error finding user by email")
+        }
     }
 }
 
