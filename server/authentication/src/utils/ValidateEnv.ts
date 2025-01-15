@@ -13,8 +13,8 @@ export default function validateEnv() {
     if(!env.JWT_REFRESH_SECRET) {
         throw new Error("JWT_REFRESH_SECRET is not found in the env")
     }
-    if(!env.REDIS_PORT) {
-        throw new Error("REDIS_PORT is not found in the env")
+    if(!env.REDIS_URI) {
+        throw new Error("REDIS_URI is not found in the env")
     }
     if(!env.USER_EMAIL) {
         throw new Error("USER_EMAIL is not found in the env")

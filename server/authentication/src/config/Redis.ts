@@ -6,7 +6,7 @@ let redisClient: RedisClientType;
 const initRedisClient = () => {
   if (!redisClient) {
     redisClient = createClient({
-      url: `redis://127.0.0.1:${env.REDIS_PORT}`,
+      url: env.REDIS_URI,
     });
 
     redisClient.on("connect", () => {
