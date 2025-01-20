@@ -1,22 +1,78 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
-import Navbar from '@/components/recruiterComponents/Navbar';
-import SignIn from '@/pages/recruiter/SignIn';
-import Signup from '@/pages/recruiter/Signup';
-import Home from '@/pages/recruiter/Home';
+import { Navigate, Route, Routes } from "react-router-dom";
+import Navbar from "@/components/recruiterComponents/Navbar";
+import { recruiterRoutes } from "@/constants/routeUrl";
+import useGetRecruiter from "../hooks/useGetRecruiter";
 
+import SignIn from "@/pages/recruiter/SignIn";
+import Signup from "@/pages/recruiter/Signup";
+import Home from "@/pages/recruiter/Home";
+import Otp from "@/pages/recruiter/Otp";
 
 const RecruiterRoutes = () => {
+  const user = useGetRecruiter();
   return (
     <>
       <Navbar />
       <Routes>
-        <Route path='/' element={<Home />}/>
-        <Route path='/login' element={<SignIn />}/>
-        <Route path='/signin' element={<SignIn />}/>
-        <Route path='/signup' element={<Signup />}/>
+        <Route
+          path="/"
+          element={
+            <Navigate
+              to={
+                user
+                  ? `/recruiter${recruiterRoutes.HOME}`
+                  : `/recruiter${recruiterRoutes.SIGNIN}`
+              }
+            />
+          }
+        />
+        <Route
+          path="/login"
+          element={<Navigate to={`/recruiter${recruiterRoutes.SIGNIN}`} />}
+        />
+        <Route
+          path={recruiterRoutes.SIGNIN}
+          element={
+            user ? (
+              <Navigate to={`/recruiter${recruiterRoutes.HOME}`} />
+            ) : (
+              <SignIn />
+            )
+          }
+        />
+        <Route
+          path={recruiterRoutes.SIGNUP}
+          element={
+            user ? (
+              <Navigate to={`/recruiter${recruiterRoutes.HOME}`} />
+            ) : (
+              <Signup />
+            )
+          }
+        />
+        <Route
+          path={recruiterRoutes.VERIFY_OTP}
+          element={
+            user ? (
+              <Navigate to={`/recruiter${recruiterRoutes.HOME}`} />
+            ) : (
+              <Otp />
+            )
+          }
+        />
+        <Route
+          path={recruiterRoutes.HOME}
+          element={
+            user ? (
+              <Home />
+            ) : (
+              <Navigate to={`/recruiter${recruiterRoutes.SIGNIN}`} />
+            )
+          }
+        />
       </Routes>
     </>
-  )
-}
+  );
+};
 
-export default RecruiterRoutes
+export default RecruiterRoutes;

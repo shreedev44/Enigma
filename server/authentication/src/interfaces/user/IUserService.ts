@@ -1,7 +1,19 @@
-import { Role, UserType } from "../../Types/types";
+import {
+  GoogleAuthUserType,
+  LoginResponseType,
+  Role,
+  UserType,
+} from "../../Types/types";
 
 export interface IUserService {
-    register(user: UserType): Promise<string>;
-    verifyOtp(otp: string, email: string): Promise<void>;
-    verifyUser(email: string, password: string, role: Role): Promise<{accessToken: string, refreshToken: string, user: UserType}>;
+  register(user: UserType): Promise<string>;
+  verifyOtp(otp: string, email: string): Promise<void>;
+  resendOtp(email: string): Promise<void>;
+  verifyUser(
+    email: string,
+    password: string,
+    role: Role
+  ): Promise<LoginResponseType>;
+  googleAuth(user: GoogleAuthUserType, role: Role): Promise<LoginResponseType>;
+  githubAuth(code: string): Promise<LoginResponseType>;
 }

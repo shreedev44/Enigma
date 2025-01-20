@@ -13,10 +13,10 @@ class StudentRepository implements IStudentRepository{
         }
     }
 
-    async findByUserId(userId: string): Promise<StudentProfileType | null> {
+    async findByUserId(userId: string): Promise<StudentProfileType> {
         try {
             const user = await Student.findOne({userId})
-            return user
+            return user as StudentProfileType
         } catch (err) {
             console.error(err)
             throw new Error("Error finding profile by userId")

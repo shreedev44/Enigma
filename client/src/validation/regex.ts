@@ -4,7 +4,7 @@ const passwordRegex = {
     letter: /[a-zA-Z]/,
     length: /^.{8,}$/,
     digit: /\d/,
-    specialChar: /[!@#$%^&*(),.?":{}|<>]/
+    specialChar: /[!@#$%^&*(),.?":{}|<>+-]/
 }
 
 export {

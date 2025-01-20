@@ -26,4 +26,46 @@ type RecruiterSignupFormAction =
   | { type: "SET_PASSWORD"; payload: string }
   | { type: "SET_CONFIRM_PASSWORD"; payload: string };
 
-export type { StudentSignupFormType, StudentSignupFormAction, RecruiterSignupFormType, RecruiterSignupFormAction };
+interface LoginType {
+  email: string;
+  password: string;
+}
+
+
+interface UserProfileType {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  githubProfile: string;
+  linkedinProfile: string;
+  userId: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface UserStoreType {
+  _id: string;
+  email: string;
+  role: "student" | "recruiter" | "admin" | "";
+  status: "active" | "blocked" | "deleted" | "";
+  accessToken: string | null;
+  profilePicture?: string;
+  name?: string;
+}
+
+interface ReduxStoreType {
+  student: UserStoreType;
+  recruiter: UserStoreType;
+  admin: UserStoreType
+}
+
+export type {
+  StudentSignupFormType,
+  StudentSignupFormAction,
+  RecruiterSignupFormType,
+  RecruiterSignupFormAction,
+  LoginType,
+  UserStoreType,
+  UserProfileType,
+  ReduxStoreType
+};

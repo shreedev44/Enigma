@@ -20,4 +20,10 @@ export const env = {
   get USER_PASS() {
     return process.env.USER_PASS!;
   },
+  get GITHUB_CLIENT_ID() {
+    return process.env.GITHUB_CLIENT_ID!;
+  },
+  get GITHUB_SECRET() {
+    return process.env.GITHUB_SECRET!;
+  }
 };

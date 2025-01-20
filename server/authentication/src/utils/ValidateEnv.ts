@@ -22,4 +22,10 @@ export default function validateEnv() {
     if(!env.USER_PASS) {
         throw new Error("USER_PASS is not found in the env")
     }
+    if(!env.GITHUB_CLIENT_ID) {
+        throw new Error("GITHUB_CLIENT_ID is not found in the env")
+    }
+    if(!env.GITHUB_SECRET) {
+        throw new Error("GITHUB_SECRET is not found in the env")
+    }
 }

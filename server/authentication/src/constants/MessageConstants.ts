@@ -2,6 +2,7 @@ export const Messages = {
     SERVER_ERROR: "Internel server error",
     USER_EXIST: "User already exist",
     OTP_ERROR: "Error while sending OTP, Try again later",
+    OTP_RESENT: "OTP has been resent successfully",
     INVALID_NAME: "Please enter a valid name (A - Z)",
     INVALID_EMAIL: "Please enter a valid email",
     PASSWORD_LENGTH: "Your password must be at least 8 characters long",
@@ -15,4 +16,7 @@ export const Messages = {
     USER_NOT_FOUND: "User not found, try to signup",
     PASSWORD_INCORRECT: "Incorrect password, try again",
     USER_BLOCKED: "Your are blocked from Enigma, Please contact support",
+    NO_ACCESS: "Unauthorized Access",
+    NO_EMAIL: "Your github email is not public",
+    USE_SOCIAL: "Your account is created using social account"
 }

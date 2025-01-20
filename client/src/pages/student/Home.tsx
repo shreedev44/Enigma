@@ -1,5 +1,4 @@
 
-
 const Home = () => {
   return (
     <div className="pt-24">
