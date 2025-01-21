@@ -71,4 +71,10 @@ userRouter.post(
   userController.verifyUser.bind(userController)
 );
 
+
+
+//! ------------- Common -------------- //
+userRouter.post("/changePassword", userController.changePassword.bind(userController))
+userRouter.patch("/resetPassword", userController.resetPassword.bind(userController))
+
 export default userRouter;

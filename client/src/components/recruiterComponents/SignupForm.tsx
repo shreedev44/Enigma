@@ -34,7 +34,7 @@ const SignupForm = ({ className, ...props }: React.ComponentProps<"div">) => {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-  const dispatchFun = useDispatch()
+  const dispatchFun = useDispatch();
   const { toast } = useToast();
 
   const initialFormData: RecruiterSignupFormType = {
@@ -113,7 +113,9 @@ const SignupForm = ({ className, ...props }: React.ComponentProps<"div">) => {
     if (response.success) {
       localStorage.setItem("email", response.data.email);
       setLoading(false);
-      navigate(`/recruiter${recruiterRoutes.VERIFY_OTP}`, { state: { fromSignup: true } });
+      navigate(`/recruiter${recruiterRoutes.VERIFY_OTP}`, {
+        state: { fromSignup: true },
+      });
       toast({
         description: "Verify your email with OTP",
       });
@@ -128,17 +130,17 @@ const SignupForm = ({ className, ...props }: React.ComponentProps<"div">) => {
 
   const googleSignin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      const decoded = await decodeToken(tokenResponse.access_token)
+      const decoded = await decodeToken(tokenResponse.access_token);
       const response = await googleAuth({
         email: decoded.email,
         companyName: decoded.name,
-        profilePicture: decoded.picture
-      })
+        profilePicture: decoded.picture,
+      });
 
-      if(response.success) {
+      if (response.success) {
         toast({
-          description: `Signed in successfully`
-        })
+          description: `Signed in successfully`,
+        });
         dispatchFun(
           setRecruiter({
             _id: response.data.user._id,
@@ -149,24 +151,24 @@ const SignupForm = ({ className, ...props }: React.ComponentProps<"div">) => {
             profilePicture: response.data.profile.profilePicture,
           })
         );
-        setLoading(false)
+        setLoading(false);
         navigate(`/recruiter/${recruiterRoutes.HOME}`);
       } else {
         toast({
-          variant: 'destructive',
-          description: response.error
-        })
-        setLoading(false)
+          variant: "destructive",
+          description: response.error,
+        });
+        setLoading(false);
       }
     },
     onError: () => {
       toast({
         description: `Google Authentication Failed`,
-        variant: 'destructive'
-      })
-      setLoading(false)
-    }
-  })
+        variant: "destructive",
+      });
+      setLoading(false);
+    },
+  });
 
   return (
     <div
@@ -209,7 +211,9 @@ const SignupForm = ({ className, ...props }: React.ComponentProps<"div">) => {
                 />
                 {error.field === "companyName" ? (
                   <p className="text-red-500 text-xs">{error.message}</p>
-                ) : (<></>)}
+                ) : (
+                  <></>
+                )}
               </div>
               <div className="grid gap-2">
                 <div className="flex justify-between">
@@ -234,20 +238,20 @@ const SignupForm = ({ className, ...props }: React.ComponentProps<"div">) => {
                 />
                 {error.field === "email" ? (
                   <p className="text-red-500 text-xs">{error.message}</p>
-                ) : (<></>)}
+                ) : (
+                  <></>
+                )}
               </div>
               <div className="grid gap-2">
-                <div className="flex items-center">
-                  <div className="flex justify-between">
-                    <Label htmlFor="password" className="mr-2">
-                      Password
-                    </Label>
-                    {error.field === "password" ? (
-                      <LuCircleAlert color="red" size={18} />
-                    ) : (
-                      <></>
-                    )}
-                  </div>
+                <div className="flex justify-between">
+                  <Label htmlFor="password" className="mr-2">
+                    Password
+                  </Label>
+                  {error.field === "password" ? (
+                    <LuCircleAlert color="red" size={18} />
+                  ) : (
+                    <></>
+                  )}
                 </div>
                 <div className="relative">
                   <Input
@@ -277,7 +281,9 @@ const SignupForm = ({ className, ...props }: React.ComponentProps<"div">) => {
                 </div>
                 {error.field === "password" ? (
                   <p className="text-red-500 text-xs">{error.message}</p>
-                ) : (<></>)}
+                ) : (
+                  <></>
+                )}
                 {isPasswordStrengthVisible ? (
                   <>
                     <Label htmlFor="passwordstrength">Password Strength</Label>
@@ -288,17 +294,15 @@ const SignupForm = ({ className, ...props }: React.ComponentProps<"div">) => {
                 )}
               </div>
               <div className="grid gap-2">
-                <div className="flex items-center">
-                  <div className="flex justify-between">
-                    <Label htmlFor="cpassword" className="mr-2">
-                      Confirm Password
-                    </Label>
-                    {error.field === "confirmPassword" ? (
-                      <LuCircleAlert color="red" size={18} />
-                    ) : (
-                      <></>
-                    )}
-                  </div>
+                <div className="flex justify-between">
+                  <Label htmlFor="cpassword" className="mr-2">
+                    Confirm Password
+                  </Label>
+                  {error.field === "confirmPassword" ? (
+                    <LuCircleAlert color="red" size={18} />
+                  ) : (
+                    <></>
+                  )}
                 </div>
                 <div className="relative">
                   <Input
@@ -327,7 +331,9 @@ const SignupForm = ({ className, ...props }: React.ComponentProps<"div">) => {
                 </div>
                 {error.field === "confirmPassword" ? (
                   <p className="text-red-500 text-xs">{error.message}</p>
-                ) : (<></>)}
+                ) : (
+                  <></>
+                )}
               </div>
               <Button
                 type="submit"
@@ -347,10 +353,15 @@ const SignupForm = ({ className, ...props }: React.ComponentProps<"div">) => {
                 </span>
               </div>
               <div className="grid grid-cols-1 gap-4">
-                <Button variant="outline" className="w-full" disabled={loading} onClick={() => {
-                  setLoading(true)
-                  googleSignin()
-                  }}>
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  disabled={loading}
+                  onClick={() => {
+                    setLoading(true);
+                    googleSignin();
+                  }}
+                >
                   <FaGoogle />
                 </Button>
               </div>
@@ -358,7 +369,9 @@ const SignupForm = ({ className, ...props }: React.ComponentProps<"div">) => {
                 Already an Enigma user?{" "}
                 <a
                   className="underline underline-offset-4 cursor-pointer"
-                  onClick={() => navigate(`/recruiter${recruiterRoutes.SIGNIN}`)}
+                  onClick={() =>
+                    navigate(`/recruiter${recruiterRoutes.SIGNIN}`)
+                  }
                 >
                   Sign In
                 </a>

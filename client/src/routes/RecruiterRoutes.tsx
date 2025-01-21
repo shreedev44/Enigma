@@ -7,6 +7,8 @@ import SignIn from "@/pages/recruiter/SignIn";
 import Signup from "@/pages/recruiter/Signup";
 import Home from "@/pages/recruiter/Home";
 import Otp from "@/pages/recruiter/Otp";
+import ForgotPassword from "@/pages/ForgotPassword";
+import ResetPassword from "@/pages/ResetPassword";
 
 const RecruiterRoutes = () => {
   const user = useGetRecruiter();
@@ -57,6 +59,26 @@ const RecruiterRoutes = () => {
               <Navigate to={`/recruiter${recruiterRoutes.HOME}`} />
             ) : (
               <Otp />
+            )
+          }
+        />
+        <Route
+          path={recruiterRoutes.FORGOT_PASSWORD}
+          element={
+            user ? (
+              <Navigate to={`/recruiter${recruiterRoutes.HOME}`} />
+            ) : (
+              <ForgotPassword />
+            )
+          }
+        />
+        <Route
+          path={recruiterRoutes.RESET_PASSWORD}
+          element={
+            user ? (
+              <Navigate to={`/recruiter${recruiterRoutes.HOME}`} />
+            ) : (
+              <ResetPassword />
             )
           }
         />

@@ -16,4 +16,6 @@ export interface IUserService {
   ): Promise<LoginResponseType>;
   googleAuth(user: GoogleAuthUserType, role: Role): Promise<LoginResponseType>;
   githubAuth(code: string): Promise<LoginResponseType>;
+  changePassword(email: string): Promise<void>;
+  resetPassword(token: string, password: string): Promise<void>;
 }

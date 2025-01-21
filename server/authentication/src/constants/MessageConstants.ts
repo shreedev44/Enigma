@@ -18,5 +18,8 @@ export const Messages = {
     USER_BLOCKED: "Your are blocked from Enigma, Please contact support",
     NO_ACCESS: "Unauthorized Access",
     NO_EMAIL: "Your github email is not public",
-    USE_SOCIAL: "Your account is created using social account"
+    USE_SOCIAL: "Your account is created using social account",
+    LINK_SENT: "Password reset link has been sent to your mail",
+    LINK_EXPIRED: "Your link has been expired",
+    PASSWORD_CHANGED: "Password has been changed successfully"
 }

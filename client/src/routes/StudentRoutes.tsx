@@ -8,6 +8,8 @@ import SignIn from "@/pages/student/SignIn";
 import Signup from "@/pages/student/Signup";
 import Home from "@/pages/student/Home";
 import Otp from "@/pages/student/Otp";
+import ForgotPassword from "@/pages/ForgotPassword";
+import ResetPassword from "@/pages/ResetPassword";
 
 const StudentRoutes = () => {
   const user = useGetUser();
@@ -36,7 +38,21 @@ const StudentRoutes = () => {
         />
         <Route
           path={studentRoutes.GITHUB_AUTH}
-          element={user ? <Navigate to={studentRoutes.HOME} /> : <GitHubCallback />}
+          element={
+            user ? <Navigate to={studentRoutes.HOME} /> : <GitHubCallback />
+          }
+        />
+        <Route
+          path={studentRoutes.FORGOT_PASSWORD}
+          element={
+            user ? <Navigate to={studentRoutes.HOME} /> : <ForgotPassword />
+          }
+        />
+        <Route
+          path={studentRoutes.RESET_PASSWORD}
+          element={
+            user ? <Navigate to={studentRoutes.HOME} /> : <ResetPassword />
+          }
         />
         <Route
           path={studentRoutes.HOME}

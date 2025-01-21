@@ -190,6 +190,10 @@ const SigninForm = ({ className, ...props }: React.ComponentProps<"div">) => {
                 ) : (<></>)}
               </div>
               <a
+                onClick={(e) => {
+                  e.preventDefault()
+                  navigate(`/recruiter${recruiterRoutes.FORGOT_PASSWORD}`)
+                }}
                 href="#"
                 className="ml-auto text-sm underline-offset-2 hover:underline"
               >

@@ -185,6 +185,10 @@ const SigninForm = ({ className, ...props }: React.ComponentProps<"div">) => {
                 ) : (<></>)}
               </div>
               <a
+                onClick={(e) => {
+                  e.preventDefault()
+                  navigate(studentRoutes.FORGOT_PASSWORD)
+                }}
                 href="#"
                 className="ml-auto text-sm underline-offset-2 hover:underline"
               >
@@ -219,7 +223,7 @@ const SigninForm = ({ className, ...props }: React.ComponentProps<"div">) => {
                 Don&apos;t have an account?{" "}
                 <a
                   className="underline underline-offset-4 cursor-pointer"
-                  onClick={() => navigate("/signup")}
+                  onClick={() => navigate(studentRoutes.SIGNUP)}
                 >
                   Sign Up
                 </a>

@@ -3,6 +3,7 @@ import { createHttpError } from "../utils/HttpError";
 import { HttpStatus } from "../constants/StatusConstants";
 import { Messages } from "../constants/MessageConstants";
 import otpPage from "../utils/OtpTemplate";
+import forgotPasswordPage from "../utils/ResetPasswordTemplate";
 import {
   GoogleAuthUserType,
   LoginResponseType,
@@ -21,6 +22,7 @@ import { IStudentRepository } from "../interfaces/student/IStudentRepository";
 import { ObjectId } from "mongoose";
 import { generateAccessToken, generateRefreshToken } from "../utils/Token";
 import { IRecruiterRepository } from "../interfaces/recruiter/IRecruiterRepository";
+import generateUID from "../utils/GenerateUID";
 
 export class UserService implements IUserService {
   constructor(
@@ -103,16 +105,16 @@ export class UserService implements IUserService {
   }
 
   async resendOtp(email: string): Promise<void> {
-    const storedData = await redisClient.get(email)
-    if(!storedData) {
-      throw createHttpError(HttpStatus.BAD_REQUEST, Messages.OTP_EXPIRED)
+    const storedData = await redisClient.get(email);
+    if (!storedData) {
+      throw createHttpError(HttpStatus.BAD_REQUEST, Messages.OTP_EXPIRED);
     }
 
-    const {userData} = JSON.parse(storedData)
+    const { userData } = JSON.parse(storedData);
 
-    const otp = otpGenerator()
+    const otp = otpGenerator();
 
-    await redisClient.setEx(email, 300, JSON.stringify({otp, userData}))
+    await redisClient.setEx(email, 300, JSON.stringify({ otp, userData }));
 
     let mailOptions = {
       from: env.USER_EMAIL,
@@ -148,8 +150,8 @@ export class UserService implements IUserService {
       throw createHttpError(HttpStatus.NOT_FOUND, Messages.USER_NOT_FOUND);
     }
 
-    if(!user.password) {
-      throw createHttpError(HttpStatus.BAD_REQUEST, Messages.USE_SOCIAL)
+    if (!user.password) {
+      throw createHttpError(HttpStatus.BAD_REQUEST, Messages.USE_SOCIAL);
     }
 
     const passwordCorrect = await bcrypt.compare(
@@ -235,14 +237,14 @@ export class UserService implements IUserService {
           firstName: user.firstName as string,
           lastName: user.lastName as string,
           userId: userData._id as ObjectId,
-          profilePicture: user.profilePicture
+          profilePicture: user.profilePicture,
         };
         profile = await this._studentRepository.create(profileObject);
       } else {
         const profileObject: RecruiterProfileType = {
           companyName: user.companyName as string,
           userId: userData._id as ObjectId,
-          profilePicture: user.profilePicture
+          profilePicture: user.profilePicture,
         };
         profile = await this._recruiterRepository.create(profileObject);
       }
@@ -255,18 +257,21 @@ export class UserService implements IUserService {
   }
 
   async githubAuth(code: string): Promise<LoginResponseType> {
-    const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json"
-      },
-      body: JSON.stringify({
-        client_id: env.GITHUB_CLIENT_ID,
-        client_secret: env.GITHUB_SECRET,
-        code,
-      })
-    })
+    const tokenResponse = await fetch(
+      "https://github.com/login/oauth/access_token",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          client_id: env.GITHUB_CLIENT_ID,
+          client_secret: env.GITHUB_SECRET,
+          code,
+        }),
+      }
+    );
 
     const { access_token } = await tokenResponse.json();
 
@@ -274,16 +279,16 @@ export class UserService implements IUserService {
       headers: { Authorization: `Bearer ${access_token}` },
     });
 
-    const user = await userResponse.json()
+    const user = await userResponse.json();
 
-    if(!user.email) {
-      throw createHttpError(HttpStatus.BAD_REQUEST, Messages.NO_EMAIL)
+    if (!user.email) {
+      throw createHttpError(HttpStatus.BAD_REQUEST, Messages.NO_EMAIL);
     }
 
-    const userExist = await this._userRepository.findByEmail(user.email)
+    const userExist = await this._userRepository.findByEmail(user.email);
 
-    if(userExist) {
-      if(userExist.status === 'blocked') {
+    if (userExist) {
+      if (userExist.status === "blocked") {
         throw createHttpError(HttpStatus.FORBIDDEN, Messages.USER_BLOCKED);
       }
 
@@ -292,33 +297,91 @@ export class UserService implements IUserService {
       }
 
       const accessToken = generateAccessToken(String(userExist._id), "student");
-      const refreshToken = generateRefreshToken(String(userExist._id), "student");
+      const refreshToken = generateRefreshToken(
+        String(userExist._id),
+        "student"
+      );
 
-      let profile = await this._studentRepository.findByUserId(String(userExist._id))
+      let profile = await this._studentRepository.findByUserId(
+        String(userExist._id)
+      );
 
-      return { accessToken, refreshToken, user: userExist, profile }
+      return { accessToken, refreshToken, user: userExist, profile };
     }
 
     const userObject: UserType = {
       email: user.email,
-      role: "student"
-    }
+      role: "student",
+    };
 
-    const userData = await this._userRepository.create(userObject)
-
+    const userData = await this._userRepository.create(userObject);
 
     const profileObject: StudentProfileType = {
       firstName: user.login,
       profilePicture: user.avatar_url,
       githubProfile: user.html_url,
-      userId: userData._id as ObjectId 
-    }
+      userId: userData._id as ObjectId,
+    };
 
-    const profile = await this._studentRepository.create(profileObject)
+    const profile = await this._studentRepository.create(profileObject);
 
     const accessToken = generateAccessToken(String(userData._id), "student");
     const refreshToken = generateRefreshToken(String(userData._id), "student");
 
-    return { accessToken, refreshToken, user: userData, profile }
+    return { accessToken, refreshToken, user: userData, profile };
+  }
+
+  async changePassword(email: string): Promise<void> {
+    const user = await this._userRepository.findByEmail(email);
+    if (!user) {
+      throw createHttpError(HttpStatus.NOT_FOUND, Messages.USER_NOT_FOUND);
+    }
+
+    if (!user.password) {
+      throw createHttpError(HttpStatus.BAD_REQUEST, Messages.USE_SOCIAL);
+    }
+
+    const token = await generateUID();
+
+    const link = `${env.FRONTEND_ORIGIN}${
+      user.role === "student"
+        ? ""
+        : user.role === "recruiter"
+        ? "/recruiter"
+        : "/admin"
+    }/reset-password?token=${token}`;
+
+    let mailOptions = {
+      from: env.USER_EMAIL,
+      to: user.email,
+      subject: "Reset your password",
+      html: forgotPasswordPage(link),
+    };
+
+    try {
+      await transporter.sendMail(mailOptions);
+    } catch (err) {
+      console.log(err);
+      throw createHttpError(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        Messages.OTP_ERROR
+      );
+    }
+
+    await redisClient.setEx(token, 300, String(user._id));
+  }
+
+  async resetPassword(token: string, password: string): Promise<void> {
+    const storedId = await redisClient.get(token);
+
+    if (!storedId) {
+      throw createHttpError(HttpStatus.FORBIDDEN, Messages.LINK_EXPIRED);
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await this._userRepository.updateById(storedId, {
+      password: hashedPassword,
+    });
   }
 }

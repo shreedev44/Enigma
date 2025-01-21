@@ -32,6 +32,7 @@ export class UserController implements IUserController {
         res
           .status(HttpStatus.BAD_REQUEST)
           .json({ error: Messages.INCOMPLETE_FORM });
+        return;
       }
       await this._userService.verifyOtp(otp, email);
       res.status(HttpStatus.CREATED).json({ message: Messages.OTP_VERIFIED });
@@ -48,21 +49,26 @@ export class UserController implements IUserController {
   }
 
   async resendOtp(req: Request, res: Response): Promise<void> {
-    try{
-      const {email} = req.body;
+    try {
+      const { email } = req.body;
 
-      if(!email) {
-        res.status(HttpStatus.BAD_REQUEST).json({error: Messages.INCOMPLETE_FORM})
+      if (!email) {
+        res
+          .status(HttpStatus.BAD_REQUEST)
+          .json({ error: Messages.INCOMPLETE_FORM });
+        return;
       }
 
       await this._userService.resendOtp(email);
-      res.status(HttpStatus.OK).json({message: Messages.OTP_RESENT})
+      res.status(HttpStatus.OK).json({ message: Messages.OTP_RESENT });
     } catch (err) {
-      if(err instanceof HttpError) {
-        res.status(err.statusCode).json({error: err.message})
+      if (err instanceof HttpError) {
+        res.status(err.statusCode).json({ error: err.message });
       } else {
-        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({error: Messages.SERVER_ERROR})
-        console.log(err)
+        res
+          .status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .json({ error: Messages.SERVER_ERROR });
+        console.log(err);
       }
     }
   }
@@ -124,6 +130,12 @@ export class UserController implements IUserController {
   async githubAuth(req: Request, res: Response): Promise<void> {
     try {
       const { code } = req.body;
+      if (!code) {
+        res
+          .status(HttpStatus.BAD_REQUEST)
+          .json({ error: Messages.INCOMPLETE_FORM });
+        return;
+      }
 
       const { accessToken, refreshToken, user, profile } =
         await this._userService.githubAuth(code);
@@ -134,6 +146,53 @@ export class UserController implements IUserController {
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
       res.status(HttpStatus.OK).json({ accessToken, user, profile });
+    } catch (err) {
+      if (err instanceof HttpError) {
+        res.status(err.statusCode).json({ error: err.message });
+      } else {
+        res
+          .status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .json({ error: Messages.SERVER_ERROR });
+        console.log(err);
+      }
+    }
+  }
+
+  async changePassword(req: Request, res: Response): Promise<void> {
+    try {
+      const { email } = req.body;
+      if (!email) {
+        res
+          .status(HttpStatus.BAD_REQUEST)
+          .json({ error: Messages.INCOMPLETE_FORM });
+        return;
+      }
+
+      await this._userService.changePassword(email);
+      res.status(HttpStatus.OK).json({ message: Messages.LINK_SENT });
+    } catch (err) {
+      if (err instanceof HttpError) {
+        res.status(err.statusCode).json({ error: err.message });
+      } else {
+        res
+          .status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .json({ error: Messages.SERVER_ERROR });
+        console.log(err);
+      }
+    }
+  }
+
+  async resetPassword(req: Request, res: Response): Promise<void> {
+    try {
+      const { token, password } = req.body;
+      if (!token || !password) {
+        res
+          .status(HttpStatus.BAD_REQUEST)
+          .json({ error: Messages.INCOMPLETE_FORM });
+        return;
+      }
+      await this._userService.resetPassword(token, password);
+      res.status(HttpStatus.OK).json({ message: Messages.PASSWORD_CHANGED });
     } catch (err) {
       if (err instanceof HttpError) {
         res.status(err.statusCode).json({ error: err.message });

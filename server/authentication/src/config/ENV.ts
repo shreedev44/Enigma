@@ -25,5 +25,8 @@ export const env = {
   },
   get GITHUB_SECRET() {
     return process.env.GITHUB_SECRET!;
+  },
+  get FRONTEND_ORIGIN() {
+    return process.env.FRONTEND_ORIGIN!;
   }
 };

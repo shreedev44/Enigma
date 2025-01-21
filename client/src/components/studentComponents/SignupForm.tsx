@@ -35,7 +35,7 @@ const SignupForm = ({ className, ...props }: React.ComponentProps<"div">) => {
 
   const navigate = useNavigate();
   const { toast } = useToast();
-  const dispatchFun = useDispatch()
+  const dispatchFun = useDispatch();
 
   const initialFormData: StudentSignupFormType = {
     firstName: "",
@@ -114,61 +114,63 @@ const SignupForm = ({ className, ...props }: React.ComponentProps<"div">) => {
     const response = await signup(formData);
 
     if (response.success) {
-      localStorage.setItem('email', response.data.email)
+      localStorage.setItem("email", response.data.email);
       setLoading(false);
-      navigate(studentRoutes.VERIFY_OTP, { state: { fromSignup: true } })
+      navigate(studentRoutes.VERIFY_OTP, { state: { fromSignup: true } });
       toast({
-        description: "Verify your email with OTP"
-      })
+        description: "Verify your email with OTP",
+      });
     } else {
       setLoading(false);
       toast({
         description: response.error,
-        variant: 'destructive'
+        variant: "destructive",
       });
     }
   };
 
   const googleSignin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      const decoded = await decodeToken(tokenResponse.access_token)
+      const decoded = await decodeToken(tokenResponse.access_token);
       const response = await googleAuth({
         email: decoded.email,
         firstName: decoded.given_name,
         lastName: decoded.family_name,
-        profilePicture: decoded.picture
-      })
+        profilePicture: decoded.picture,
+      });
 
-      if(response.success) {
+      if (response.success) {
         toast({
-          description: `Signed in successfully`
-        })
-        dispatchFun(setStudent({
-          _id: response.data.user._id,
-          email: response.data.user.email,
-          role: response.data.user.role,
-          status: response.data.user.status,
-          accessToken: response.data.accessToken,
-          profilePicture: response.data.profile.profilePicture,
-        }))
-        setLoading(false)
-        navigate(studentRoutes.HOME)
+          description: `Signed in successfully`,
+        });
+        dispatchFun(
+          setStudent({
+            _id: response.data.user._id,
+            email: response.data.user.email,
+            role: response.data.user.role,
+            status: response.data.user.status,
+            accessToken: response.data.accessToken,
+            profilePicture: response.data.profile.profilePicture,
+          })
+        );
+        setLoading(false);
+        navigate(studentRoutes.HOME);
       } else {
         toast({
-          variant: 'destructive',
-          description: response.error
-        })
-        setLoading(false)
+          variant: "destructive",
+          description: response.error,
+        });
+        setLoading(false);
       }
     },
     onError: () => {
-      setLoading(false)
+      setLoading(false);
       toast({
         description: `Google Authentication Failed`,
-        variant: 'destructive'
-      })
-    }
-  })
+        variant: "destructive",
+      });
+    },
+  });
 
   return (
     <div
@@ -211,7 +213,9 @@ const SignupForm = ({ className, ...props }: React.ComponentProps<"div">) => {
                 />
                 {error.field === "firstName" ? (
                   <p className="text-red-500 text-xs">{error.message}</p>
-                ) : (<></>)}
+                ) : (
+                  <></>
+                )}
               </div>
               <div className="grid gap-2">
                 <div className="flex justify-between">
@@ -236,7 +240,9 @@ const SignupForm = ({ className, ...props }: React.ComponentProps<"div">) => {
                 />
                 {error.field === "lastName" ? (
                   <p className="text-red-500 text-xs">{error.message}</p>
-                ) : (<></>)}
+                ) : (
+                  <></>
+                )}
               </div>
               <div className="grid gap-2">
                 <div className="flex justify-between">
@@ -261,20 +267,20 @@ const SignupForm = ({ className, ...props }: React.ComponentProps<"div">) => {
                 />
                 {error.field === "email" ? (
                   <p className="text-red-500 text-xs">{error.message}</p>
-                ) : (<></>)}
+                ) : (
+                  <></>
+                )}
               </div>
               <div className="grid gap-2">
-                <div className="flex items-center">
-                  <div className="flex justify-between">
-                    <Label htmlFor="password" className="mr-2">
-                      Password
-                    </Label>
-                    {error.field === "password" ? (
-                      <LuCircleAlert color="red" size={18} />
-                    ) : (
-                      <></>
-                    )}
-                  </div>
+                <div className="flex justify-between">
+                  <Label htmlFor="password" className="mr-2">
+                    Password
+                  </Label>
+                  {error.field === "password" ? (
+                    <LuCircleAlert color="red" size={18} />
+                  ) : (
+                    <></>
+                  )}
                 </div>
                 <div className="relative">
                   <Input
@@ -302,9 +308,11 @@ const SignupForm = ({ className, ...props }: React.ComponentProps<"div">) => {
                     )}
                   </button>
                 </div>
-                  {error.field === "password" ? (
+                {error.field === "password" ? (
                   <p className="text-red-500 text-xs">{error.message}</p>
-                ) : (<></>)}
+                ) : (
+                  <></>
+                )}
                 {isPasswordStrengthVisible ? (
                   <>
                     <Label htmlFor="passwordstrength">Password Strength</Label>
@@ -315,17 +323,15 @@ const SignupForm = ({ className, ...props }: React.ComponentProps<"div">) => {
                 )}
               </div>
               <div className="grid gap-2">
-                <div className="flex items-center">
-                  <div className="flex justify-between">
-                    <Label htmlFor="cpassword" className="mr-2">
-                      Confirm Password
-                    </Label>
-                    {error.field === "confirmPassword" ? (
-                      <LuCircleAlert color="red" size={18} />
-                    ) : (
-                      <></>
-                    )}
-                  </div>
+                <div className="flex justify-between">
+                  <Label htmlFor="cpassword" className="mr-2">
+                    Confirm Password
+                  </Label>
+                  {error.field === "confirmPassword" ? (
+                    <LuCircleAlert color="red" size={18} />
+                  ) : (
+                    <></>
+                  )}
                 </div>
                 <div className="relative">
                   <Input
@@ -340,9 +346,6 @@ const SignupForm = ({ className, ...props }: React.ComponentProps<"div">) => {
                       })
                     }
                   />
-                  {error.field === "confirmPassword" ? (
-                  <p className="text-red-500 text-xs">{error.message}</p>
-                ) : (<></>)}
                   <button
                     type="button"
                     onClick={toggleCPasswordVisibility}
@@ -355,6 +358,11 @@ const SignupForm = ({ className, ...props }: React.ComponentProps<"div">) => {
                     )}
                   </button>
                 </div>
+                {error.field === "confirmPassword" ? (
+                  <p className="text-red-500 text-xs">{error.message}</p>
+                ) : (
+                  <></>
+                )}
               </div>
               <Button
                 type="submit"
@@ -374,15 +382,25 @@ const SignupForm = ({ className, ...props }: React.ComponentProps<"div">) => {
                 </span>
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <Button variant="outline" className="w-full" disabled={loading} onClick={() => {
-                  window.location.href = studentRoutes.GITHUB_AUTH_URL
-                }}>
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  disabled={loading}
+                  onClick={() => {
+                    window.location.href = studentRoutes.GITHUB_AUTH_URL;
+                  }}
+                >
                   <FaGithub />
                 </Button>
-                <Button variant="outline" className="w-full" disabled={loading} onClick={() => {
-                  setLoading(true)
-                  googleSignin()
-                  }}>
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  disabled={loading}
+                  onClick={() => {
+                    setLoading(true);
+                    googleSignin();
+                  }}
+                >
                   <FaGoogle />
                 </Button>
               </div>

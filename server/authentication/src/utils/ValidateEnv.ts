@@ -28,4 +28,7 @@ export default function validateEnv() {
     if(!env.GITHUB_SECRET) {
         throw new Error("GITHUB_SECRET is not found in the env")
     }
+    if(!env.FRONTEND_ORIGIN) {
+        throw new Error("FRONTEND_ORIGIN is not found in the env")
+    }
 }

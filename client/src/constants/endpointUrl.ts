@@ -4,7 +4,9 @@ export const studentEndpoints = {
     VERIFY_OTP: '/auth/verifyOtp',
     RESEND_OTP: '/auth/resendOtp',
     GOOGLE_AUTH: '/auth/googleAuth',
-    GITHUB_AUTH: '/auth/githubAuth'
+    GITHUB_AUTH: '/auth/githubAuth',
+    FORGOT_PASSWORD: '/auth/changePassword',
+    RESET_PASSWORD: '/auth/resetPassword'
 }
 
 export const recruiterEndpoints = {

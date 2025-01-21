@@ -84,3 +84,30 @@ export const githubAuth = async (code: string) => {
     return { success: false, error: message };
   }
 };
+
+export const forgotPassword = async (email: string) => {
+  try {
+    const { data } = await Api.post(studentEndpoints.FORGOT_PASSWORD, {
+      email,
+    });
+    return { success: true, data };
+  } catch (err) {
+    const error = err as any;
+    const message = error.response?.data?.error || "An error occured";
+    return { success: false, error: message };
+  }
+};
+
+export const resetPassword = async (token: string, password: string) => {
+  try{
+    const { data } = await Api.patch(studentEndpoints.RESET_PASSWORD, {
+      token,
+      password
+    })
+    return { success: true, data };
+  } catch (err) {
+    const error = err as any;
+    const message = error.response?.data?.error || "An error occured";
+    return { success: false, error: message }
+  }
+}

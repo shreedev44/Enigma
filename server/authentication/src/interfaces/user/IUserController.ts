@@ -7,4 +7,6 @@ export interface IUserController {
     verifyUser(req: Request, res: Response): Promise<void>;
     googleAuth(req: Request, res: Response): Promise<void>;
     githubAuth(req: Request, res: Response): Promise<void>;
+    changePassword(req: Request, res: Response): Promise<void>;
+    resetPassword(req: Request, res: Response): Promise<void>;
 }
