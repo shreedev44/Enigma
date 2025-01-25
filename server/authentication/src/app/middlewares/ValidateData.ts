@@ -3,8 +3,7 @@ import { HttpStatus } from "../../constants/StatusConstants";
 import { Messages } from "../../constants/MessageConstants";
 
 export const validateData = (
-  validationSchema: Record<string, { rules: RegExp[]; messages: string[] }>,
-  role: string
+  validationSchema: Record<string, { rules: RegExp[]; messages: string[] }>
 ): any => {
   return (req: Request, res: Response, next: NextFunction) => {
     for (const field in validationSchema) {
@@ -26,8 +25,6 @@ export const validateData = (
         }
       }
     }
-
-    req.body.role = role
     next();
   };
 };

@@ -10,6 +10,7 @@ import Home from "@/pages/student/Home";
 import Otp from "@/pages/student/Otp";
 import ForgotPassword from "@/pages/ForgotPassword";
 import ResetPassword from "@/pages/ResetPassword";
+import Profile from "@/pages/student/Profile";
 
 const StudentRoutes = () => {
   const user = useGetUser();
@@ -57,6 +58,10 @@ const StudentRoutes = () => {
         <Route
           path={studentRoutes.HOME}
           element={user ? <Home /> : <Navigate to={studentRoutes.SIGNIN} />}
+        />
+        <Route
+          path={studentRoutes.PROFILE}
+          element={user ? <Profile /> : <Navigate to={studentRoutes.SIGNIN} />}
         />
       </Routes>
     </>

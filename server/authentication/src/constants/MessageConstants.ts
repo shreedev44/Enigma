@@ -21,5 +21,8 @@ export const Messages = {
     USE_SOCIAL: "Your account is created using social account",
     LINK_SENT: "Password reset link has been sent to your mail",
     LINK_EXPIRED: "Your link has been expired",
-    PASSWORD_CHANGED: "Password has been changed successfully"
+    PASSWORD_CHANGED: "Password has been changed successfully",
+    INVALID_TOKEN: "Invalid refresh token",
+    NO_TOKEN: "Token not provided",
+    NO_PROFILE: "Profile not found"
 }

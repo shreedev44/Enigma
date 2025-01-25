@@ -20,7 +20,7 @@ import { IUserRepository } from "../interfaces/user/IUserRepository";
 import { redisClient } from "../config/Redis";
 import { IStudentRepository } from "../interfaces/student/IStudentRepository";
 import { ObjectId } from "mongoose";
-import { generateAccessToken, generateRefreshToken } from "../utils/Token";
+import { generateAccessToken, generateRefreshToken, verifyToken } from "../utils/Token";
 import { IRecruiterRepository } from "../interfaces/recruiter/IRecruiterRepository";
 import generateUID from "../utils/GenerateUID";
 
@@ -71,7 +71,7 @@ export class UserService implements IUserService {
   async verifyOtp(otp: string, email: string): Promise<void> {
     const storedData = await redisClient.get(email);
     if (!storedData) {
-      throw createHttpError(HttpStatus.FORBIDDEN, Messages.OTP_EXPIRED);
+      throw createHttpError(HttpStatus.UNAUTHORIZED, Messages.OTP_EXPIRED);
     }
 
     const { otp: storedOtp, userData } = JSON.parse(storedData);
@@ -167,11 +167,11 @@ export class UserService implements IUserService {
     }
 
     if (user.status === "blocked") {
-      throw createHttpError(HttpStatus.FORBIDDEN, Messages.USER_BLOCKED);
+      throw createHttpError(HttpStatus.UNAUTHORIZED, Messages.USER_BLOCKED);
     }
 
     if (user.role !== role) {
-      throw createHttpError(HttpStatus.FORBIDDEN, Messages.NO_ACCESS);
+      throw createHttpError(HttpStatus.UNAUTHORIZED, Messages.NO_ACCESS);
     }
 
     const accessToken = generateAccessToken(String(user._id), role);
@@ -201,11 +201,11 @@ export class UserService implements IUserService {
     const userExist = await this._userRepository.findByEmail(user.email);
     if (userExist) {
       if (userExist.status === "blocked") {
-        throw createHttpError(HttpStatus.FORBIDDEN, Messages.USER_BLOCKED);
+        throw createHttpError(HttpStatus.UNAUTHORIZED, Messages.USER_BLOCKED);
       }
 
       if (userExist.role !== role) {
-        throw createHttpError(HttpStatus.FORBIDDEN, Messages.NO_ACCESS);
+        throw createHttpError(HttpStatus.UNAUTHORIZED, Messages.NO_ACCESS);
       }
 
       const accessToken = generateAccessToken(String(userExist._id), role);
@@ -289,11 +289,11 @@ export class UserService implements IUserService {
 
     if (userExist) {
       if (userExist.status === "blocked") {
-        throw createHttpError(HttpStatus.FORBIDDEN, Messages.USER_BLOCKED);
+        throw createHttpError(HttpStatus.UNAUTHORIZED, Messages.USER_BLOCKED);
       }
 
       if (userExist.role !== "student") {
-        throw createHttpError(HttpStatus.FORBIDDEN, Messages.NO_ACCESS);
+        throw createHttpError(HttpStatus.UNAUTHORIZED, Messages.NO_ACCESS);
       }
 
       const accessToken = generateAccessToken(String(userExist._id), "student");
@@ -375,7 +375,7 @@ export class UserService implements IUserService {
     const storedId = await redisClient.get(token);
 
     if (!storedId) {
-      throw createHttpError(HttpStatus.FORBIDDEN, Messages.LINK_EXPIRED);
+      throw createHttpError(HttpStatus.UNAUTHORIZED, Messages.LINK_EXPIRED);
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -383,5 +383,26 @@ export class UserService implements IUserService {
     await this._userRepository.updateById(storedId, {
       password: hashedPassword,
     });
+  }
+
+  async refreshToken(token: string): Promise<string> {
+    const payload = verifyToken(token);
+
+    if(!payload) {
+      throw createHttpError(HttpStatus.FORBIDDEN, Messages.INVALID_TOKEN)
+    }
+    
+    const user = await this._userRepository.findById(payload.id)
+
+    if(!user) {
+      throw createHttpError(HttpStatus.FORBIDDEN, Messages.USER_NOT_FOUND)
+    }
+    if(user.status !== 'active') {
+      throw createHttpError(HttpStatus.FORBIDDEN, Messages.USER_BLOCKED)
+    }
+
+    const accessToken = generateAccessToken(String(user._id), user.role)
+
+    return accessToken
   }
 }

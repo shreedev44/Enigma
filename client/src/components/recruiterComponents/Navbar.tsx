@@ -27,6 +27,7 @@ import { useDispatch } from "react-redux";
 import defaultPic from "../../assets/default-avatar.jpg";
 import { useToast } from "@/hooks/use-toast";
 import Messages from "@/constants/Messages";
+import { Skeleton } from "../ui/skeleton";
 
 const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
@@ -80,7 +81,7 @@ const Navbar = () => {
                   src={profilePic ? profilePic : defaultPic}
                   alt="@shadcn"
                 />
-                <AvatarFallback>P</AvatarFallback>
+                <AvatarFallback><Skeleton className="rounded-full w-10 h-10"/></AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent>

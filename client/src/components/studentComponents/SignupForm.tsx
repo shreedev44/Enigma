@@ -111,7 +111,7 @@ const SignupForm = ({ className, ...props }: React.ComponentProps<"div">) => {
     }
 
     setLoading(true);
-    const response = await signup(formData);
+    const response = await signup({...formData, role: "student"});
 
     if (response.success) {
       localStorage.setItem("email", response.data.email);
@@ -137,6 +137,7 @@ const SignupForm = ({ className, ...props }: React.ComponentProps<"div">) => {
         firstName: decoded.given_name,
         lastName: decoded.family_name,
         profilePicture: decoded.picture,
+        role: "student"
       });
 
       if (response.success) {

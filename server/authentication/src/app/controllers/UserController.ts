@@ -101,10 +101,10 @@ export class UserController implements IUserController {
 
   async googleAuth(req: Request, res: Response): Promise<void> {
     try {
-      const { role, ...userInfo } = req.body;
+      const { role, ...userInfo } = req.body.user;
       const { accessToken, refreshToken, user, profile } =
         await this._userService.googleAuth(
-          userInfo.user as GoogleAuthUserType,
+          userInfo as GoogleAuthUserType,
           role as Role
         );
       res.cookie("refreshToken", refreshToken, {
@@ -201,6 +201,29 @@ export class UserController implements IUserController {
           .status(HttpStatus.INTERNAL_SERVER_ERROR)
           .json({ error: Messages.SERVER_ERROR });
         console.log(err);
+      }
+    }
+  }
+
+  async refreshToken(req: Request, res: Response): Promise<void> {
+    try {
+      if(!req.cookies) {
+        res.status(HttpStatus.FORBIDDEN).json({error: Messages.NO_TOKEN})
+        return;
+      }
+      const refreshToken = req.cookies.refreshToken;
+      if(!refreshToken) {
+        res.status(HttpStatus.FORBIDDEN).json({error: Messages.NO_TOKEN})
+        return;
+      }
+      const accessToken = await this._userService.refreshToken(refreshToken)
+      res.status(HttpStatus.OK).json({accessToken})
+    } catch (err) {
+      if(err instanceof HttpError) {
+        res.status(err.statusCode).json({error: err.message});
+      } else {
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({error: Messages.SERVER_ERROR})
+        console.log(err)
       }
     }
   }

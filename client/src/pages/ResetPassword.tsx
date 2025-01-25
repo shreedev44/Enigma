@@ -13,7 +13,8 @@ import {
 } from "@/constants/routeUrl";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { LuCircleAlert } from "react-icons/lu";
-import { resetPassword } from "@/api/student";
+import { resetPassword } from "@/api/common";
+import { Role } from "@/types/formTypes";
 
 const ResetPassword = () => {
   const location = useLocation();
@@ -76,7 +77,15 @@ const ResetPassword = () => {
 
     setLoading(true);
 
-    const response = await resetPassword(token as string, password);
+    let role: Role | null;
+    if (path.includes("recruiter")) {
+      role = "recruiter"
+    } else if (path.includes("admin")) {
+      role = "admin"
+    } else {
+      role = "student"
+    }
+    const response = await resetPassword(token as string, password, role);
 
     if (response.success) {
       toast({

@@ -23,6 +23,16 @@ class UserRepository implements IUserRepository {
     }
   }
 
+  async findById(id: string): Promise<UserType | null> {
+    try {
+      const user = await User.findById(id)
+      return user;
+    } catch (err) {
+      console.error(err);
+      throw new Error("Error finding user by id")
+    }
+  }
+
   async updateById(
     id: string,
     data: Partial<UserType>

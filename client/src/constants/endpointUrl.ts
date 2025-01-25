@@ -1,22 +1,24 @@
 export const studentEndpoints = {
-    SIGNIN: '/auth/signin',
     SIGNUP: '/auth/register',
-    VERIFY_OTP: '/auth/verifyOtp',
-    RESEND_OTP: '/auth/resendOtp',
     GOOGLE_AUTH: '/auth/googleAuth',
     GITHUB_AUTH: '/auth/githubAuth',
-    FORGOT_PASSWORD: '/auth/changePassword',
-    RESET_PASSWORD: '/auth/resetPassword'
+    FETCH_PROFILE: '/auth/student/getProfile'
 }
 
 export const recruiterEndpoints = {
-    SIGNIN: '/auth/recruiter/signin',
     SIGNUP: '/auth/recruiter/register',
-    VERIFY_OTP: '/auth/recruiter/verifyOtp',
-    RESEND_OTP: '/auth/recruiter/resendOtp',
-    GOOGLE_AUTH: '/auth/recruiter/googleAuth'
+    GOOGLE_AUTH: '/auth/googleAuth'
 }
 
 export const adminEndpoints = {
     SIGNIN: '/auth/admin/signin',
+}
+
+export const commonEndpoints = {
+    VERIFY_OTP: '/auth/verifyOtp',
+    RESEND_OTP: '/auth/resendOtp',
+    SIGNIN: '/auth/signin',
+    FORGOT_PASSWORD: '/auth/changePassword',
+    RESET_PASSWORD: '/auth/resetPassword',
+    REFRESH_TOKEN: `${import.meta.env.VITE_BASE_URL}/auth/refreshToken`,
 }

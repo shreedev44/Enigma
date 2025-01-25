@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import path from 'path'
 import express, { Application } from "express";
 import morgan from 'morgan'
+import cookieParser from 'cookie-parser'
 
 //* Importing configs and initializers
 import connectDB from "./config/DB";
@@ -15,6 +16,7 @@ dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 //* Importing routers
 import userRouter from "./app/routes/UserRouter";
+import studentRouter from './app/routes/StudentRouter';
 
 
 
@@ -34,11 +36,13 @@ class App{
     private initializeMiddlewares(): void {
         this.app.use(express.json())
         this.app.use(express.urlencoded({extended: true}))
+        this.app.use(cookieParser())
         this.app.use(morgan('combined'))
     }
 
     private initializeRoutes(): void {
         this.app.use('/', userRouter);
+        this.app.use('/student', studentRouter)
     }
 
     private initializeDatabase(): void {

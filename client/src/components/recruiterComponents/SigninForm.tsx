@@ -10,7 +10,7 @@ import { LuCircleAlert } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import { validateForm } from "@/validation/formValidation";
 import { loginValidationSchema } from "@/validation/formSchema";
-import { signin } from "@/api/recruiter";
+import { signin } from "@/api/common";
 import { useToast } from "@/hooks/use-toast";
 import { recruiterRoutes } from "@/constants/routeUrl";
 import { useDispatch } from "react-redux";
@@ -48,7 +48,7 @@ const SigninForm = ({ className, ...props }: React.ComponentProps<"div">) => {
 
     setLoading(true);
 
-    const response = await signin(email, password);
+    const response = await signin(email, password, "recruiter");
 
     if (response.success) {
       setLoading(false);
@@ -77,17 +77,18 @@ const SigninForm = ({ className, ...props }: React.ComponentProps<"div">) => {
 
   const googleSignin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      const decoded = await decodeToken(tokenResponse.access_token)
+      const decoded = await decodeToken(tokenResponse.access_token);
       const response = await googleAuth({
         email: decoded.email,
         companyName: decoded.name,
-        profilePicture: decoded.picture
-      })
+        profilePicture: decoded.picture,
+        role: "recruiter"
+      });
 
-      if(response.success) {
+      if (response.success) {
         toast({
-          description: `Signed in successfully`
-        })
+          description: response.data.message,
+        });
         dispatch(
           setRecruiter({
             _id: response.data.user._id,
@@ -98,24 +99,24 @@ const SigninForm = ({ className, ...props }: React.ComponentProps<"div">) => {
             profilePicture: response.data.profile.profilePicture,
           })
         );
-        setLoading(false)
+        setLoading(false);
         navigate(`/recruiter/${recruiterRoutes.HOME}`);
       } else {
         toast({
-          variant: 'destructive',
-          description: response.error
-        })
-        setLoading(false)
+          variant: "destructive",
+          description: response.error,
+        });
+        setLoading(false);
       }
     },
     onError: () => {
       toast({
         description: `Google Authentication Failed`,
-        variant: 'destructive'
-      })
-      setLoading(false)
-    }
-  })
+        variant: "destructive",
+      });
+      setLoading(false);
+    },
+  });
 
   return (
     <div
@@ -153,17 +154,21 @@ const SigninForm = ({ className, ...props }: React.ComponentProps<"div">) => {
                 />
                 {error.field === "email" ? (
                   <p className="text-red-500 text-xs">{error.message}</p>
-                ) : (<></>)}
+                ) : (
+                  <></>
+                )}
               </div>
               <div className="grid gap-2">
-                  <div className="flex justify-between">
-                    <Label htmlFor="password" className="mr-2">Password</Label>
-                    {error.field === "password" ? (
-                      <LuCircleAlert color="red" size={18} />
-                    ) : (
-                      <></>
-                    )}
-                  </div>
+                <div className="flex justify-between">
+                  <Label htmlFor="password" className="mr-2">
+                    Password
+                  </Label>
+                  {error.field === "password" ? (
+                    <LuCircleAlert color="red" size={18} />
+                  ) : (
+                    <></>
+                  )}
+                </div>
                 <div className="relative">
                   <Input
                     type={isPasswordVisible ? "text" : "password"}
@@ -187,12 +192,14 @@ const SigninForm = ({ className, ...props }: React.ComponentProps<"div">) => {
                 </div>
                 {error.field === "password" ? (
                   <p className="text-red-500 text-xs">{error.message}</p>
-                ) : (<></>)}
+                ) : (
+                  <></>
+                )}
               </div>
               <a
                 onClick={(e) => {
-                  e.preventDefault()
-                  navigate(`/recruiter${recruiterRoutes.FORGOT_PASSWORD}`)
+                  e.preventDefault();
+                  navigate(`/recruiter${recruiterRoutes.FORGOT_PASSWORD}`);
                 }}
                 href="#"
                 className="ml-auto text-sm underline-offset-2 hover:underline"
@@ -217,10 +224,15 @@ const SigninForm = ({ className, ...props }: React.ComponentProps<"div">) => {
                 </span>
               </div>
               <div className="grid grid-cols-1 gap-4">
-                <Button variant="outline" className="w-full" disabled={loading} onClick={() => {
-                  setLoading(true)
-                  googleSignin()
-                  }}>
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  disabled={loading}
+                  onClick={() => {
+                    setLoading(true);
+                    googleSignin();
+                  }}
+                >
                   <FaGoogle />
                 </Button>
               </div>
@@ -228,7 +240,9 @@ const SigninForm = ({ className, ...props }: React.ComponentProps<"div">) => {
                 Don&apos;t have an account?{" "}
                 <a
                   className="underline underline-offset-4 cursor-pointer"
-                  onClick={() => navigate(`/recruiter${recruiterRoutes.SIGNUP}`)}
+                  onClick={() =>
+                    navigate(`/recruiter${recruiterRoutes.SIGNUP}`)
+                  }
                 >
                   Sign Up
                 </a>

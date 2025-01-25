@@ -18,4 +18,5 @@ export interface IUserService {
   githubAuth(code: string): Promise<LoginResponseType>;
   changePassword(email: string): Promise<void>;
   resetPassword(token: string, password: string): Promise<void>;
+  refreshToken(token: string): Promise<string>;
 }

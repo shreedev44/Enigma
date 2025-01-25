@@ -3,49 +3,14 @@ import Api from "@/services/axios";
 import { StudentSignupFormType } from "@/types/formTypes";
 import { studentEndpoints } from "@/constants/endpointUrl";
 
+const headers = {
+  "X-User-Level": "student",
+};
+
 export const signup = async (userData: StudentSignupFormType) => {
   try {
-    const { data } = await Api.post(studentEndpoints.SIGNUP, userData);
-    return { success: true, data };
-  } catch (err) {
-    const error = err as any;
-    const message = error.response?.data?.error || "An error occured";
-    return { success: false, error: message };
-  }
-};
-
-export const verifyOtp = async (otp: string, email: string) => {
-  try {
-    const { data } = await Api.post(studentEndpoints.VERIFY_OTP, {
-      otp,
-      email,
-    });
-    return { success: true, data };
-  } catch (err) {
-    const error = err as any;
-    const message = error.response?.data?.error || "An error occured";
-    return { success: false, error: message };
-  }
-};
-
-export const resendOtp = async (email: string) => {
-  try {
-    const { data } = await Api.post(studentEndpoints.RESEND_OTP, {
-      email,
-    });
-    return { success: true, data };
-  } catch (err) {
-    const error = err as any;
-    const message = error.response?.data?.error || "An error occured";
-    return { success: false, error: message };
-  }
-};
-
-export const signin = async (email: string, password: string) => {
-  try {
-    const { data } = await Api.post(studentEndpoints.SIGNIN, {
-      email,
-      password,
+    const { data } = await Api.post(studentEndpoints.SIGNUP, userData, {
+      headers,
     });
     return { success: true, data };
   } catch (err) {
@@ -61,9 +26,13 @@ export const googleAuth = async (
   }
 ) => {
   try {
-    const { data } = await Api.post(studentEndpoints.GOOGLE_AUTH, {
-      user,
-    });
+    const { data } = await Api.post(
+      studentEndpoints.GOOGLE_AUTH,
+      {
+        user,
+      },
+      { headers }
+    );
     return { success: true, data };
   } catch (err) {
     const error = err as any;
@@ -74,9 +43,13 @@ export const googleAuth = async (
 
 export const githubAuth = async (code: string) => {
   try {
-    const { data } = await Api.post(studentEndpoints.GITHUB_AUTH, {
-      code,
-    });
+    const { data } = await Api.post(
+      studentEndpoints.GITHUB_AUTH,
+      {
+        code,
+      },
+      { headers }
+    );
     return { success: true, data };
   } catch (err) {
     const error = err as any;
@@ -85,11 +58,9 @@ export const githubAuth = async (code: string) => {
   }
 };
 
-export const forgotPassword = async (email: string) => {
+export const getProfile = async () => {
   try {
-    const { data } = await Api.post(studentEndpoints.FORGOT_PASSWORD, {
-      email,
-    });
+    const { data } = await Api.get(studentEndpoints.FETCH_PROFILE, { headers });
     return { success: true, data };
   } catch (err) {
     const error = err as any;
@@ -97,17 +68,3 @@ export const forgotPassword = async (email: string) => {
     return { success: false, error: message };
   }
 };
-
-export const resetPassword = async (token: string, password: string) => {
-  try{
-    const { data } = await Api.patch(studentEndpoints.RESET_PASSWORD, {
-      token,
-      password
-    })
-    return { success: true, data };
-  } catch (err) {
-    const error = err as any;
-    const message = error.response?.data?.error || "An error occured";
-    return { success: false, error: message }
-  }
-}

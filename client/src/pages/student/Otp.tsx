@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { studentRoutes } from "@/constants/routeUrl";
 import { useToast } from "@/hooks/use-toast";
-import { resendOtp, verifyOtp } from "@/api/student";
+import { resendOtp, verifyOtp } from "@/api/common";
 import { Button } from "@/components/ui/button";
 
 const Otp = () => {
@@ -85,7 +85,7 @@ const Otp = () => {
 
     setLoading(true);
 
-    const response = await verifyOtp(otp, email);
+    const response = await verifyOtp(otp, email, "student");
 
     if (response.success) {
       localStorage.removeItem("email");
@@ -117,7 +117,7 @@ const Otp = () => {
 
     setLoading(true);
 
-    const response = await resendOtp(email);
+    const response = await resendOtp(email, "student");
 
     if (response.success) {
       setLoading(false);

@@ -9,4 +9,5 @@ export interface IUserController {
     githubAuth(req: Request, res: Response): Promise<void>;
     changePassword(req: Request, res: Response): Promise<void>;
     resetPassword(req: Request, res: Response): Promise<void>;
+    refreshToken(req: Request, res: Response): Promise<void>;
 }

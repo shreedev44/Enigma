@@ -1,4 +1,4 @@
-import { forgotPassword } from "@/api/student";
+import { forgotPassword } from "@/api/common";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,6 +12,7 @@ import {
   recruiterRoutes,
   studentRoutes,
 } from "@/constants/routeUrl";
+import { Role } from "@/types/formTypes";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -38,7 +39,17 @@ const ForgotPassword = () => {
 
     setLoading(true);
 
-    const response = await forgotPassword(email);
+    const pathName = window.location.pathname;
+    let role: Role | null;
+      if (pathName.includes("recruiter")) {
+        role = "recruiter"
+      } else if (pathName.includes("admin")) {
+        role = "admin"
+      } else {
+        role = "student"
+      }
+
+    const response = await forgotPassword(email, role);
 
     if (response.success) {
       toast({

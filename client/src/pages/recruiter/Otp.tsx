@@ -8,9 +8,9 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { recruiterRoutes } from "@/constants/routeUrl";
 import { useToast } from "@/hooks/use-toast";
-import { verifyOtp } from "@/api/recruiter";
+import { verifyOtp } from "@/api/common";
 import { Button } from "@/components/ui/button";
-import { resendOtp } from "@/api/recruiter";
+import { resendOtp } from "@/api/common";
 
 const Otp = () => {
   const [otp, setOtp] = useState("");
@@ -85,7 +85,7 @@ const Otp = () => {
 
     setLoading(true);
 
-    const response = await verifyOtp(otp, email as string);
+    const response = await verifyOtp(otp, email as string, "recruiter");
 
     if (response.success) {
       localStorage.removeItem("email");
@@ -116,7 +116,7 @@ const Otp = () => {
   
       setLoading(true);
   
-      const response = await resendOtp(email);
+      const response = await resendOtp(email, "recruiter");
   
       if (response.success) {
         setLoading(false);

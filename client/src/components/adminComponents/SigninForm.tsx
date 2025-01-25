@@ -10,7 +10,7 @@ import { LuCircleAlert } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import { validateForm } from "@/validation/formValidation";
 import { loginValidationSchema } from "@/validation/formSchema";
-import { signin } from "@/api/admin";
+import { signin } from "@/api/common";
 import { useToast } from "@/hooks/use-toast";
 import { adminRoutes } from "@/constants/routeUrl";
 import { useDispatch } from "react-redux";
@@ -45,12 +45,12 @@ const SigninForm = ({ className, ...props }: React.ComponentProps<"div">) => {
 
     setLoading(true);
 
-    const response = await signin(email, password);
+    const response = await signin(email, password, "admin");
 
     if (response.success) {
       setLoading(false);
       toast({
-        description: `Signed in successfully`,
+        description: response.data.message,
       });
       dispatch(
         setAdmin({

@@ -4,6 +4,7 @@ interface StudentSignupFormType {
   email: string;
   password: string;
   confirmPassword: string;
+  role?: "student";
 }
 
 type StudentSignupFormAction =
@@ -18,6 +19,7 @@ interface RecruiterSignupFormType {
   email: string;
   password: string;
   confirmPassword: string;
+  role?: "recruiter";
 }
 
 type RecruiterSignupFormAction =
@@ -59,6 +61,8 @@ interface ReduxStoreType {
   admin: UserStoreType
 }
 
+type Role = "student" | "recruiter" | "admin"
+
 export type {
   StudentSignupFormType,
   StudentSignupFormAction,
@@ -67,5 +71,6 @@ export type {
   LoginType,
   UserStoreType,
   UserProfileType,
-  ReduxStoreType
+  ReduxStoreType,
+  Role
 };

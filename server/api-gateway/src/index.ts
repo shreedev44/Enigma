@@ -1,9 +1,10 @@
 import express from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
 import dotenv from "dotenv";
-import { env, validateEnv } from "./envConfig";
+import { env, validateEnv } from "./configs/envConfig";
 import cors from "cors";
 import morgan from "morgan";
+import verifyToken from "./middleware/verifyToken";
 
 dotenv.config();
 validateEnv();
@@ -31,6 +32,11 @@ app.use(
     credentials: true,
   })
 );
+
+app.use((req, res, next) => {
+  verifyToken(req, res, next)
+})
+
 app.use(morgan("combined"));
 
 services.forEach((service) => {

@@ -17,64 +17,32 @@ const userController = new UserController(userService);
 const userRouter = Router();
 
 
-//! ------------- Student -------------- //
 userRouter.post(
   "/register",
-  validateData(FormValidation.studentSignupValidationSchema, "student"),
+  validateData(FormValidation.studentSignupValidationSchema),
   userController.register.bind(userController)
 );
 userRouter.post("/verifyOtp", userController.verifyOtp.bind(userController));
 userRouter.post("/resendOtp", userController.resendOtp.bind(userController));
 userRouter.post(
   "/signin",
-  validateData(FormValidation.loginValidationSchema, "student"),
+  validateData(FormValidation.loginValidationSchema),
   userController.verifyUser.bind(userController)
 );
-userRouter.post(
-  "/googleAuth",
-  validateData({}, "student"),
-  userController.googleAuth.bind(userController)
-);
+userRouter.post("/googleAuth", userController.googleAuth.bind(userController));
 userRouter.post("/githubAuth", userController.githubAuth.bind(userController));
 
-
-
-
-//! ------------- Recruiter -------------- //
 userRouter.post(
-  "/recruiter/register",
-  validateData(FormValidation.recruiterSignupValidation, "recruiter"),
-  userController.register.bind(userController)
+  "/changePassword",
+  userController.changePassword.bind(userController)
+);
+userRouter.patch(
+  "/resetPassword",
+  userController.resetPassword.bind(userController)
 );
 userRouter.post(
-  "/recruiter/verifyOtp",
-  userController.verifyOtp.bind(userController)
+  "/refreshToken",
+  userController.refreshToken.bind(userController)
 );
-userRouter.post("/recruiter/resendOtp", userController.resendOtp.bind(userController));
-userRouter.post(
-  "/recruiter/signin",
-  validateData(FormValidation.loginValidationSchema, "recruiter"),
-  userController.verifyUser.bind(userController)
-);
-userRouter.post(
-  "/recruiter/googleAuth",
-  validateData({}, "recruiter"),
-  userController.googleAuth.bind(userController)
-);
-
-
-
-//! ------------- Admin -------------- //
-userRouter.post(
-  "/admin/signin",
-  validateData(FormValidation.loginValidationSchema, "admin"),
-  userController.verifyUser.bind(userController)
-);
-
-
-
-//! ------------- Common -------------- //
-userRouter.post("/changePassword", userController.changePassword.bind(userController))
-userRouter.patch("/resetPassword", userController.resetPassword.bind(userController))
 
 export default userRouter;
