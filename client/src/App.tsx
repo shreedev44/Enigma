@@ -13,7 +13,6 @@ const App = () => {
         <Route path="/*" element={<StudentRoutes />}/>
         <Route path="/admin/*" element={<AdminRoutes />}/>
         <Route path="/recruiter/*" element={<RecruiterRoutes />}/>
-        {/* <Route path="/changePassword" element={<ForgotPassword />} /> */}
       </Routes>
     </ThemeProvider>
   )

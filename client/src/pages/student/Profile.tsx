@@ -9,41 +9,43 @@ import { useGetProfilePic } from "@/hooks/useGetStudent";
 import defaultPic from "../../assets/default-avatar.jpg";
 import { getProfile } from "@/api/student";
 import { useToast } from "@/hooks/use-toast";
+import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
+import EditProfileModal from "@/components/studentComponents/EditProfileModal";
 
 const Profile = () => {
   const { toast } = useToast();
 
+  const [isModalOpen, setModalOpen] = useState(false);
   const [profileLoading, setProfileLoading] = useState(true);
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [githubProfile, setGithubProfile] = useState('')
-  const [linkedinProfile, setLinkedinProfile] = useState('')
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [githubProfile, setGithubProfile] = useState("");
+  const [linkedinProfile, setLinkedinProfile] = useState("");
   const [profilePic, setProfilePic] = useState(
     useGetProfilePic() || defaultPic
   );
-
 
   useEffect(() => {
     const fetchProfile = async () => {
       const response = await getProfile();
 
       if (response.success) {
-        const {profile} = response.data
-        setFirstName(profile.firstName)
-        setLastName(profile.lastName)
-        setGithubProfile(profile.githubProfile)
-        setLinkedinProfile(profile.linkedinProfile)
-        setProfilePic(profile.profilePicture || defaultPic)
-        setProfileLoading(false)
+        const { profile } = response.data;
+        setFirstName(profile.firstName);
+        setLastName(profile.lastName);
+        setGithubProfile(profile.githubProfile);
+        setLinkedinProfile(profile.linkedinProfile);
+        setProfilePic(profile.profilePicture || defaultPic);
+        setProfileLoading(false);
       } else {
         toast({
-            description: response.error,
-            variant: 'destructive'
-        })
+          description: response.error,
+          variant: "destructive",
+        });
       }
     };
 
-    fetchProfile()
+    fetchProfile();
     setTimeout(() => {
       setProfileLoading(false);
     }, 5000);
@@ -59,7 +61,7 @@ const Profile = () => {
       />
       <div className="grid grid-flow-row md:grid-flow-col grid-rows-5 gap-4 mt-10 px-5 md:px-20">
         <div className="row-span-3 bg-zinc-300 dark:bg-zinc-800 rounded-xl">
-          <div className="flex justify-center">
+          <div className="flex justify-start ml-5">
             <Avatar className="w-12 md:w-20 h-12 md:h-20 my-5">
               <AvatarImage src={profilePic} alt="image" />
               <AvatarFallback>
@@ -74,7 +76,8 @@ const Profile = () => {
                 </>
               ) : (
                 <p className="font-bold text-2xl font-mono">
-                  {firstName} {lastName}<p className="text-sm">Leaderboard Rank: 4</p>
+                  {firstName} {lastName}
+                  <p className="text-sm">Leaderboard Rank: 4</p>
                 </p>
               )}
             </div>
@@ -88,13 +91,19 @@ const Profile = () => {
                 ) : (
                   <div className="flex justify-center items-center">
                     <p className="ml-2 text-xs mr-3">
-                      {githubProfile || "Not added"}{" "}
+                      {githubProfile.slice(0, 30) + '...' || "Not added"}{" "}
                     </p>
                     {githubProfile ? (
-                      <a href={githubProfile} target="_blank" className="cursor-pointer">
+                      <a
+                        href={githubProfile}
+                        target="_blank"
+                        className="cursor-pointer"
+                      >
                         <IoIosNavigate size={20} />
                       </a>
-                    ) : (<></>)}
+                    ) : (
+                      <></>
+                    )}
                   </div>
                 )}
               </div>
@@ -105,7 +114,7 @@ const Profile = () => {
                 ) : (
                   <div className="flex justify-center items-center">
                     <p className="ml-2 text-xs mr-3">
-                      {linkedinProfile || "Not added"}{" "}
+                      {linkedinProfile.slice(0, 30) + '...' || "Not added"}{" "}
                     </p>
                     {linkedinProfile ? (
                       <a
@@ -115,20 +124,40 @@ const Profile = () => {
                       >
                         <IoIosNavigate size={20} />
                       </a>
-                    ) : (<></>)}
+                    ) : (
+                      <></>
+                    )}
                   </div>
                 )}
               </div>
             </div>
           </div>
           <div className="flex justify-center my-10">
-            <Button
-              size={"lg"}
-              className="bg-fleace font-bold"
-              disabled={profileLoading}
-            >
-              Edit Profile
-            </Button>
+            <Dialog>
+              <DialogTrigger>
+                <Button
+                  size={"lg"}
+                  className="bg-fleace font-bold"
+                  disabled={profileLoading}
+                  onClick={() => setModalOpen(!isModalOpen)}
+                >
+                  Edit Profile
+                </Button>
+              </DialogTrigger>
+              <EditProfileModal
+                firstName={firstName}
+                setFirstName={setFirstName}
+                lastName={lastName}
+                setLastName={setLastName}
+                profilePicture={useGetProfilePic() || ''}
+                setProfilePicture={setProfilePic}
+                githubProfile={githubProfile}
+                setGithubProfile={setGithubProfile}
+                linkedinProfile={linkedinProfile}
+                setLinkedinProfile={setLinkedinProfile}
+                isModalOpen={isModalOpen}
+              />
+            </Dialog>
           </div>
           <hr className="border-t-2 border-fleace mb-5" />
           <div className="flex justify-center">

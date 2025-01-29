@@ -1,4 +1,11 @@
-import { nameRegex, emailRegex, passwordRegex } from "./Regex";
+import {
+  nameRegex,
+  emailRegex,
+  passwordRegex,
+  optionalNameRegex,
+  optionalGithubRegex,
+  optionalLinkedinRegex,
+} from "./Regex";
 import { Messages } from "../constants/MessageConstants";
 
 const loginValidationSchema = {
@@ -51,6 +58,29 @@ const studentSignupValidationSchema = {
   },
 };
 
+const studentProfileValidationSchema = {
+  firstName: {
+    rules: [nameRegex],
+    messages: [Messages.INVALID_NAME],
+    optional: true,
+  },
+  lastName: {
+    rules: [optionalNameRegex],
+    messages: [Messages.INVALID_NAME],
+    optional: true,
+  },
+  githubProfile: {
+    rules: [optionalGithubRegex],
+    messages: [Messages.INVALID_GITHUB],
+    optional: true,
+  },
+  linkedinProfile: {
+    rules: [optionalLinkedinRegex],
+    messages: [Messages.INVALID_LINKEDIN],
+    optional: true,
+  },
+};
+
 const recruiterSignupValidation = {
   companyName: {
     rules: [nameRegex],
@@ -74,10 +104,11 @@ const recruiterSignupValidation = {
       Messages.PASSWORD_SPECIALCHAR,
     ],
   },
-}
+};
 
 export default {
   loginValidationSchema,
   studentSignupValidationSchema,
-  recruiterSignupValidation
+  recruiterSignupValidation,
+  studentProfileValidationSchema,
 };

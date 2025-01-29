@@ -68,3 +68,16 @@ export const getProfile = async () => {
     return { success: false, error: message };
   }
 };
+
+export const updateProfile = async (formData: FormData) => {
+  try {
+    const { data } = await Api.post(studentEndpoints.UPDATE_PROFILE, formData, {
+      headers: { ...headers, "Content-Type": "multipart/form-data" },
+    });
+    return { success: true, data };
+  } catch (err) {
+    const error = err as any;
+    const message = error.response?.data?.error || "An error occured";
+    return { success: false, error: message };
+  }
+};

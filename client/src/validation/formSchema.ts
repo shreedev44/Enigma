@@ -1,5 +1,5 @@
 import Messages from "@/constants/Messages";
-import { nameRegex, emailRegex, passwordRegex } from "./regex";
+import { nameRegex, emailRegex, passwordRegex, optionalNameRegex, optionalGithubRegex, optionalLinkedinRegex } from "./regex";
 
 export const studentSignupValidationSchema = {
   firstName: {
@@ -29,6 +29,29 @@ export const studentSignupValidationSchema = {
     ],
   },
 };
+
+export const studentProfileValidationSchema = {
+  firstName: {
+    rules: [nameRegex],
+    messages: [Messages.INVALID_NAME],
+  },
+  lastName: {
+    rules: [optionalNameRegex],
+    messages: [Messages.INVALID_NAME],
+    optional: true,
+  },
+  githubProfile: {
+    rules: [optionalGithubRegex],
+    messages: [Messages.INVALID_GITHUB],
+    optional: true,
+  },
+  linkedinProfile: {
+    rules: [optionalLinkedinRegex],
+    messages: [Messages.INVALID_LINKEDIN],
+    optional: true,
+  },
+
+}
 
 export const recruiterSignupValidationSchema = {
   companyName: {

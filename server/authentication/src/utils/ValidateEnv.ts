@@ -31,4 +31,10 @@ export default function validateEnv() {
     if(!env.FRONTEND_ORIGIN) {
         throw new Error("FRONTEND_ORIGIN is not found in the env")
     }
+    if(!env.CLOUDINARY_API_KEY) {
+        throw new Error("CLOUDINARY_API_KEY is not found in the env")
+    }
+    if(!env.CLOUDINARY_API_SECRET) {
+        throw new Error("CLOUDINARY_API_SECRET is not found in the env")
+    }
 }

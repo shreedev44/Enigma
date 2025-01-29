@@ -1,13 +1,19 @@
 import { NextFunction, Request, Response, RequestHandler } from "express";
 import { HttpStatus } from "../../constants/StatusConstants";
 import { Messages } from "../../constants/MessageConstants";
+import { config } from "dotenv";
 
 export const validateData = (
-  validationSchema: Record<string, { rules: RegExp[]; messages: string[] }>
+  validationSchema: Record<
+    string,
+    { rules: RegExp[]; messages: string[]; optional?: boolean }
+  >
 ): any => {
   return (req: Request, res: Response, next: NextFunction) => {
     for (const field in validationSchema) {
       const value = req.body[field];
+
+      if (!value && validationSchema[field].optional) continue;
 
       if (!value) {
         return res

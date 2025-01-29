@@ -34,7 +34,7 @@ interface LoginType {
 }
 
 
-interface UserProfileType {
+interface StudentProfileType {
   _id: string;
   firstName: string;
   lastName: string;
@@ -70,7 +70,7 @@ export type {
   RecruiterSignupFormAction,
   LoginType,
   UserStoreType,
-  UserProfileType,
+  StudentProfileType,
   ReduxStoreType,
   Role
 };

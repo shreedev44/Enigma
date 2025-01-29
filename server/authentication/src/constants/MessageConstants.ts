@@ -24,5 +24,11 @@ export const Messages = {
     PASSWORD_CHANGED: "Password has been changed successfully",
     INVALID_TOKEN: "Invalid refresh token",
     NO_TOKEN: "Token not provided",
-    NO_PROFILE: "Profile not found"
+    NO_PROFILE: "Profile not found",
+    INVALID_REQUEST: "Invalid request",
+    INVALID_GITHUB: "Please provide a valid github profile link",
+    INVALID_LINKEDIN: "Please provide a valid linked profile link",
+    INVALID_FILE_TYPE: "Only jpeg, jpg, webp and png files allowed",
+    FILE_SIZE_EXCEEDED: "Image size cannot exceed 5MB",
+    FAILED_TO_UPLOAD: "Failed to upload image"
 }

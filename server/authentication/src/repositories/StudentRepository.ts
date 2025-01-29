@@ -22,6 +22,17 @@ class StudentRepository implements IStudentRepository{
             throw new Error("Error finding profile by userId")
         }
     }
+
+    async updateById(userId: string, data: Partial<StudentProfileType>): Promise<StudentProfileType | null> {
+        try{
+            await Student.updateOne({userId}, data)
+            const user = Student.findOne({userId})
+            return user;
+        } catch (err) {
+            console.error(err)
+            throw new Error("Error updating student profile by userId")
+        }
+    }
 }
 
 export default new StudentRepository();

@@ -28,5 +28,11 @@ export const env = {
   },
   get FRONTEND_ORIGIN() {
     return process.env.FRONTEND_ORIGIN!;
-  }
+  },
+  get CLOUDINARY_API_KEY() {
+    return process.env.CLOUDINARY_API_KEY!;
+  },
+  get CLOUDINARY_API_SECRET() {
+    return process.env.CLOUDINARY_API_SECRET!;
+  },
 };
