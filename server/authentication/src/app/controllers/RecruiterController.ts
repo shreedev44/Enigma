@@ -1,12 +1,12 @@
 import { HttpStatus } from "../../constants/StatusConstants";
 import { Messages } from "../../constants/MessageConstants";
 import { NextFunction, Request, Response } from "express";
-import { IStudentService } from "../../interfaces/student/IStudentService";
-import { IStudentController } from "../../interfaces/student/IStudentController";
-import { FileType, StudentProfileType } from "../../Types/types";
+import { IRecruiterService } from "../../interfaces/recruiter/IRecruiterService";
+import { IRecruiterController } from "../../interfaces/recruiter/IRecruiterController";
+import { FileType, RecruiterProfileType } from "../../Types/types";
 
-export class StudentController implements IStudentController {
-  constructor(private _studentService: IStudentService) {}
+export class RecruiterController implements IRecruiterController {
+  constructor(private _recruiterService: IRecruiterService) {}
 
   async getProfile(
     req: Request,
@@ -21,9 +21,11 @@ export class StudentController implements IStudentController {
           .json({ message: Messages.INCOMPLETE_FORM });
         return;
       }
-      const profile: StudentProfileType = await this._studentService.getProfile(
+
+      const profile = (await this._recruiterService.getProfile(
         id as string
-      );
+      )) as RecruiterProfileType;
+
       res.status(HttpStatus.OK).json({ profile });
     } catch (err) {
       next(err);
@@ -39,7 +41,7 @@ export class StudentController implements IStudentController {
       const userData = req.body;
       const { id } = JSON.parse(req.headers["x-user-payload"] as string);
       const profilePicture = req.file;
-      const profile = await this._studentService.updateProfile(
+      const profile = await this._recruiterService.updateProfile(
         id,
         userData,
         profilePicture as FileType | undefined

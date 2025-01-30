@@ -20,7 +20,11 @@ import { IUserRepository } from "../interfaces/user/IUserRepository";
 import { redisClient } from "../config/Redis";
 import { IStudentRepository } from "../interfaces/student/IStudentRepository";
 import { ObjectId } from "mongoose";
-import { generateAccessToken, generateRefreshToken, verifyToken } from "../utils/Token";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  verifyToken,
+} from "../utils/Token";
 import { IRecruiterRepository } from "../interfaces/recruiter/IRecruiterRepository";
 import generateUID from "../utils/GenerateUID";
 
@@ -216,11 +220,23 @@ export class UserService implements IUserService {
         profile = await this._studentRepository.findByUserId(
           String(userExist._id)
         );
+        if (profile.profilePicture === "") {
+          profile = (await this._studentRepository.updateById(
+            String(userExist._id),
+            { profilePicture: user.profilePicture }
+          )) as StudentProfileType;
+        }
         return { accessToken, refreshToken, user: userExist, profile };
       } else {
         profile = await this._recruiterRepository.findByUserId(
           String(userExist._id)
         );
+        if (profile.profilePicture === "") {
+          profile = (await this._recruiterRepository.updateById(
+            String(userExist._id),
+            { profilePicture: user.profilePicture }
+          )) as RecruiterProfileType;
+        }
         return { accessToken, refreshToken, user: userExist, profile };
       }
     } else {
@@ -306,6 +322,21 @@ export class UserService implements IUserService {
         String(userExist._id)
       );
 
+      let haveUpdate = false;
+      let updateObj: { profilePicture?: string; githubProfile?: string } = {};
+      if (profile.profilePicture === "") {
+        updateObj.profilePicture = user.avatar_url;
+        haveUpdate = true;
+      }
+      if (profile.githubProfile === "") {
+        updateObj.githubProfile = user.html_url;
+        haveUpdate = true;
+      }
+
+      if(haveUpdate) {
+        profile = await this._studentRepository.updateById(String(userExist._id), updateObj) as StudentProfileType
+      }
+
       return { accessToken, refreshToken, user: userExist, profile };
     }
 
@@ -388,21 +419,21 @@ export class UserService implements IUserService {
   async refreshToken(token: string): Promise<string> {
     const payload = verifyToken(token);
 
-    if(!payload) {
-      throw createHttpError(HttpStatus.FORBIDDEN, Messages.INVALID_TOKEN)
-    }
-    
-    const user = await this._userRepository.findById(payload.id)
-
-    if(!user) {
-      throw createHttpError(HttpStatus.FORBIDDEN, Messages.USER_NOT_FOUND)
-    }
-    if(user.status !== 'active') {
-      throw createHttpError(HttpStatus.FORBIDDEN, Messages.USER_BLOCKED)
+    if (!payload) {
+      throw createHttpError(HttpStatus.FORBIDDEN, Messages.INVALID_TOKEN);
     }
 
-    const accessToken = generateAccessToken(String(user._id), user.role)
+    const user = await this._userRepository.findById(payload.id);
 
-    return accessToken
+    if (!user) {
+      throw createHttpError(HttpStatus.FORBIDDEN, Messages.USER_NOT_FOUND);
+    }
+    if (user.status !== "active") {
+      throw createHttpError(HttpStatus.FORBIDDEN, Messages.USER_BLOCKED);
+    }
+
+    const accessToken = generateAccessToken(String(user._id), user.role);
+
+    return accessToken;
   }
 }

@@ -6,12 +6,12 @@ import {
   DialogTitle,
   DialogTrigger,
   Dialog,
-  DialogClose
+  DialogClose,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "../ui/button";
-import { StdntEditProfilePropType } from "@/types/propsTypes";
+import { RctrEditProfilePropType } from "@/types/propsTypes";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Skeleton } from "../ui/skeleton";
 import { useEffect, useRef, useState } from "react";
@@ -19,32 +19,45 @@ import { MdEdit } from "react-icons/md";
 import defaultPic from "../../assets/default-avatar.jpg";
 import CropperCanvas from "../Cropper";
 import { validateForm } from "@/validation/formValidation";
-import { studentProfileValidationSchema } from "@/validation/formSchema";
-import { StudentProfileType } from "@/types/formTypes";
+import { recruiterProfileValidationSchema } from "@/validation/formSchema";
+import { RecruiterProfileType } from "@/types/formTypes";
 import { dataURLToFile } from "@/utils/urlToFile";
 import Messages from "@/constants/Messages";
-import { updateProfile } from "@/api/student";
+import { updateProfile } from "@/api/recruiter";
 import { useToast } from "@/hooks/use-toast";
 import { useDispatch } from "react-redux";
-import { setStudent } from "@/redux/studentSlice";
+import { setRecruiter } from "@/redux/recruiterSlice";
+import { Textarea } from "@/components/ui/textarea";
 
-const EditProfileModal = (props: StdntEditProfilePropType) => {
+const EditProfileModal = (props: RctrEditProfilePropType) => {
   const { toast } = useToast();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const inputRef = useRef<HTMLInputElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
 
   const [isHover, setHover] = useState(false);
-  const [firstName, setFirstName] = useState(props.firstName);
-  const [lastName, setLastName] = useState(props.lastName);
-  const [githubProfile, setGithubProfile] = useState(props.githubProfile);
+  const [companyName, setCompanyName] = useState(props.companyName);
+  const [bio, setBio] = useState(props.bio);
+  const [basedAt, setBasedAt] = useState(props.basedAt);
+  const [facebookProfile, setFacebookProfile] = useState(props.facebookProfile);
   const [linkedinProfile, setLinkedinProfile] = useState(props.linkedinProfile);
+  const [twitterProfile, setTwitterProfile] = useState(props.twitterProfile);
   const [profilePicture, setProfilePicture] = useState(props.profilePicture);
   const [profileFile, setProfileFile] = useState("");
   const [error, setError] = useState({ field: "", message: "" });
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setCompanyName(props.companyName);
+    setBio(props.bio);
+    setBasedAt(props.basedAt);
+    setFacebookProfile(props.facebookProfile);
+    setLinkedinProfile(props.linkedinProfile);
+    setTwitterProfile(props.twitterProfile);
+    setProfilePicture(props.profilePicture);
+  }, [props]);
 
   const handleProfileClick = () => {
     inputRef.current?.click();
@@ -82,21 +95,29 @@ const EditProfileModal = (props: StdntEditProfilePropType) => {
 
   const hanldeSubmit = async () => {
     let changed = false;
-    const form: Partial<StudentProfileType> = {};
-    if (firstName !== props.firstName) {
-      form.firstName = firstName;
+    const form: Partial<RecruiterProfileType> = {};
+    if (companyName !== props.companyName) {
+      form.companyName = companyName;
       changed = true;
     }
-    if (lastName !== props.lastName) {
-      form.lastName = lastName;
+    if (bio !== props.bio) {
+      form.bio = bio;
       changed = true;
     }
-    if (githubProfile !== props.githubProfile) {
-      form.githubProfile = githubProfile;
+    if (basedAt !== props.basedAt) {
+      form.basedAt = basedAt;
       changed = true;
     }
     if (linkedinProfile !== props.linkedinProfile) {
       form.linkedinProfile = linkedinProfile;
+      changed = true;
+    }
+    if (facebookProfile !== props.facebookProfile) {
+      form.facebookProfile = facebookProfile;
+      changed = true;
+    }
+    if (twitterProfile !== props.twitterProfile) {
+      form.twitterProfile = twitterProfile;
       changed = true;
     }
     if (profilePicture !== props.profilePicture) {
@@ -108,8 +129,9 @@ const EditProfileModal = (props: StdntEditProfilePropType) => {
       setError({ field: "", message: "" });
       return;
     }
+
     const error = validateForm(
-      studentProfileValidationSchema,
+      recruiterProfileValidationSchema,
       form as Record<string, string>
     );
 
@@ -128,39 +150,32 @@ const EditProfileModal = (props: StdntEditProfilePropType) => {
       formData.append("profilePicture", newFile);
     }
 
-    setLoading(true);
-    const response = await updateProfile(formData);
+    setLoading(true)
+    const response = await updateProfile(formData)
 
-    if (response.success) {
-      const profile = response.data?.profile;
-      props.setFirstName(profile.firstName);
-      props.setLastName(profile.lastName);
-      props.setGithubProfile(profile.githubProfile);
-      props.setLinkedinProfile(profile.linkedinProfile);
-      if(props.profilePicture !== profile.profilePicture) {
-        dispatch(setStudent({profilePicture: profile.profilePicture}))
-      }
-      props.setProfilePicture(profile.profilePicture);
-      closeRef.current?.click();
-      setLoading(false)
+    if(response.success) {
+        const profile = response.data?.profile
+        props.setCompanyName(profile.companyName)
+        props.setBio(profile.bio)
+        props.setBasedAt(profile.basedAt)
+        props.setLinkedinProfile(profile.linkedinProfile)
+        props.setFacebookProfile(profile.facebookProfile)
+        props.setTwitterProfile(profile.twitterProfile)
+        if(props.profilePicture !== profile.profilePicture) {
+            dispatch(setRecruiter({profilePicture: profile.profilePicture}))
+        }
+        props.setProfilePicture(profile.profilePicture)
+        closeRef.current?.click()
+        setLoading(false)
     } else {
-      toast({
-        description: response.error,
-        variant: "destructive",
-      });
-      closeRef.current?.click();
-      setLoading(false)
+        toast({
+            description: response.error,
+            variant: "destructive"
+        })
+        closeRef.current?.click()
+        setLoading(false)
     }
   };
-
-  useEffect(() => {
-    setFirstName(props.firstName);
-    setLastName(props.lastName);
-    setGithubProfile(props.githubProfile);
-    setLinkedinProfile(props.linkedinProfile);
-    setProfilePicture(props.profilePicture);
-  }, [props]);
-
   return (
     <DialogContent className="sm:max-w-[425px]">
       <DialogHeader>
@@ -200,30 +215,30 @@ const EditProfileModal = (props: StdntEditProfilePropType) => {
           <></>
         )}
         <div className="grid grid-cols-4 items-center gap-4">
-          <Label htmlFor="firstName" className="text-right">
-            First Name
+          <Label htmlFor="companyName" className="text-right">
+            Company Name
           </Label>
           <Input
-            id="firstName"
-            value={firstName}
+            id="companyName"
+            value={companyName}
             className="col-span-3"
-            onChange={(e) => setFirstName(e.target.value)}
+            onChange={(e) => setCompanyName(e.target.value)}
           />
         </div>
-        {error.field === "firstName" ? (
+        {error.field === "companyName" ? (
           <p className="text-red-500 text-xs text-center">{error.message}</p>
         ) : (
           <></>
         )}
         <div className="grid grid-cols-4 items-center gap-4">
           <Label htmlFor="lastName" className="text-right">
-            Last Name
+            Bio
           </Label>
-          <Input
+          <Textarea
             id="lastName"
-            value={lastName}
-            className="col-span-3"
-            onChange={(e) => setLastName(e.target.value)}
+            value={bio}
+            className="col-span-3 resize-none"
+            onChange={(e) => setBio(e.target.value)}
           />
         </div>
         {error.field === "lastName" ? (
@@ -231,18 +246,19 @@ const EditProfileModal = (props: StdntEditProfilePropType) => {
         ) : (
           <></>
         )}
+
         <div className="grid grid-cols-4 items-center gap-4">
-          <Label htmlFor="github" className="text-right">
-            Github
+          <Label htmlFor="basedAt" className="text-right">
+            Based At
           </Label>
           <Input
-            id="github"
-            value={githubProfile}
+            id="basedAt"
+            value={basedAt}
             className="col-span-3"
-            onChange={(e) => setGithubProfile(e.target.value)}
+            onChange={(e) => setBasedAt(e.target.value)}
           />
         </div>
-        {error.field === "githubProfile" ? (
+        {error.field === "basedAt" ? (
           <p className="text-red-500 text-xs text-center">{error.message}</p>
         ) : (
           <></>
@@ -259,6 +275,38 @@ const EditProfileModal = (props: StdntEditProfilePropType) => {
           />
         </div>
         {error.field === "linkedinProfile" ? (
+          <p className="text-red-500 text-xs text-center">{error.message}</p>
+        ) : (
+          <></>
+        )}
+        <div className="grid grid-cols-4 items-center gap-4">
+          <Label htmlFor="facebook" className="text-right">
+            Facebook
+          </Label>
+          <Input
+            id="facebook"
+            value={facebookProfile}
+            className="col-span-3"
+            onChange={(e) => setFacebookProfile(e.target.value)}
+          />
+        </div>
+        {error.field === "facebookProfile" ? (
+          <p className="text-red-500 text-xs text-center">{error.message}</p>
+        ) : (
+          <></>
+        )}
+        <div className="grid grid-cols-4 items-center gap-4">
+          <Label htmlFor="twitter" className="text-right">
+            X (twitter)
+          </Label>
+          <Input
+            id="twitter"
+            value={twitterProfile}
+            className="col-span-3"
+            onChange={(e) => setTwitterProfile(e.target.value)}
+          />
+        </div>
+        {error.field === "twitterProfile" ? (
           <p className="text-red-500 text-xs text-center">{error.message}</p>
         ) : (
           <></>

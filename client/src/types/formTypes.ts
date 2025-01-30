@@ -45,6 +45,20 @@ interface StudentProfileType {
   updatedAt: Date;
 }
 
+export interface RecruiterProfileType {
+  _id: string;
+  companyName: string;
+  bio: string;
+  basedAt: string;
+  facebookProfile: string;
+  linkedinProfile: string;
+  twitterProfile: string;
+  profilePicture: string;
+  userId: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 interface UserStoreType {
   _id: string;
   email: string;

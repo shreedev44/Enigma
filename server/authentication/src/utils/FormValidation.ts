@@ -5,6 +5,10 @@ import {
   optionalNameRegex,
   optionalGithubRegex,
   optionalLinkedinRegex,
+  optionalBioRegex,
+  optionalFacebookRegex,
+  optionalTwitterRegex,
+  optionalBasedAtRegex,
 } from "./Regex";
 import { Messages } from "../constants/MessageConstants";
 
@@ -106,9 +110,43 @@ const recruiterSignupValidation = {
   },
 };
 
+const recruiterProfileValidationSchema = {
+  companyName: {
+    rules: [nameRegex],
+    messages: [Messages.INVALID_NAME],
+    optional: true,
+  },
+  bio: {
+    rules: [optionalBioRegex],
+    messages: [Messages.INVALID_BIO],
+    optional: true,
+  },
+  facebookProfile: {
+    rules: [optionalFacebookRegex],
+    messages: [Messages.INVALID_FACEBOOK],
+    optional: true,
+  },
+  linkedinProfile: {
+    rules: [optionalLinkedinRegex],
+    messages: [Messages.INVALID_LINKEDIN],
+    optional: true,
+  },
+  twitterProfile: {
+    rules: [optionalTwitterRegex],
+    messages: [Messages.INVALID_TWITTER],
+    optional: true,
+  },
+  basedAt: {
+    rules: [optionalBasedAtRegex],
+    messages: [Messages.INVALID_BASED_AT],
+    optional: true,
+  }
+};
+
 export default {
   loginValidationSchema,
   studentSignupValidationSchema,
   recruiterSignupValidation,
   studentProfileValidationSchema,
+  recruiterProfileValidationSchema
 };

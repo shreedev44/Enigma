@@ -3,6 +3,6 @@ import Api from "@/services/axios";
 import { adminEndpoints } from "@/constants/endpointUrl";
 
 const headers = {
-    "X-User-Level": "admin",
+    "x-user-level": "admin",
   };
 

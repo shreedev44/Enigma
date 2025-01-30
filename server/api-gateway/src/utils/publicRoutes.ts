@@ -1,7 +1,8 @@
 import { Request } from "express";
 
 const PUBLIC_ROUTES: { method: string; path: string }[] = [
-  { method: "POST", path: "/auth/register" },
+  { method: "POST", path: "/auth/student/register" },
+  { method: "POST", path: "/auth/recruiter/register" },
   { method: "POST", path: "/auth/verifyOtp" },
   { method: "POST", path: "/auth/resendOtp" },
   { method: "POST", path: "/auth/signin" },

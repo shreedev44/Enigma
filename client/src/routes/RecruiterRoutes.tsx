@@ -9,6 +9,7 @@ import Home from "@/pages/recruiter/Home";
 import Otp from "@/pages/recruiter/Otp";
 import ForgotPassword from "@/pages/ForgotPassword";
 import ResetPassword from "@/pages/ResetPassword";
+import Profile from "@/pages/recruiter/Profile";
 
 const RecruiterRoutes = () => {
   const user = useGetRecruiter();
@@ -87,6 +88,16 @@ const RecruiterRoutes = () => {
           element={
             user ? (
               <Home />
+            ) : (
+              <Navigate to={`/recruiter${recruiterRoutes.SIGNIN}`} />
+            )
+          }
+        />
+        <Route
+          path={recruiterRoutes.PROFILE}
+          element={
+            user ? (
+              <Profile />
             ) : (
               <Navigate to={`/recruiter${recruiterRoutes.SIGNIN}`} />
             )

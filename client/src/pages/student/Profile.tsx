@@ -11,6 +11,12 @@ import { getProfile } from "@/api/student";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
 import EditProfileModal from "@/components/studentComponents/EditProfileModal";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const Profile = () => {
   const { toast } = useToast();
@@ -46,9 +52,6 @@ const Profile = () => {
     };
 
     fetchProfile();
-    setTimeout(() => {
-      setProfileLoading(false);
-    }, 5000);
   }, []);
 
   return (
@@ -61,7 +64,7 @@ const Profile = () => {
       />
       <div className="grid grid-flow-row md:grid-flow-col grid-rows-5 gap-4 mt-10 px-5 md:px-20">
         <div className="row-span-3 bg-zinc-300 dark:bg-zinc-800 rounded-xl">
-          <div className="flex justify-start ml-5">
+          <div className="flex justify-center max-w-md">
             <Avatar className="w-12 md:w-20 h-12 md:h-20 my-5">
               <AvatarImage src={profilePic} alt="image" />
               <AvatarFallback>
@@ -75,10 +78,21 @@ const Profile = () => {
                   <Skeleton className="h-4 w-[100px]" />
                 </>
               ) : (
-                <p className="font-bold text-2xl font-mono">
-                  {firstName} {lastName}
-                  <p className="text-sm">Leaderboard Rank: 4</p>
-                </p>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <p className="font-bold text-2xl font-mono">
+                        {(firstName + lastName).length <= 11
+                          ? firstName + " " + lastName
+                          : (firstName + " " + lastName).slice(0, 11) + "..."}
+                        <p className="text-sm">Leaderboard Rank: 4</p>
+                      </p>
+                    </TooltipTrigger>
+                    <TooltipContent className="light:bg-black">
+                      {firstName + " " + lastName}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               )}
             </div>
           </div>
@@ -89,9 +103,11 @@ const Profile = () => {
                 {profileLoading ? (
                   <Skeleton className="h-4 w-[200px]" />
                 ) : (
-                  <div className="flex justify-center items-center">
+                  <div className="flex justify-start items-center">
                     <p className="ml-2 text-xs mr-3">
-                      {githubProfile.slice(0, 30) + '...' || "Not added"}{" "}
+                      {githubProfile
+                        ? githubProfile.slice(0, 30) + "..."
+                        : "Not added"}{" "}
                     </p>
                     {githubProfile ? (
                       <a
@@ -112,9 +128,11 @@ const Profile = () => {
                 {profileLoading ? (
                   <Skeleton className="h-4 w-[200px]" />
                 ) : (
-                  <div className="flex justify-center items-center">
+                  <div className="flex justify-start items-center">
                     <p className="ml-2 text-xs mr-3">
-                      {linkedinProfile.slice(0, 30) + '...' || "Not added"}{" "}
+                      {linkedinProfile
+                        ? linkedinProfile.slice(0, 30) + "..."
+                        : "Not added"}{" "}
                     </p>
                     {linkedinProfile ? (
                       <a
@@ -149,7 +167,7 @@ const Profile = () => {
                 setFirstName={setFirstName}
                 lastName={lastName}
                 setLastName={setLastName}
-                profilePicture={useGetProfilePic() || ''}
+                profilePicture={useGetProfilePic() || ""}
                 setProfilePicture={setProfilePic}
                 githubProfile={githubProfile}
                 setGithubProfile={setGithubProfile}

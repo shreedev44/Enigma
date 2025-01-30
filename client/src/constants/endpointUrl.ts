@@ -1,5 +1,5 @@
 export const studentEndpoints = {
-    SIGNUP: '/auth/register',
+    SIGNUP: '/auth/student/register',
     GOOGLE_AUTH: '/auth/googleAuth',
     GITHUB_AUTH: '/auth/githubAuth',
     FETCH_PROFILE: '/auth/student/getProfile',
@@ -8,7 +8,9 @@ export const studentEndpoints = {
 
 export const recruiterEndpoints = {
     SIGNUP: '/auth/recruiter/register',
-    GOOGLE_AUTH: '/auth/googleAuth'
+    GOOGLE_AUTH: '/auth/googleAuth',
+    FETCH_PROFILE: "/auth/recruiter/getProfile",
+    UPDATE_PROFILE: "/auth/recruiter/updateProfile"
 }
 
 export const adminEndpoints = {

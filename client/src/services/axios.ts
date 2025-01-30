@@ -51,7 +51,7 @@ const Api = axios.create({
 
 Api.interceptors.request.use(
   (config) => {
-    const userLevel = config.headers["X-User-Level"] || "student";
+    const userLevel = config.headers["x-user-level"] || "student";
     const token = getTokenByUserLevel(userLevel);
 
     if (token) {
@@ -81,7 +81,7 @@ Api.interceptors.response.use(
 
       try {
         const accessToken = await refreshToken(
-          originalRequest.headers["X-User-Level"] || "student"
+          originalRequest.headers["x-user-level"] || "student"
         );
 
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
@@ -89,7 +89,7 @@ Api.interceptors.response.use(
         return Api(originalRequest);
       } catch (err) {
         console.log(err);
-        const userLevel = originalRequest.headers["X-User-Level"] || "student";
+        const userLevel = originalRequest.headers["x-user-level"] || "student";
         if (userLevel === "student") {
           store.dispatch(removeStudent());
         } else if (userLevel === "recruiter") {

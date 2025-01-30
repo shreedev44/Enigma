@@ -85,7 +85,7 @@ const Navbar = () => {
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem>Profile</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate(`/recruiter${recruiterRoutes.PROFILE}`)}>Profile</DropdownMenuItem>
               <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -124,7 +124,7 @@ const Navbar = () => {
             </SheetClose>
             {user ? (
               <SheetClose asChild>
-                <Button variant={"outline"}>Profile</Button>
+                <Button variant={"outline"} onClick={() => navigate(`/recruiter${recruiterRoutes.PROFILE}`)}>Profile</Button>
               </SheetClose>
             ) : (<></>)}
           </SheetHeader>

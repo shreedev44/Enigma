@@ -50,15 +50,25 @@ export default {
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
   			},
-			black: '#09090b',
-			fleace: {
-				DEFAULT: 'hsl(var(--fleace))',
+  			black: '#09090b',
+  			fleace: {
+  				DEFAULT: 'hsl(var(--fleace))',
   				foreground: 'hsl(var(--fleace-foreground))'
-			},
-			bluegrey: {
-				DEFAULT: 'hsl(var(--bluegrey))',
-				foreground: 'hsl(var(--bluegrey-foreground))'
-			}
+  			},
+  			bluegrey: {
+  				DEFAULT: 'hsl(var(--bluegrey))',
+  				foreground: 'hsl(var(--bluegrey-foreground))'
+  			},
+  			sidebar: {
+  				DEFAULT: 'hsl(var(--sidebar-background))',
+  				foreground: 'hsl(var(--sidebar-foreground))',
+  				primary: 'hsl(var(--sidebar-primary))',
+  				'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+  				accent: 'hsl(var(--sidebar-accent))',
+  				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+  				border: 'hsl(var(--sidebar-border))',
+  				ring: 'hsl(var(--sidebar-ring))'
+  			}
   		}
   	}
   },

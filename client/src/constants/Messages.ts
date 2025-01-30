@@ -10,5 +10,9 @@ export default {
     INVALID_GITHUB: "Please provide a valid github profile link",
     INVALID_LINKEDIN: "Please provide a valid linked profile link",
     INVALID_FILE_TYPE: "Only jpeg, jpg, webp and png files allowed",
-    FILE_SIZE_EXCEEDED: "Image size cannot exceed 5MB"
+    FILE_SIZE_EXCEEDED: "Image size cannot exceed 5MB",
+    INVALID_BIO: "Bio should contains 100 - 600 characters",
+    INVALID_FACEBOOK: "Please provide a valid facebook profile link",
+    INVALID_TWITTER: "Please provide a valid twitter profile link",
+    INVALID_BASED_AT: "Please provide a valid location",
 }

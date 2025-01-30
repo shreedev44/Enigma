@@ -1,5 +1,4 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import Navbar from "@/components/adminComponents/Navbar";
 import { adminRoutes } from "@/constants/routeUrl";
 import useGetAdmin from "@/hooks/useGetAdmin";
 
@@ -7,12 +6,12 @@ import SignIn from "@/pages/admin/SignIn";
 import Dashboard from "@/pages/admin/Dashboard";
 import ForgotPassword from "@/pages/ForgotPassword";
 import ResetPassword from "@/pages/ResetPassword";
+import Sidebar from "@/components/adminComponents/Sidebar";
 
 const AdminRoutes = () => {
   const user = useGetAdmin();
   return (
     <>
-      <Navbar />
       <Routes>
         <Route
           path="/"
@@ -60,7 +59,7 @@ const AdminRoutes = () => {
           path={adminRoutes.HOME}
           element={
             user ? (
-              <Dashboard />
+              <Sidebar children={<Dashboard />} />
             ) : (
               <Navigate to={`/admin${adminRoutes.SIGNIN}`} />
             )

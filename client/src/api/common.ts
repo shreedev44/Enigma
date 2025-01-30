@@ -5,7 +5,7 @@ import { Role } from "@/types/formTypes";
 
 function getHeader(role: Role) {
   return {
-    "X-User-Level": role,
+    "x-user-level": role,
   };
 }
 

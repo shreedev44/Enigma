@@ -15,7 +15,7 @@ studentRouter.get(
   "/getProfile",
   studentController.getProfile.bind(studentController)
 );
-studentRouter.post(
+studentRouter.patch(
   "/updateProfile",
   upload.single("profilePicture"),
   validateData(FormValidation.studentProfileValidationSchema),

@@ -4,7 +4,7 @@ import { RecruiterSignupFormType } from "@/types/formTypes";
 import { recruiterEndpoints } from "@/constants/endpointUrl";
 
 const headers = {
-  "X-User-Level": "recruiter",
+  "x-user-level": "recruiter",
 };
 
 export const signup = async (userData: RecruiterSignupFormType) => {
@@ -33,6 +33,32 @@ export const googleAuth = async (
       },
       { headers }
     );
+    return { success: true, data };
+  } catch (err) {
+    const error = err as any;
+    const message = error.response?.data?.error || "An error occured";
+    return { success: false, error: message };
+  }
+};
+
+export const getProfile = async () => {
+  try {
+    const { data } = await Api.get(recruiterEndpoints.FETCH_PROFILE, {
+      headers,
+    });
+    return { success: true, data };
+  } catch (err) {
+    const error = err as any;
+    const message = error.response?.data?.error || "An error occured";
+    return { success: false, error: message };
+  }
+};
+
+export const updateProfile = async (formData: FormData) => {
+  try {
+    const { data } = await Api.patch(recruiterEndpoints.UPDATE_PROFILE, formData, {
+      headers: { ...headers, "Content-Type": "multipart/form-data" },
+    });
     return { success: true, data };
   } catch (err) {
     const error = err as any;

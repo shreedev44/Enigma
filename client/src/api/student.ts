@@ -4,7 +4,7 @@ import { StudentSignupFormType } from "@/types/formTypes";
 import { studentEndpoints } from "@/constants/endpointUrl";
 
 const headers = {
-  "X-User-Level": "student",
+  "x-user-level": "student",
 };
 
 export const signup = async (userData: StudentSignupFormType) => {
@@ -71,7 +71,7 @@ export const getProfile = async () => {
 
 export const updateProfile = async (formData: FormData) => {
   try {
-    const { data } = await Api.post(studentEndpoints.UPDATE_PROFILE, formData, {
+    const { data } = await Api.patch(studentEndpoints.UPDATE_PROFILE, formData, {
       headers: { ...headers, "Content-Type": "multipart/form-data" },
     });
     return { success: true, data };

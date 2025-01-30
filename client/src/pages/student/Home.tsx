@@ -5,9 +5,7 @@ const Home = () => {
   return (
     <div className="pt-24">
       <Breadcrumbs
-        components={[
-          { component: "Home", path: studentRoutes.HOME }
-        ]}
+        components={[{ component: "Home", path: studentRoutes.HOME }]}
       />
     </div>
   );

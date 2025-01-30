@@ -18,8 +18,13 @@ const userRouter = Router();
 
 
 userRouter.post(
-  "/register",
+  "/student/register",
   validateData(FormValidation.studentSignupValidationSchema),
+  userController.register.bind(userController)
+);
+userRouter.post(
+  "/recruiter/register",
+  validateData(FormValidation.recruiterSignupValidation),
   userController.register.bind(userController)
 );
 userRouter.post("/verifyOtp", userController.verifyOtp.bind(userController));

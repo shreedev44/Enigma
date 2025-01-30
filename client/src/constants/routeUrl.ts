@@ -16,12 +16,15 @@ export const recruiterRoutes = {
     VERIFY_OTP: '/verify-otp',
     HOME: '/home',
     FORGOT_PASSWORD: '/forgot-password',
-    RESET_PASSWORD: '/reset-password'
+    RESET_PASSWORD: '/reset-password',
+    PROFILE: '/profile',
 }
 
 export const adminRoutes = {
     SIGNIN: '/signin',
     HOME: '/dashboard',
     FORGOT_PASSWORD: '/forgot-password',
-    RESET_PASSWORD: '/reset-password'
+    RESET_PASSWORD: '/reset-password',
+    STUDENTS: '/students',
+    RECRUITERS: '/recruiters'
 }

@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import { IUserService } from "../../interfaces/user/IUserService";
 import { IUserController } from "../../interfaces/user/IUserController";
 import { HttpStatus } from "../../constants/StatusConstants";
-import { HttpError } from "../../utils/HttpError";
 import { Messages } from "../../constants/MessageConstants";
 import { GoogleAuthUserType, Role } from "../../Types/types";
 
