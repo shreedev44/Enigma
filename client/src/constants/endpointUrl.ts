@@ -14,7 +14,9 @@ export const recruiterEndpoints = {
 }
 
 export const adminEndpoints = {
-    
+    FETCH_STUDENTS: "/auth/admin/getStudents",
+    FETCH_RECRUITERS: "/auth/admin/getRecruiters",
+    BLOCK_ACTION: "/auth/admin/blockOrUnblock",
 }
 
 export const commonEndpoints = {

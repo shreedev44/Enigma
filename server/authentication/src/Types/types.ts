@@ -5,7 +5,7 @@ export interface UserType {
   email: string;
   password?: string;
   role: "student" | "recruiter" | "admin";
-  status?: "active" | "blocked" | "deleted";
+  status?: "active" | "blocked";
   subscriptionType?: "free" | "premium";
   createdAt?: Date;
   updatedAt?: Date;
@@ -61,4 +61,33 @@ export interface FileType {
   mimetype: string;
   buffer: Buffer;
   size: number;
+}
+
+export interface StudentWithProfileType {
+  _id: ObjectId;
+  email: string;
+  role: Role;
+  status: "active" | "blocked";
+  createdAt: Date;
+  firstName: string;
+  lastName: string;
+  githubProfile: string;
+  linkedinProifle: string;
+  profilePicture: string;
+}
+
+export interface RecruiterWithProfileType {
+  _id: ObjectId;
+  email: string;
+  role: Role;
+  status: "active" | "blocked";
+  subscriptionType: "free" | "premium";
+  createdAt: Date;
+  companyName: string;
+  facebookProfile: string;
+  linkedinProifle: string;
+  twitterProifle: string;
+  profilePicture: string;
+  basedAt: string;
+  bio: string;
 }

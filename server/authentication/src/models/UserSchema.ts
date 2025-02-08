@@ -22,7 +22,7 @@ const UserSchema: Schema = new Schema(
         status: {
             type: String,
             required: true,
-            enum: ['active', 'blocked', 'deleted'],
+            enum: ['active', 'blocked'],
             default: 'active'
         },
         subscriptionType: {

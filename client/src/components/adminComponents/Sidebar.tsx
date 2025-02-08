@@ -7,41 +7,56 @@ import { useToast } from "@/hooks/use-toast";
 import Messages from "@/constants/Messages";
 import { useTheme } from "../../context/ThemeContext";
 import Breadcrumbs from "../Breadcrumbs";
+import { createContext, useContext, useState } from "react";
+import { Outlet } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { adminRoutes } from "@/constants/routeUrl";
 
-const Sidebar = ({ children }: { children: React.ReactNode }) => {
-  const { theme, toggleTheme } = useTheme();
 
+const SidebarContext = createContext<{ setBreadcrumbs: (breadcrumbs: { component: string, path?: string | undefined }[]) => void } | null>(null);
+export const useSidebarContext = () => {
+  const context = useContext(SidebarContext);
+  if (!context) {
+    throw new Error("useSidebarContext must be used within SidebarProvider");
+  }
+  return context;
+};
+
+const Sidebar = () => {
+  const { theme, toggleTheme } = useTheme();
   const dispatch = useDispatch();
   const { toast } = useToast();
   const { name } = useGetUserData();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     dispatch(removeAdmin());
     toast({
       description: Messages.LOGOUT_SUCCESS,
     });
+    navigate(`/admin${adminRoutes.SIGNIN}`)
   };
+
+  const [breadcrumbs, setBreadcrumbs] = useState([{ component: "" }]);
 
   return (
     <SidebarProvider>
-      <AppSidebar
-        theme={theme}
-        handleLogout={handleLogout}
-        toggleTheme={toggleTheme}
-        user={name || "admin"}
-      />
-      <main>
-        <div className="flex justify-start items-center">
-          <SidebarTrigger />
-          <Breadcrumbs
-            components={[
-              { component: "Dashboard", path: `/admin${adminRoutes.HOME}` },
-            ]}
-          />
-        </div>
-        {children}
-      </main>
+      <SidebarContext.Provider value={{ setBreadcrumbs }}>
+        <AppSidebar
+          theme={theme}
+          handleLogout={handleLogout}
+          toggleTheme={toggleTheme}
+          user={name || "admin"}
+        />
+        <main className="px-5 pt-5 w-full">
+          <div className="flex justify-start items-center">
+            <SidebarTrigger />
+            <Breadcrumbs components={breadcrumbs} />
+          </div>
+
+          <Outlet />
+        </main>
+      </SidebarContext.Provider>
     </SidebarProvider>
   );
 };

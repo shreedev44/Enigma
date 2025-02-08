@@ -25,6 +25,6 @@ export const adminRoutes = {
     HOME: '/dashboard',
     FORGOT_PASSWORD: '/forgot-password',
     RESET_PASSWORD: '/reset-password',
-    STUDENTS: '/students',
-    RECRUITERS: '/recruiters'
+    STUDENTS: '/users/students',
+    RECRUITERS: '/users/recruiters'
 }

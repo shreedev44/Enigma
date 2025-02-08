@@ -6,6 +6,7 @@ import {
   Briefcase,
   ChevronUp,
   ChevronRight,
+  Minus,
 } from "lucide-react";
 
 import {
@@ -34,6 +35,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "./collapsible";
+import { useLocation } from "react-router-dom";
 
 export function AppSidebar(props: {
   theme: Theme;
@@ -42,9 +44,10 @@ export function AppSidebar(props: {
   user: string;
 }) {
   const navigate = useNavigate();
+  const location = useLocation()
   return (
     <Sidebar>
-      <SidebarHeader className="font-mono font-bold text-2xl">
+      <SidebarHeader className="font-mono font-bold text-2xl mt-3">
         Enigma
       </SidebarHeader>
       <SidebarContent>
@@ -55,6 +58,7 @@ export function AppSidebar(props: {
                 <SidebarMenuButton
                   asChild
                   onClick={() => navigate(`/admin${adminRoutes.HOME}`)}
+                  className={location.pathname.split('/')[2] === 'dashboard' ? "outline outline-1" : ''}
                 >
                   <span>
                     <LayoutDashboardIcon />
@@ -67,6 +71,7 @@ export function AppSidebar(props: {
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton
                       asChild
+                      className={location.pathname.split('/')[2] === 'users' ? "outline outline-1" : ''}
                     >
                       <span>
                         <User />
@@ -83,6 +88,9 @@ export function AppSidebar(props: {
                       >
                         <span>
                           <span>{"Students"}</span>
+                          {location.pathname.split('/')[3] === 'students' ? (
+                            <Minus className="ml-auto"/>
+                          ) : (<></>)}
                         </span>
                       </SidebarMenuButton>
                       <SidebarMenuButton
@@ -91,6 +99,9 @@ export function AppSidebar(props: {
                       >
                         <span>
                           <span>{"Recruiters"}</span>
+                          {location.pathname.split('/')[3] === 'recruiters' ? (
+                            <Minus className="ml-auto"/>
+                          ) : (<></>)}
                         </span>
                       </SidebarMenuButton>
                     </SidebarMenuSub>
@@ -101,6 +112,7 @@ export function AppSidebar(props: {
                 <SidebarMenuButton
                   asChild
                   onClick={() => navigate(`/admin${adminRoutes.HOME}`)}
+                  className={location.pathname.split('/')[2] === 'problems' ? "outline outline-1" : ''}
                 >
                   <span>
                     <Code2 />
@@ -112,6 +124,7 @@ export function AppSidebar(props: {
                 <SidebarMenuButton
                   asChild
                   onClick={() => navigate(`/admin${adminRoutes.HOME}`)}
+                  className={location.pathname.split('/')[2] === 'community' ? "outline outline-1" : ''}
                 >
                   <span>
                     <Users />
@@ -123,6 +136,7 @@ export function AppSidebar(props: {
                 <SidebarMenuButton
                   asChild
                   onClick={() => navigate(`/admin${adminRoutes.HOME}`)}
+                  className={location.pathname.split('/')[2] === 'jobposts' ? "outline outline-1" : ''}
                 >
                   <span>
                     <Briefcase />

@@ -150,7 +150,7 @@ export class UserService implements IUserService {
   }> {
     const user = await this._userRepository.findByEmail(email);
 
-    if (!user || user.status === "deleted") {
+    if (!user) {
       throw createHttpError(HttpStatus.NOT_FOUND, Messages.USER_NOT_FOUND);
     }
 

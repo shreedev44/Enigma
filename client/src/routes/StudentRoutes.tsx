@@ -13,7 +13,14 @@ import ResetPassword from "@/pages/ResetPassword";
 import Profile from "@/pages/student/Profile";
 
 const StudentRoutes = () => {
-  const user = useGetUser();
+  const ProtectRoute = ({ children }: { children: JSX.Element }) => {
+    const user = useGetUser();
+    return user ? children : <Navigate to={studentRoutes.SIGNIN} />;
+  };
+  const PublicRoute = ({ children }: { children: JSX.Element }) => {
+    const user = useGetUser();
+    return user ? <Navigate to={studentRoutes.HOME} /> : children;
+  };
   return (
     <>
       <Navbar />
@@ -21,47 +28,71 @@ const StudentRoutes = () => {
         <Route
           path="/"
           element={
-            <Navigate to={user ? studentRoutes.HOME : studentRoutes.SIGNIN} />
+            <ProtectRoute>
+              <Home />
+            </ProtectRoute>
           }
         />
         <Route path="/login" element={<Navigate to={studentRoutes.SIGNIN} />} />
         <Route
           path={studentRoutes.SIGNIN}
-          element={user ? <Navigate to={studentRoutes.HOME} /> : <SignIn />}
+          element={
+            <PublicRoute>
+              <SignIn />
+            </PublicRoute>
+          }
         />
         <Route
           path={studentRoutes.SIGNUP}
-          element={user ? <Navigate to={studentRoutes.HOME} /> : <Signup />}
+          element={
+            <PublicRoute>
+              <Signup />
+            </PublicRoute>
+          }
         />
         <Route
           path={studentRoutes.VERIFY_OTP}
-          element={user ? <Navigate to={studentRoutes.HOME} /> : <Otp />}
+          element={
+            <PublicRoute>
+              <Otp />
+            </PublicRoute>
+          }
         />
         <Route
           path={studentRoutes.GITHUB_AUTH}
           element={
-            user ? <Navigate to={studentRoutes.HOME} /> : <GitHubCallback />
+            <PublicRoute>
+              <GitHubCallback />
+            </PublicRoute>
           }
         />
         <Route
           path={studentRoutes.FORGOT_PASSWORD}
           element={
-            user ? <Navigate to={studentRoutes.HOME} /> : <ForgotPassword />
+            <PublicRoute>
+              <ForgotPassword />
+            </PublicRoute>
           }
         />
         <Route
           path={studentRoutes.RESET_PASSWORD}
-          element={
-            user ? <Navigate to={studentRoutes.HOME} /> : <ResetPassword />
-          }
+          element={<ResetPassword />}
         />
         <Route
           path={studentRoutes.HOME}
-          element={user ? <Home /> : <Navigate to={studentRoutes.SIGNIN} />}
+          element={
+            <ProtectRoute>
+              <Home />
+            </ProtectRoute>
+          }
         />
         <Route
           path={studentRoutes.PROFILE}
-          element={user ? <Profile /> : <Navigate to={studentRoutes.SIGNIN} />}
+          element={
+            <ProtectRoute>
+              <Profile />
+            </ProtectRoute>
+          }
         />
       </Routes>
     </>

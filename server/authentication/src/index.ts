@@ -19,6 +19,7 @@ dotenv.config({ path: path.resolve(__dirname, "../.env") });
 import userRouter from "./app/routes/UserRouter";
 import studentRouter from "./app/routes/StudentRouter";
 import recruiterRouter from "./app/routes/RecruiterRouter";
+import adminRouter from "./app/routes/AdminRouter";
 
 class App {
   public app: Application;
@@ -44,6 +45,7 @@ class App {
     this.app.use("/", userRouter);
     this.app.use("/student", studentRouter);
     this.app.use("/recruiter", recruiterRouter);
+    this.app.use("/admin", adminRouter);
     this.app.use(notFoundHandler);
     this.app.use(errorHandler);
   }

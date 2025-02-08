@@ -75,6 +75,35 @@ interface ReduxStoreType {
   admin: UserStoreType
 }
 
+type StudentData = {
+  _id: string;
+  email: string;
+  role: "student";
+  status: "active" | "blocked";
+  createdAt: Date;
+  firstName: string;
+  lastName: string;
+  githubProfile: string;
+  linkedinProfile: string;
+  profilePicture: string;
+};
+
+type RecruiterData = {
+  _id: string;
+  email: string;
+  role: "recruiter";
+  status: "active" | "blocked";
+  subscriptionType: "free" | "premium";
+  createdAt: Date;
+  companyName: string;
+  facebookProfile: string;
+  linkedinProfile: string;
+  twitterProfile: string;
+  profilePicture: string;
+  basedAt: string;
+  bio: string;
+};
+
 type Role = "student" | "recruiter" | "admin"
 
 export type {
@@ -86,5 +115,7 @@ export type {
   UserStoreType,
   StudentProfileType,
   ReduxStoreType,
-  Role
+  Role,
+  StudentData,
+  RecruiterData,
 };

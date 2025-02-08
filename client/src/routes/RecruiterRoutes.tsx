@@ -12,7 +12,22 @@ import ResetPassword from "@/pages/ResetPassword";
 import Profile from "@/pages/recruiter/Profile";
 
 const RecruiterRoutes = () => {
-  const user = useGetRecruiter();
+  const ProtectRoute = ({ children }: { children: JSX.Element }) => {
+    const user = useGetRecruiter();
+    return user ? (
+      children
+    ) : (
+      <Navigate to={`/recruiter${recruiterRoutes.SIGNIN}`} />
+    );
+  };
+  const PublicRoute = ({ children }: { children: JSX.Element }) => {
+    const user = useGetRecruiter();
+    return user ? (
+      <Navigate to={`/recruiter${recruiterRoutes.HOME}`} />
+    ) : (
+      children
+    );
+  };
   return (
     <>
       <Navbar />
@@ -20,15 +35,12 @@ const RecruiterRoutes = () => {
         <Route
           path="/"
           element={
-            <Navigate
-              to={
-                user
-                  ? `/recruiter${recruiterRoutes.HOME}`
-                  : `/recruiter${recruiterRoutes.SIGNIN}`
-              }
-            />
+            <ProtectRoute>
+              <Home />
+            </ProtectRoute>
           }
         />
+
         <Route
           path="/login"
           element={<Navigate to={`/recruiter${recruiterRoutes.SIGNIN}`} />}
@@ -36,71 +48,53 @@ const RecruiterRoutes = () => {
         <Route
           path={recruiterRoutes.SIGNIN}
           element={
-            user ? (
-              <Navigate to={`/recruiter${recruiterRoutes.HOME}`} />
-            ) : (
+            <PublicRoute>
               <SignIn />
-            )
+            </PublicRoute>
           }
         />
         <Route
           path={recruiterRoutes.SIGNUP}
           element={
-            user ? (
-              <Navigate to={`/recruiter${recruiterRoutes.HOME}`} />
-            ) : (
+            <PublicRoute>
               <Signup />
-            )
+            </PublicRoute>
           }
         />
         <Route
           path={recruiterRoutes.VERIFY_OTP}
           element={
-            user ? (
-              <Navigate to={`/recruiter${recruiterRoutes.HOME}`} />
-            ) : (
+            <PublicRoute>
               <Otp />
-            )
+            </PublicRoute>
           }
         />
         <Route
           path={recruiterRoutes.FORGOT_PASSWORD}
           element={
-            user ? (
-              <Navigate to={`/recruiter${recruiterRoutes.HOME}`} />
-            ) : (
+            <PublicRoute>
               <ForgotPassword />
-            )
+            </PublicRoute>
           }
         />
         <Route
           path={recruiterRoutes.RESET_PASSWORD}
-          element={
-            user ? (
-              <Navigate to={`/recruiter${recruiterRoutes.HOME}`} />
-            ) : (
-              <ResetPassword />
-            )
-          }
+          element={<ResetPassword />}
         />
         <Route
           path={recruiterRoutes.HOME}
           element={
-            user ? (
+            <ProtectRoute>
               <Home />
-            ) : (
-              <Navigate to={`/recruiter${recruiterRoutes.SIGNIN}`} />
-            )
+            </ProtectRoute>
           }
         />
         <Route
           path={recruiterRoutes.PROFILE}
           element={
-            user ? (
+            <ProtectRoute>
               <Profile />
-            ) : (
-              <Navigate to={`/recruiter${recruiterRoutes.SIGNIN}`} />
-            )
+            </ProtectRoute>
           }
         />
       </Routes>

@@ -7,24 +7,29 @@ import Dashboard from "@/pages/admin/Dashboard";
 import ForgotPassword from "@/pages/ForgotPassword";
 import ResetPassword from "@/pages/ResetPassword";
 import Sidebar from "@/components/adminComponents/Sidebar";
+import Users from "@/pages/admin/Users";
 
 const AdminRoutes = () => {
-  const user = useGetAdmin();
+  const ProtectRoute = ({ children }: { children: JSX.Element }) => {
+    const user = useGetAdmin();
+    return user ? children : <Navigate to={`/admin${adminRoutes.SIGNIN}`} />;
+  };
+  const PublicRoute = ({ children }: { children: JSX.Element }) => {
+    const user = useGetAdmin();
+    return user ? <Navigate to={`/admin${adminRoutes.HOME}`} /> : children;
+  };
   return (
     <>
       <Routes>
         <Route
           path="/"
           element={
-            <Navigate
-              to={
-                user
-                  ? `/admin${adminRoutes.HOME}`
-                  : `/admin${adminRoutes.SIGNIN}`
-              }
-            />
+            <ProtectRoute>
+              <Dashboard />
+            </ProtectRoute>
           }
         />
+
         <Route
           path="/login"
           element={<Navigate to={`/admin${adminRoutes.SIGNIN}`} />}
@@ -32,39 +37,53 @@ const AdminRoutes = () => {
         <Route
           path={adminRoutes.SIGNIN}
           element={
-            user ? <Navigate to={`/admin${adminRoutes.HOME}`} /> : <SignIn />
+            <PublicRoute>
+              <SignIn />
+            </PublicRoute>
           }
         />
         <Route
           path={adminRoutes.FORGOT_PASSWORD}
           element={
-            user ? (
-              <Navigate to={`/admin${adminRoutes.HOME}`} />
-            ) : (
+            <PublicRoute>
               <ForgotPassword />
-            )
+            </PublicRoute>
           }
         />
         <Route
           path={adminRoutes.RESET_PASSWORD}
           element={
-            user ? (
-              <Navigate to={`/admin${adminRoutes.HOME}`} />
-            ) : (
+            <PublicRoute>
               <ResetPassword />
-            )
+            </PublicRoute>
           }
         />
-        <Route
-          path={adminRoutes.HOME}
-          element={
-            user ? (
-              <Sidebar children={<Dashboard />} />
-            ) : (
-              <Navigate to={`/admin${adminRoutes.SIGNIN}`} />
-            )
-          }
-        />
+        <Route element={<Sidebar />}>
+          <Route
+            path={adminRoutes.HOME}
+            element={
+              <ProtectRoute>
+                <Dashboard />
+              </ProtectRoute>
+            }
+          />
+          <Route
+            path={adminRoutes.STUDENTS}
+            element={
+              <ProtectRoute>
+                <Users user="student" />
+              </ProtectRoute>
+            }
+          />
+          <Route
+            path={adminRoutes.RECRUITERS}
+            element={
+              <ProtectRoute>
+                <Users user="recruiter" />
+              </ProtectRoute>
+            }
+          />
+        </Route>
       </Routes>
     </>
   );
