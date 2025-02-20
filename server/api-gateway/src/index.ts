@@ -16,6 +16,10 @@ const services = [
     route: "/auth",
     target: env.AUTH,
   },
+  {
+    route: "/problem",
+    target: env.PROBLEM
+  }
 ];
 
 const allowedOrigins = ["http://localhost:5173"];

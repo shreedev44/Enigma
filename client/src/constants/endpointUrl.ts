@@ -3,7 +3,9 @@ export const studentEndpoints = {
     GOOGLE_AUTH: '/auth/googleAuth',
     GITHUB_AUTH: '/auth/githubAuth',
     FETCH_PROFILE: '/auth/student/getProfile',
-    UPDATE_PROFILE: '/auth/student/updateProfile'
+    UPDATE_PROFILE: '/auth/student/updateProfile',
+    GET_PROBLEMS: '/problem/student/getProblems',
+    FIND_PROBLEM: '/problem/student/findProblem'
 }
 
 export const recruiterEndpoints = {
@@ -17,6 +19,7 @@ export const adminEndpoints = {
     FETCH_STUDENTS: "/auth/admin/getStudents",
     FETCH_RECRUITERS: "/auth/admin/getRecruiters",
     BLOCK_ACTION: "/auth/admin/blockOrUnblock",
+    ADD_PROBLEM: "/problem/admin/addProblem"
 }
 
 export const commonEndpoints = {

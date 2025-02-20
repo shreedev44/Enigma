@@ -71,9 +71,41 @@ export const getProfile = async () => {
 
 export const updateProfile = async (formData: FormData) => {
   try {
-    const { data } = await Api.patch(studentEndpoints.UPDATE_PROFILE, formData, {
-      headers: { ...headers, "Content-Type": "multipart/form-data" },
-    });
+    const { data } = await Api.patch(
+      studentEndpoints.UPDATE_PROFILE,
+      formData,
+      {
+        headers: { ...headers, "Content-Type": "multipart/form-data" },
+      }
+    );
+    return { success: true, data };
+  } catch (err) {
+    const error = err as any;
+    const message = error.response?.data?.error || "An error occured";
+    return { success: false, error: message };
+  }
+};
+
+export const getProblems = async (query = "") => {
+  try {
+    const { data } = await Api.get(
+      `${studentEndpoints.GET_PROBLEMS}?${query}`,
+      { headers }
+    );
+    return { success: true, data };
+  } catch (err) {
+    const error = err as any;
+    const message = error.response?.data?.error || "An error occured";
+    return { success: false, error: message };
+  }
+};
+
+export const findProblem = async (problemNo: number) => {
+  try {
+    const { data } = await Api.get(
+      `${studentEndpoints.FIND_PROBLEM}/${problemNo}`,
+      { headers }
+    );
     return { success: true, data };
   } catch (err) {
     const error = err as any;

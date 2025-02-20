@@ -11,6 +11,8 @@ import Otp from "@/pages/student/Otp";
 import ForgotPassword from "@/pages/ForgotPassword";
 import ResetPassword from "@/pages/ResetPassword";
 import Profile from "@/pages/student/Profile";
+import ProblemSet from "@/pages/student/ProblemSet";
+import Problem from "@/pages/student/Problem";
 
 const StudentRoutes = () => {
   const ProtectRoute = ({ children }: { children: JSX.Element }) => {
@@ -91,6 +93,22 @@ const StudentRoutes = () => {
           element={
             <ProtectRoute>
               <Profile />
+            </ProtectRoute>
+          }
+        />
+        <Route
+          path={studentRoutes.PROBLEM_SET}
+          element={
+            <ProtectRoute>
+              <ProblemSet />
+            </ProtectRoute>
+          }
+        />
+        <Route
+          path={studentRoutes.PROBLEM + '/:problemNo'}
+          element={
+            <ProtectRoute>
+              <Problem />
             </ProtectRoute>
           }
         />

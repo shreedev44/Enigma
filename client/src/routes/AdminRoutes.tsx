@@ -8,6 +8,8 @@ import ForgotPassword from "@/pages/ForgotPassword";
 import ResetPassword from "@/pages/ResetPassword";
 import Sidebar from "@/components/adminComponents/Sidebar";
 import Users from "@/pages/admin/Users";
+import Problems from "@/pages/admin/Problems";
+import AddProblem from "@/pages/admin/AddProblem";
 
 const AdminRoutes = () => {
   const ProtectRoute = ({ children }: { children: JSX.Element }) => {
@@ -80,6 +82,22 @@ const AdminRoutes = () => {
             element={
               <ProtectRoute>
                 <Users user="recruiter" />
+              </ProtectRoute>
+            }
+          />
+          <Route 
+            path={adminRoutes.PROBLEMS}
+            element={
+              <ProtectRoute>
+                <Problems />
+              </ProtectRoute>
+            }
+          />
+          <Route 
+            path={adminRoutes.ADD_PROBLEM}
+            element={
+              <ProtectRoute>
+                <AddProblem />
               </ProtectRoute>
             }
           />

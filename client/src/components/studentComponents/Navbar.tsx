@@ -24,7 +24,7 @@ import useGetUser, { useGetProfilePic } from "@/hooks/useGetStudent";
 import { removeStudent } from "@/redux/studentSlice";
 import { useDispatch } from "react-redux";
 import { studentRoutes } from "@/constants/routeUrl";
-import defaultPic from '../../assets/default-avatar.jpg'
+import defaultPic from "../../assets/default-avatar.jpg";
 import { useToast } from "@/hooks/use-toast";
 import Messages from "@/constants/Messages";
 import { Skeleton } from "../ui/skeleton";
@@ -32,30 +32,33 @@ import { Skeleton } from "../ui/skeleton";
 const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
-  const user = useGetUser()
+  const user = useGetUser();
   const profilePic = useGetProfilePic();
 
-  const dispatch = useDispatch()
-  const { toast } = useToast()
+  const dispatch = useDispatch();
+  const { toast } = useToast();
 
   const handleLogout = () => {
-    dispatch(removeStudent())
+    dispatch(removeStudent());
     toast({
-      description: Messages.LOGOUT_SUCCESS
-    })
-  }
+      description: Messages.LOGOUT_SUCCESS,
+    });
+  };
 
   return (
     <div className="dark:bg-black bg-primary-foreground outline outline-1 outline-gray-600 w-full flex h-20 items-center px-6 md:px-16 fixed top-0 justify-between z-30">
       <div className="font-mono font-extrabold text-3xl">Enigma</div>
       <div>
-        <Button className="bg-fleace text-fleace-foreground mr-3 font-bold hidden md:inline" onClick={() => navigate(studentRoutes.HOME)}>
+        <Button
+          className="bg-fleace text-fleace-foreground mr-3 font-bold hidden md:inline rounded-full"
+          onClick={() => navigate(studentRoutes.HOME)}
+        >
           Home
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button className="bg-fleace font-bold text-fleace-foreground mr-3 hidden md:inline">
-              Learn
+            <Button className="bg-fleace font-bold text-fleace-foreground mr-3 hidden md:inline rounded-full">
+              Learn &nbsp; &#x25BC;
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -63,13 +66,16 @@ const Navbar = () => {
             <DropdownMenuItem>Compiler</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        <Button className="bg-fleace text-fleace-foreground font-bold mr-3 hidden md:inline">
+        <Button
+          className="bg-fleace text-fleace-foreground font-bold mr-3 hidden md:inline rounded-full"
+          onClick={() => navigate(studentRoutes.PROBLEM_SET)}
+        >
           Problems
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button className="bg-fleace font-bold text-fleace-foreground mr-3 hidden md:inline">
-              Jobs
+            <Button className="bg-fleace font-bold text-fleace-foreground mr-3 hidden md:inline rounded-full">
+              Jobs &nbsp; &#x25BC;
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -84,17 +90,24 @@ const Navbar = () => {
         </button>
         {user ? (
           <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-          <Avatar className="hidden md:inline">
-            <AvatarImage src={profilePic ? profilePic : defaultPic} alt="@image" />
-            <AvatarFallback><Skeleton className="rounded-full w-10 h-10"/></AvatarFallback>
-          </Avatar>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem onClick={() => navigate(studentRoutes.PROFILE)}>Profile</DropdownMenuItem>
-            <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Avatar className="hidden md:inline">
+                <AvatarImage
+                  src={profilePic ? profilePic : defaultPic}
+                  alt="@image"
+                />
+                <AvatarFallback>
+                  <Skeleton className="rounded-full w-10 h-10" />
+                </AvatarFallback>
+              </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem onClick={() => navigate(studentRoutes.PROFILE)}>
+                Profile
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         ) : (
           <Button
             className="bg-fleace text-fleace-foreground font-bold ml-3 hidden md:inline align-middle"
@@ -112,7 +125,12 @@ const Navbar = () => {
           <SheetHeader>
             <SheetTitle>Menu</SheetTitle>
             <SheetClose asChild>
-              <Button variant={"outline"} onClick={() => navigate(studentRoutes.HOME)}>Home</Button>
+              <Button
+                variant={"outline"}
+                onClick={() => navigate(studentRoutes.HOME)}
+              >
+                Home
+              </Button>
             </SheetClose>
             <SheetClose asChild>
               <Button variant={"outline"}>Community</Button>
@@ -121,7 +139,7 @@ const Navbar = () => {
               <Button variant={"outline"}>Compiler</Button>
             </SheetClose>
             <SheetClose asChild>
-              <Button variant={"outline"}>Problems</Button>
+              <Button variant={"outline"} onClick={() => navigate(studentRoutes.PROBLEM_SET)}>Problems</Button>
             </SheetClose>
             <SheetClose asChild>
               <Button variant={"outline"}>Online Interview</Button>
@@ -136,7 +154,12 @@ const Navbar = () => {
             </SheetClose>
             {user ? (
               <SheetClose asChild>
-                <Button variant={"outline"} onClick={() => navigate(studentRoutes.PROFILE)}>Profile</Button>
+                <Button
+                  variant={"outline"}
+                  onClick={() => navigate(studentRoutes.PROFILE)}
+                >
+                  Profile
+                </Button>
               </SheetClose>
             ) : (
               <></>
@@ -145,10 +168,7 @@ const Navbar = () => {
           <SheetFooter>
             <SheetClose asChild>
               {user ? (
-                <Button
-                  className="mt-10"
-                  onClick={handleLogout}
-                >
+                <Button className="mt-10" onClick={handleLogout}>
                   Logout
                 </Button>
               ) : (

@@ -1,4 +1,5 @@
 import { RecruiterData, StudentData } from "./formTypes";
+import { ProblemListType } from "./types";
 
 export interface BreadcrumbPropType {
   components: { component: string; path?: string }[];
@@ -50,4 +51,14 @@ export type UsersPagePropType = {
   blockUser: (userId: string, block: boolean) => void;
   viewProfile: (userId: string) => void;
   pageData: {page: number, totalPages: number, setPage: (page: number, user: "student" | "recruiter") => void};
+}
+
+export interface ProblemPagePropType {
+  data: ProblemListType[];
+  userLevel: "student" | "admin";
+  loading: boolean;
+  search: string;
+  setSearch: (value: string) => void;
+  sort: (sortBy: string) => void;
+  pageData: {page: number, totalPages: number, setPage: (page: number) => void};
 }

@@ -7,7 +7,9 @@ export const studentRoutes = {
     GITHUB_AUTH_URL:`https://github.com/login/oauth/authorize?client_id=${import.meta.env.VITE_GITHUB_CLIENT_ID}&redirect_uri=${import.meta.env.VITE_ORIGIN+"/github-auth&scope=user"}`,
     FORGOT_PASSWORD: '/forgot-password',
     RESET_PASSWORD: "/reset-password",
-    PROFILE: "/profile"
+    PROFILE: "/profile",
+    PROBLEM_SET: '/problemset',
+    PROBLEM: "/problem"
 }
 
 export const recruiterRoutes = {
@@ -26,5 +28,7 @@ export const adminRoutes = {
     FORGOT_PASSWORD: '/forgot-password',
     RESET_PASSWORD: '/reset-password',
     STUDENTS: '/users/students',
-    RECRUITERS: '/users/recruiters'
+    RECRUITERS: '/users/recruiters',
+    PROBLEMS: '/problems',
+    ADD_PROBLEM: '/problems/add-problem'
 }

@@ -51,12 +51,12 @@ const Navbar = () => {
         Enigma <span className="text-bluegrey ml-3">Recruiter</span>
       </div>
       <div>
-        <Button className="bg-fleace text-fleace-foreground mr-3 font-bold hidden md:inline">
+        <Button className="bg-fleace text-fleace-foreground mr-3 font-bold hidden md:inline rounded-full">
           Home
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button className="bg-fleace font-bold text-fleace-foreground mr-3 hidden md:inline">
+            <Button className="bg-fleace font-bold text-fleace-foreground mr-3 hidden md:inline rounded-full">
               <span>Jobs &nbsp; &#x25BC;</span>
             </Button>
           </DropdownMenuTrigger>
@@ -65,7 +65,7 @@ const Navbar = () => {
             <DropdownMenuItem>My Jobs</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        <Button className="bg-fleace text-fleace-foreground font-bold mr-3 hidden md:inline">
+        <Button className="bg-fleace text-fleace-foreground font-bold mr-3 hidden md:inline rounded-full">
           Interviews
         </Button>
       </div>

@@ -4,7 +4,7 @@ import { blockAction, getRecruiters, getStudents } from "@/api/admin";
 import { useToast } from "@/hooks/use-toast";
 import { DataTable } from "@/components/adminComponents/UserTable";
 import { RecruiterData, StudentData } from "@/types/formTypes";
-import { debounce } from "@/utils/debounce";
+import debounce from 'debounce'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -36,7 +36,6 @@ const Users = (props: { user: "student" | "recruiter" }) => {
   const [filtered, setFiltered] = useState<RecruiterData[] | StudentData[]>([]);
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState("");
-  const debouncedSetQuery = debounce(setQuery, 1500);
   const [loading, setLoading] = useState(false);
   const [urlQuery, setUrlQuery] = useState({
     page: "1",
@@ -44,6 +43,10 @@ const Users = (props: { user: "student" | "recruiter" }) => {
     sortOrder: "1",
     filter: "",
   });
+  const debouncedSetQuery = useCallback(
+    debounce((val) => setQuery(val), 1500),
+    []
+  );
 
   const filteredUrl = (
     filter = "",
@@ -415,7 +418,7 @@ const Users = (props: { user: "student" | "recruiter" }) => {
                     </Badge>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-20 w-full max-w-md p-6 border rounded-lg shadow-sm max-w-3xl">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-20 w-full p-6 border rounded-lg shadow-sm max-w-xl">
                     <div className="flex flex-col">
                       <span className="text-gray-600 text-sm">Email</span>
                       <span className="font-medium">

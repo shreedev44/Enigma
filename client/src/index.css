@@ -65,6 +65,10 @@
 
     --bluegrey-foreground: 0 0% 100%;
 
+    --mildgreen: 240 10% 4%;
+
+    --mildgreen-foreground: 0 0% 100%;
+
     --sidebar-background: 0 0% 98%;
 
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -138,6 +142,10 @@
     --bluegrey: 224 33% 76%;
 
     --bluegrey-foreground: 0 0% 100%;
+
+    --mildgreen: 90 91% 87%;
+
+    --mildgreen-foreground: 1 1% 1%;
 
     --sidebar-background: 240 5.9% 10%;
 

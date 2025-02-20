@@ -38,8 +38,6 @@ export const Messages = {
   INVALID_BASED_AT: "Please provide a valid location",
   INVALID_SORT_OPTION: "Invalid sort option",
   INVALID_SORT_VALUE: "Invalid sort value",
-  INVALID_FILTER_OPTION: "Invalid filter option",
-  INVALID_FILTER_VALUE: "Invalid filter value",
   INVALID_PAGE: "Invalid page selected",
   BLOCKED: "User blocked successfully",
   UNBLOCKED: "User unblocked successfully"
