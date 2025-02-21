@@ -1,7 +1,7 @@
 import multer from 'multer'
-import { createHttpError } from '../utils/HttpError'
-import { HttpStatus } from '../constants/StatusConstants'
-import { Messages } from '../constants/MessageConstants'
+import { createHttpError } from '../utils/http-error.util'
+import { HttpStatus } from '../constants/status.constant'
+import { Messages } from '../constants/message.constant'
 
 
 const allowedFiles = ['jpeg', 'png', 'webp', 'jpg']

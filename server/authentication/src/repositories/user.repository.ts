@@ -1,4 +1,4 @@
-import User from "../models/UserSchema";
+import User from "../models/user.model";
 import {
   RecruiterWithProfileType,
   StudentWithProfileType,

@@ -6,11 +6,11 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 
 //* Importing configs and initializers
-import connectDB from "./config/DB";
-import { initRedisClient } from "./config/Redis";
-import validateEnv from "./utils/ValidateEnv";
-import { env } from "./config/ENV";
-import { cloudinaryConfig } from "./config/Cloudinary";
+import connectDB from "./config/mongo.config";
+import { initRedisClient } from "./config/redis.config";
+import validateEnv from "./utils/validate-env.util";
+import { env } from "./config/env.config";
+import { cloudinaryConfig } from "./config/cloudinary.config";
 import { errorHandler, notFoundHandler } from "./app/middlewares/ErrorHandler";
 
 dotenv.config({ path: path.resolve(__dirname, "../.env") });

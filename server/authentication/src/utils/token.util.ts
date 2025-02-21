@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { env } from "../config/ENV";
+import { env } from "../config/env.config";
 import { Role } from "../Types/types";
 
 export function generateAccessToken(userId: string, role: Role) {

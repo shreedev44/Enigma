@@ -1,4 +1,4 @@
-import Student from '../models/StudentProfileSchema';
+import Student from '../models/student-profile.model';
 import { StudentProfileType } from '../Types/types';
 import { IStudentRepository } from '../interfaces/student/IStudentRepository';
 

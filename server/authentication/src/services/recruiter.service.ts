@@ -1,10 +1,10 @@
-import { createHttpError } from "../utils/HttpError";
-import { HttpStatus } from "../constants/StatusConstants";
-import { Messages } from "../constants/MessageConstants";
+import { createHttpError } from "../utils/http-error.util";
+import { HttpStatus } from "../constants/status.constant";
+import { Messages } from "../constants/message.constant";
 import { FileType, RecruiterProfileType } from "../Types/types";
 import { IRecruiterService } from "../interfaces/recruiter/IRecruiterService";
 import { IRecruiterRepository } from "../interfaces/recruiter/IRecruiterRepository";
-import { hanldeCloudinaryUpload } from "../config/Cloudinary";
+import { hanldeCloudinaryUpload } from "../config/cloudinary.config";
 
 export class RecruiterService implements IRecruiterService {
   constructor(private _recruiterRepository: IRecruiterRepository) {}

@@ -1,4 +1,4 @@
-import Recruiter from "../models/RecruiterSchema";
+import Recruiter from "../models/recruiter.model";
 import { RecruiterProfileType } from "../Types/types";
 import { IRecruiterRepository } from "../interfaces/recruiter/IRecruiterRepository";
 

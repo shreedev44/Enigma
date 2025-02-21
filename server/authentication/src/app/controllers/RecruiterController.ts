@@ -1,5 +1,5 @@
-import { HttpStatus } from "../../constants/StatusConstants";
-import { Messages } from "../../constants/MessageConstants";
+import { HttpStatus } from "../../constants/status.constant";
+import { Messages } from "../../constants/message.constant";
 import { NextFunction, Request, Response } from "express";
 import { IRecruiterService } from "../../interfaces/recruiter/IRecruiterService";
 import { IRecruiterController } from "../../interfaces/recruiter/IRecruiterController";

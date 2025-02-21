@@ -1,10 +1,10 @@
-import { createHttpError } from "../utils/HttpError";
-import { HttpStatus } from "../constants/StatusConstants";
-import { Messages } from "../constants/MessageConstants";
+import { createHttpError } from "../utils/http-error.util";
+import { HttpStatus } from "../constants/status.constant";
+import { Messages } from "../constants/message.constant";
 import { FileType, StudentProfileType } from "../Types/types";
 import { IStudentService } from "../interfaces/student/IStudentService";
 import { IStudentRepository } from "../interfaces/student/IStudentRepository";
-import { hanldeCloudinaryUpload } from "../config/Cloudinary";
+import { hanldeCloudinaryUpload } from "../config/cloudinary.config";
 
 export class StudentService implements IStudentService {
     constructor(private _studentRepository: IStudentRepository){}

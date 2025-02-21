@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { AdminController } from "../controllers/AdminController";
-import { AdminService } from "../../services/AdminService";
-import UserRepository from "../../repositories/UserRepository";
+import { AdminService } from "../../services/admin.service";
+import UserRepository from "../../repositories/user.repository";
 
 const adminService = new AdminService(UserRepository);
 const adminController = new AdminController(adminService);

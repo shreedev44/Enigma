@@ -9,8 +9,8 @@ import {
   optionalFacebookRegex,
   optionalTwitterRegex,
   optionalBasedAtRegex,
-} from "./Regex";
-import { Messages } from "../constants/MessageConstants";
+} from "./regex.util";
+import { Messages } from "../constants/message.constant";
 
 const loginValidationSchema = {
   email: {

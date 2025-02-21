@@ -1,4 +1,4 @@
-import { env } from "./ENV";
+import { env } from "./env.config";
 import nodemailer from 'nodemailer'
 
 export const transporter = nodemailer.createTransport({

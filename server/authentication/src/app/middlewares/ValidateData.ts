@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, RequestHandler } from "express";
-import { HttpStatus } from "../../constants/StatusConstants";
-import { Messages } from "../../constants/MessageConstants";
+import { HttpStatus } from "../../constants/status.constant";
+import { Messages } from "../../constants/message.constant";
 import { config } from "dotenv";
 
 export const validateData = (

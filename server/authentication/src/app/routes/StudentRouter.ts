@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { StudentController } from "../controllers/StudentController";
-import { StudentService } from "../../services/StudentService";
-import StudentRepository from "../../repositories/StudentRepository";
-import { upload } from "../../config/Multer";
+import { StudentService } from "../../services/student.service";
+import StudentRepository from "../../repositories/student.repository";
+import { upload } from "../../config/multer.config";
 import { validateData } from "../middlewares/ValidateData";
-import FormValidation from "../../utils/FormValidation";
+import FormValidation from "../../utils/form-validation.util";
 
 const studentService = new StudentService(StudentRepository);
 const studentController = new StudentController(studentService);

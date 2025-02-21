@@ -1,9 +1,9 @@
 import bcrypt from "bcryptjs";
-import { createHttpError } from "../utils/HttpError";
-import { HttpStatus } from "../constants/StatusConstants";
-import { Messages } from "../constants/MessageConstants";
-import otpPage from "../utils/OtpTemplate";
-import forgotPasswordPage from "../utils/ResetPasswordTemplate";
+import { createHttpError } from "../utils/http-error.util";
+import { HttpStatus } from "../constants/status.constant";
+import { Messages } from "../constants/message.constant";
+import otpPage from "../utils/otp-template.util";
+import forgotPasswordPage from "../utils/reset-password-template.util";
 import {
   GoogleAuthUserType,
   LoginResponseType,
@@ -12,21 +12,21 @@ import {
   StudentProfileType,
   UserType,
 } from "../Types/types";
-import { env } from "../config/ENV";
-import { transporter } from "../config/Nodemailer";
-import otpGenerator from "../utils/OtpGenerator";
+import { env } from "../config/env.config";
+import { transporter } from "../config/nodemailer.config";
+import otpGenerator from "../utils/otp-generator.util";
 import { IUserService } from "../interfaces/user/IUserService";
 import { IUserRepository } from "../interfaces/user/IUserRepository";
-import { redisClient } from "../config/Redis";
+import { redisClient } from "../config/redis.config";
 import { IStudentRepository } from "../interfaces/student/IStudentRepository";
 import { ObjectId } from "mongoose";
 import {
   generateAccessToken,
   generateRefreshToken,
   verifyToken,
-} from "../utils/Token";
+} from "../utils/token.util";
 import { IRecruiterRepository } from "../interfaces/recruiter/IRecruiterRepository";
-import generateUID from "../utils/GenerateUID";
+import generateUID from "../utils/generate-uid.util";
 
 export class UserService implements IUserService {
   constructor(
