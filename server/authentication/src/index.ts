@@ -11,15 +11,15 @@ import { initRedisClient } from "./config/redis.config";
 import validateEnv from "./utils/validate-env.util";
 import { env } from "./config/env.config";
 import { cloudinaryConfig } from "./config/cloudinary.config";
-import { errorHandler, notFoundHandler } from "./app/middlewares/ErrorHandler";
+import { errorHandler, notFoundHandler } from "./app/middlewares/error-handler.middleware";
 
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 //* Importing routers
-import userRouter from "./app/routes/UserRouter";
-import studentRouter from "./app/routes/StudentRouter";
-import recruiterRouter from "./app/routes/RecruiterRouter";
-import adminRouter from "./app/routes/AdminRouter";
+import userRouter from "./app/routes/user.router";
+import studentRouter from "./app/routes/student.router";
+import recruiterRouter from "./app/routes/recruiter.router";
+import adminRouter from "./app/routes/admin.router";
 
 class App {
   public app: Application;

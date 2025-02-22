@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { RecruiterController } from "../controllers/RecruiterController";
+import { RecruiterController } from "../controllers/recruiter.controller";
 import { RecruiterService } from "../../services/recruiter.service";
 import RecruiterRepository from "../../repositories/recruiter.repository";
 import { upload } from "../../config/multer.config";
-import { validateData } from "../middlewares/ValidateData";
+import { validateData } from "../middlewares/validate-data.middleware";
 import FormValidation from "../../utils/form-validation.util";
 
 const recruiterService = new RecruiterService(RecruiterRepository);

@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { UserController } from "../controllers/UserController";
+import { UserController } from "../controllers/user.controller";
 import { UserService } from "../../services/user.service";
 import UserRepository from "../../repositories/user.repository";
 import StudentRepository from "../../repositories/student.repository";
 import RecruiterRepository from "../../repositories/recruiter.repository";
-import { validateData } from "../middlewares/ValidateData";
+import { validateData } from "../middlewares/validate-data.middleware";
 import FormValidation from "../../utils/form-validation.util";
 
 const userService = new UserService(
