@@ -42,6 +42,7 @@ export function AppSidebar(props: {
   handleLogout: () => void;
   toggleTheme: () => void;
   user: string;
+  changePassword: () => void;
 }) {
   const navigate = useNavigate();
   const location = useLocation()
@@ -167,6 +168,9 @@ export function AppSidebar(props: {
             </DropdownMenuItem>
             <DropdownMenuItem>
               <span>Notificaion</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <span onClick={() => props.changePassword()}>Change Password</span>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={props.handleLogout}>
               <span>Logout</span>

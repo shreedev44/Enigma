@@ -17,6 +17,7 @@ export interface StdntEditProfilePropType {
   linkedinProfile: string;
   setLinkedinProfile: (value: string) => void;
   isModalOpen: boolean;
+  changePassword: () => void;
 }
 
 export interface RctrEditProfilePropType {
@@ -35,6 +36,7 @@ export interface RctrEditProfilePropType {
   profilePicture: string;
   setProfilePicture: (value: string) => void;
   isModalOpen: boolean;
+  changePassword: () => void;
 }
 
 export interface AdminPagePropType {

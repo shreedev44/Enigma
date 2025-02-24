@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { IoIosNavigate } from "react-icons/io";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect, useState } from "react";
-import { useGetProfilePic } from "@/hooks/useGetStudent";
+import { useGetProfilePic, useGetStudentData } from "@/hooks/useGetStudent";
 import defaultPic from "../../assets/default-avatar.jpg";
 import { getProfile } from "@/api/student";
 import { useToast } from "@/hooks/use-toast";
@@ -17,9 +17,11 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { forgotPassword } from "@/api/common";
 
 const Profile = () => {
   const { toast } = useToast();
+  const studentData = useGetStudentData()
 
   const [isModalOpen, setModalOpen] = useState(false);
   const [profileLoading, setProfileLoading] = useState(true);
@@ -53,6 +55,21 @@ const Profile = () => {
 
     fetchProfile();
   }, []);
+
+  const changePassword = async () => {
+    const response = await forgotPassword(studentData.email, "student");
+
+    if(response.success) {
+      toast({
+        description: "Your password reset link was sent to your email"
+      })
+    } else {
+      toast({
+        description: response.error,
+        variant: 'destructive'
+      })
+    }
+  }
 
   return (
     <div className="pt-24">
@@ -174,6 +191,7 @@ const Profile = () => {
                 linkedinProfile={linkedinProfile}
                 setLinkedinProfile={setLinkedinProfile}
                 isModalOpen={isModalOpen}
+                changePassword={changePassword}
               />
             </Dialog>
           </div>

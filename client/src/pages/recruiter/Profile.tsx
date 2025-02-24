@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { IoIosNavigate } from "react-icons/io";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect, useState } from "react";
-import { useGetProfilePic } from "@/hooks/useGetRecruiter";
+import { useGetProfilePic, useGetRecruiterData } from "@/hooks/useGetRecruiter";
 import defaultPic from "../../assets/default-avatar.jpg";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/tooltip";
 import { getProfile } from "@/api/recruiter";
 import EditProfileModal from "@/components/recruiterComponents/EditProfileModal";
+import { forgotPassword } from "@/api/common";
 
 const Profile = () => {
   useEffect(() => {
@@ -45,6 +46,7 @@ const Profile = () => {
   }, []);
 
   const { toast } = useToast();
+  const recruiterData = useGetRecruiterData();
 
   const [isModalOpen, setModalOpen] = useState(false);
   const [profileLoading, setProfileLoading] = useState(true);
@@ -57,6 +59,21 @@ const Profile = () => {
   const [profilePic, setProfilePic] = useState(
     useGetProfilePic() || defaultPic
   );
+
+  const changePassword = async () => {
+      const response = await forgotPassword(recruiterData.email, "recruiter");
+  
+      if(response.success) {
+        toast({
+          description: "Your password reset link was sent to your email"
+        })
+      } else {
+        toast({
+          description: response.error,
+          variant: 'destructive'
+        })
+      }
+    }
 
   return (
     <div className="pt-24">
@@ -224,6 +241,7 @@ const Profile = () => {
                 profilePicture={profilePic}
                 setProfilePicture={setProfilePic}
                 isModalOpen={isModalOpen}
+                changePassword={changePassword}
                 />
             </Dialog>
           </div>
