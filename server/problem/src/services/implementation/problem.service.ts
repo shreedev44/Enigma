@@ -1,10 +1,10 @@
-import { createHttpError } from "../utils/HttpError";
-import { HttpStatus } from "../constants/StatusConstants";
-import { Messages } from "../constants/MessageConstant";
-import { IProblemService } from "../interfaces/Problem/IProblemService";
-import { IProblemRepository } from "../interfaces/Problem/IProblemRepository";
-import { ProblemListType, ProblemType } from "../Types/types";
-import { validateTestCase } from "../utils/ValidateParameters";
+import { createHttpError } from "../../utils/http-error.util";
+import { HttpStatus } from "../../constants/status.constant";
+import { Messages } from "../../constants/message.constant";
+import { IProblemService } from "../interface/IProblemService";
+import { IProblemRepository } from "../../repositories/interface/IProblemRepository";
+import { ProblemListType, ProblemType } from "../../Types/types";
+import { validateTestCase } from "../../utils/validate-parameters.util";
 
 export class ProblemService implements IProblemService {
   constructor(private _problemRepository: IProblemRepository) {}

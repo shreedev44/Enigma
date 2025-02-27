@@ -5,15 +5,15 @@ import morgan from "morgan";
 import path from "path";
 
 //* Importing configs and initializers
-import connectDB from "./config/DB";
-import validateEnv from "./utils/ValidateEnv";
-import { env } from "./config/ENV";
-import { errorHandler, notFoundHandler } from "./app/middlewares/ErrorHandler";
+import connectDB from "./config/mongo.config";
+import validateEnv from "./utils/validate-env.util";
+import { env } from "./config/env.config";
+import { errorHandler, notFoundHandler } from "./app/middlewares/error-handler.middleware";
 
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 //* Importing routers
-import problemRouter from "./app/routes/ProblemRouter";
+import problemRouter from "./app/routes/problem.router";
 
 class App {
   public app: Application;

@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { ProblemController } from "../controllers/ProblemController";
-import { ProblemService } from "../../services/ProblemService";
-import ProblemRepository from "../../repositories/ProblemRepository";
-import { validateProblem } from "../middlewares/ValidateProblem";
+import { ProblemController } from "../controllers/implementation/problem.controller";
+import { ProblemService } from "../../services/implementation/problem.service";
+import ProblemRepository from "../../repositories/implementation/problem.repository";
+import { validateProblem } from "../middlewares/validate-problem.middleware";
 
 
 const problemService = new ProblemService(ProblemRepository)

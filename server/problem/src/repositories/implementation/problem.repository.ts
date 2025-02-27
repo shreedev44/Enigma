@@ -1,6 +1,6 @@
-import Problem from "../models/ProblemSchema";
-import { ProblemListType, ProblemType } from "../Types/types";
-import { IProblemRepository } from "../interfaces/Problem/IProblemRepository";
+import Problem from "../../models/problem.model";
+import { ProblemListType, ProblemType } from "../../Types/types";
+import { IProblemRepository } from "../interface/IProblemRepository";
 
 class ProblemRepository implements IProblemRepository {
     async create(problem: ProblemType): Promise<ProblemType> {
