@@ -53,3 +53,5 @@ export type ProblemListType = {
   solved?: boolean;
   status?: "listed" | "unlisted";
 };
+
+export type Language = "javascript" | "python"

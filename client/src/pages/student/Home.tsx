@@ -28,7 +28,7 @@ const Home = () => {
           </span>
         </div>
         <div className="hidden md:flex flex-col text-2xl font-bold font-mono tracking-wide">
-          <span className="text-bluegrey">Teach</span>
+          <span className="text-bluegrey">Learn</span>
           <span className="text-fleace">Compete</span>
           <span className="text-mildgreen">Master</span>
         </div>
