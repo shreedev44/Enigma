@@ -5,6 +5,7 @@ import { env, validateEnv } from "./configs/envConfig";
 import cors from "cors";
 import morgan from "morgan";
 import verifyToken from "./middleware/verifyToken";
+import helmet from "helmet";
 
 dotenv.config();
 validateEnv();
@@ -42,6 +43,8 @@ app.use((req, res, next) => {
 })
 
 app.use(morgan("combined"));
+
+app.use(helmet())
 
 services.forEach((service) => {
   app.use(
