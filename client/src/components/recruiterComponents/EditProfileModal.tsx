@@ -312,6 +312,12 @@ const EditProfileModal = (props: RctrEditProfilePropType) => {
           <></>
         )}
       </div>
+      <p
+        className="text-center text-xs underline underline-offset-2 cursor-pointer text-bluegrey"
+        onClick={() => props.changePassword()}
+      >
+        Change Password
+      </p>
       <Dialog>
         <DialogTrigger>
           <button className="hidden" ref={buttonRef}></button>

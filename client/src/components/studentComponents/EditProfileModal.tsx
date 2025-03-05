@@ -6,7 +6,7 @@ import {
   DialogTitle,
   DialogTrigger,
   Dialog,
-  DialogClose
+  DialogClose,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -30,7 +30,7 @@ import { setStudent } from "@/redux/studentSlice";
 
 const EditProfileModal = (props: StdntEditProfilePropType) => {
   const { toast } = useToast();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const inputRef = useRef<HTMLInputElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -137,19 +137,19 @@ const EditProfileModal = (props: StdntEditProfilePropType) => {
       props.setLastName(profile.lastName);
       props.setGithubProfile(profile.githubProfile);
       props.setLinkedinProfile(profile.linkedinProfile);
-      if(props.profilePicture !== profile.profilePicture) {
-        dispatch(setStudent({profilePicture: profile.profilePicture}))
+      if (props.profilePicture !== profile.profilePicture) {
+        dispatch(setStudent({ profilePicture: profile.profilePicture }));
       }
       props.setProfilePicture(profile.profilePicture);
       closeRef.current?.click();
-      setLoading(false)
+      setLoading(false);
     } else {
       toast({
         description: response.error,
         variant: "destructive",
       });
       closeRef.current?.click();
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -264,6 +264,12 @@ const EditProfileModal = (props: StdntEditProfilePropType) => {
           <></>
         )}
       </div>
+      <p
+        className="text-center text-xs underline underline-offset-2 cursor-pointer text-bluegrey"
+        onClick={() => props.changePassword()}
+      >
+        Change Password
+      </p>
       <Dialog>
         <DialogTrigger>
           <button className="hidden" ref={buttonRef}></button>

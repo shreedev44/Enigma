@@ -6,7 +6,7 @@ const useGetStudent = () => {
     return user.role
 }
 
-export const useGetUserData = () => {
+export const useGetStudentData = () => {
     const userData = useSelector((state: ReduxStoreType) => state.student)
     return userData
 }

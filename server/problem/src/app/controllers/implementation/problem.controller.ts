@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import { IProblemService } from "../../interfaces/Problem/IProblemService";
-import { IProblemController } from "../../interfaces/Problem/IProblemController";
-import { ProblemType } from "../../Types/types";
-import { HttpStatus } from "../../constants/StatusConstants";
-import { Messages } from "../../constants/MessageConstant";
+import { IProblemService } from "../../../services/interface/IProblemService";
+import { IProblemController } from "../interface/IProblemController";
+import { ProblemType } from "../../../Types/types";
+import { HttpStatus } from "../../../constants/status.constant";
+import { Messages } from "../../../constants/message.constant";
 
 export class ProblemController implements IProblemController {
   constructor(private _problemService: IProblemService) {}

@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { HttpStatus } from "../../constants/StatusConstants";
-import { Messages } from "../../constants/MessageConstant";
-import { camelCaseRegex, nameRegex } from "../../utils/Regex";
-import { isValidFunctionString } from "../../utils/ValidateParameters";
+import { HttpStatus } from "../../constants/status.constant";
+import { Messages } from "../../constants/message.constant";
+import { camelCaseRegex, nameRegex } from "../../utils/regex.util";
+import { isValidFunctionString } from "../../utils/validate-parameters.util";
 
 const difficulties = ['Beginner', 'Intermediate', 'Advanced']
 const DataTypes = ["Array", "Floating Point", "Integer", "String", "Boolean"]

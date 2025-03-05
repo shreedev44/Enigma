@@ -6,7 +6,7 @@ const useGetAdmin = () => {
     return user.role
 }
 
-export const useGetUserData = () => {
+export const useGetAdminData = () => {
     const userData = useSelector((state: ReduxStoreType) => state.admin)
     return userData
 }

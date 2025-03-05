@@ -2,7 +2,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/ui/app-sidebar";
 import { removeAdmin } from "@/redux/adminSlice";
 import { useDispatch } from "react-redux";
-import { useGetUserData } from "@/hooks/useGetAdmin";
+import { useGetAdminData } from "@/hooks/useGetAdmin";
 import { useToast } from "@/hooks/use-toast";
 import Messages from "@/constants/Messages";
 import { useTheme } from "../../context/ThemeContext";
@@ -11,6 +11,7 @@ import { createContext, useContext, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { adminRoutes } from "@/constants/routeUrl";
+import { forgotPassword } from "@/api/common";
 
 
 const SidebarContext = createContext<{ setBreadcrumbs: (breadcrumbs: { component: string, path?: string | undefined }[]) => void } | null>(null);
@@ -26,7 +27,7 @@ const Sidebar = () => {
   const { theme, toggleTheme } = useTheme();
   const dispatch = useDispatch();
   const { toast } = useToast();
-  const { name } = useGetUserData();
+  const { name, email } = useGetAdminData();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -36,6 +37,21 @@ const Sidebar = () => {
     });
     navigate(`/admin${adminRoutes.SIGNIN}`)
   };
+
+  const changePassword = async () => {
+    const response = await forgotPassword(email, "admin");
+
+    if(response.success) {
+      toast({
+        description: "Your password reset link was sent to your email"
+      })
+    } else {
+      toast({
+        description: response.error,
+        variant: 'destructive'
+      })
+    }
+  }
 
   const [breadcrumbs, setBreadcrumbs] = useState([{ component: "" }]);
 
@@ -47,6 +63,7 @@ const Sidebar = () => {
           handleLogout={handleLogout}
           toggleTheme={toggleTheme}
           user={name || "admin"}
+          changePassword={changePassword}
         />
         <main className="px-5 pt-5 w-full">
           <div className="flex justify-start items-center">
