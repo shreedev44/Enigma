@@ -1,60 +1,114 @@
-import { exec } from "child_process";
-import fs from "fs";
-import path from "path";
-import { Language } from "../Types/types";
-import generateUID from "./generate-uid.util";
+import Docker from 'dockerode';
+import fs from 'fs';
+import path from 'path';
+import { Language } from '../Types/types';
+import generateUID from './generate-uid.util';
 
-const CODE_DIR = path.resolve(__dirname, "../../temp");
-const LANGUAGES = JSON.parse(
-  fs.readFileSync(path.join(__dirname, "languages.util.json"), "utf8")
-);
+const CODE_DIR = '/app/temp';
 
 if (!fs.existsSync(CODE_DIR)) {
   fs.mkdirSync(CODE_DIR, { recursive: true });
 }
 
+const docker = new Docker({
+  host: 'dind',
+  port: 2375,
+  protocol: 'http'
+});
+
+const LANGUAGES = JSON.parse(
+  fs.readFileSync(path.join(__dirname, 'languages.util.json'), 'utf8')
+);
+
 export const executeCode = async (language: Language, code: string) => {
   const langConfig = LANGUAGES[language];
   const fileId = await generateUID();
-  const filePath = path.resolve(
-    __filename,
-    CODE_DIR,
-    `${fileId}.${langConfig.extension}`
-  );
-  const outputFile = path.resolve(__dirname, CODE_DIR, `${fileId}.out`);
+  const filePath = path.join(CODE_DIR, `${fileId}.${langConfig.extension}`);
+  const outputFile = path.join(CODE_DIR, `${fileId}.out`);
   const containerName = `compiler-${fileId}`;
 
   fs.writeFileSync(filePath, code);
 
   let compileCommand = langConfig.compile
     ? langConfig.compile.replace(
-        "{filename}",
-        fileId + "." + langConfig.extension
+        '{filename}',
+        fileId + '.' + langConfig.extension
       )
     : null;
 
   let execCommand = langConfig.command
-    .replace("{filename}", fileId + "." + langConfig.extension)
-    .replace("{outputfile}", fileId)
-    .replace("{mainClass}", fileId);
+    .replace('{filename}', fileId + '.' + langConfig.extension)
+    .replace('{outputfile}', fileId)
+    .replace('{mainClass}', fileId);
 
-  return new Promise((resolve, reject) => {
-    let dockerCmd = `docker run --rm --name ${containerName} -v "${CODE_DIR}:/app" ${langConfig.image} sh -c "`;
+  let cmd = '';
+  if (compileCommand) cmd += `${compileCommand} && `;
+  cmd += `${execCommand} > /app/${fileId}.out 2>&1`;
 
-    if (compileCommand) dockerCmd += `${compileCommand} && `;
-    dockerCmd += `${execCommand} > /app/${fileId}.out 2>&1"`;
+  console.log(`Running command in container: ${cmd}`);
 
-    exec(dockerCmd, { timeout: 5000 }, (error) => {
-      let output = "";
-
-      if (fs.existsSync(outputFile)) {
-        output = fs.readFileSync(outputFile, "utf8");
-        fs.unlinkSync(outputFile);
-      }
-
-      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-
-      resolve({ stdout: output, stderr: error ? error.message : "" });
+  try {
+    console.log(`Pulling image: ${langConfig.image}`);
+    await new Promise((resolve, reject) => {
+      docker.pull(langConfig.image, (err: any, stream: any) => {
+        if (err) {
+          console.error('Error pulling image:', err);
+          reject(err);
+          return;
+        }
+        
+        docker.modem.followProgress(stream, (err: any, output: any) => {
+          if (err) {
+            console.error('Error following pull progress:', err);
+            reject(err);
+            return;
+          }
+          resolve(output);
+        });
+      });
     });
-  });
+
+    const container = await docker.createContainer({
+      Image: langConfig.image,
+      name: containerName,
+      Cmd: ['sh', '-c', cmd],
+      HostConfig: {
+        Binds: [`${CODE_DIR}:/app`],
+        AutoRemove: true
+      }
+    });
+
+    await container.start();
+
+    const waitPromise = container.wait();
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Execution timed out')), 5000)
+    );
+
+    await Promise.race([waitPromise, timeoutPromise])
+      .catch(async (error) => {
+        console.error('Execution error or timeout:', error.message);
+        try {
+          await container.stop();
+        } catch (stopError) {
+        }
+        throw error;
+      });
+
+    let output = '';
+    if (fs.existsSync(outputFile)) {
+      output = fs.readFileSync(outputFile, 'utf8');
+      fs.unlinkSync(outputFile);
+    }
+
+    if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+
+    return { stdout: output, stderr: '' };
+  } catch (error) {
+    console.error('Docker execution error:', error);
+    return { 
+      stdout: '', 
+      stderr: error instanceof Error ? error.message : String(error) 
+    };
+  }
 };

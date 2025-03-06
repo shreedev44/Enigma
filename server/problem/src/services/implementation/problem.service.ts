@@ -3,8 +3,9 @@ import { HttpStatus } from "../../constants/status.constant";
 import { Messages } from "../../constants/message.constant";
 import { IProblemService } from "../interface/IProblemService";
 import { IProblemRepository } from "../../repositories/interface/IProblemRepository";
-import { ProblemListType, ProblemType } from "../../Types/types";
+import { Language, ProblemListType, ProblemType } from "../../Types/types";
 import { validateTestCase } from "../../utils/validate-parameters.util";
+import { executeCode } from "../../utils/executor.util";
 
 export class ProblemService implements IProblemService {
   constructor(private _problemRepository: IProblemRepository) {}
@@ -74,5 +75,11 @@ export class ProblemService implements IProblemService {
     }
 
     return problem;
+  }
+
+  async compileCode(code: string, language: Language): Promise<{stdout: string, stderr: string}> {
+    const result = await executeCode(language, code);
+
+    return result;
   }
 }

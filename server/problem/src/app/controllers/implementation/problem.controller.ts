@@ -86,4 +86,21 @@ export class ProblemController implements IProblemController {
       next(err);
     }
   }
+
+  async compileCode(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const {language, code} = req.body;
+      const languages = ["javascript", "python"]
+      if(!languages.includes(language)) {
+        res.status(HttpStatus.BAD_REQUEST).json({error: Messages})
+        return;
+      }
+
+      const result = await this._problemService.compileCode(code, language)
+
+      res.status(HttpStatus.OK).json({result})
+    } catch (err) {
+      next(err)
+    }
+  }
 }

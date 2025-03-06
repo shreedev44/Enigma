@@ -14,7 +14,6 @@ dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 //* Importing routers
 import problemRouter from "./app/routes/problem.router";
-import { executeCode } from "./utils/executor.util";
 
 class App {
   public app: Application;
@@ -52,6 +51,3 @@ class App {
 
 const app = new App()
 app.listen()
-
-executeCode('javascript', 'console.log("hello world")')
-.then((res) => console.log(res))

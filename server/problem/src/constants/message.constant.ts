@@ -21,5 +21,6 @@ export const Messages = {
   INVALID_FILTER_VALUE: "Invalid filter value",
   INVALID_PAGE: "Invalid page selected",
   PROBLEM_NOT_FOUND: "Problem not found",
-  INVALID_PROBLEM_NO: "Please provide a valid problem number"
+  INVALID_PROBLEM_NO: "Please provide a valid problem number",
+  UNSUPPORTED_LANGUAGE: "Code language not supported"
 };

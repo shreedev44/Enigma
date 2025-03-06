@@ -16,5 +16,6 @@ problemRouter.post('/admin/addProblem', validateProblem, problemController.addPr
 //! --------------- Student ---------------- //
 problemRouter.get('/student/getProblems', problemController.getProblems.bind(problemController))
 problemRouter.get('/student/findProblem/:problemNo', problemController.findProblem.bind(problemController));
+problemRouter.post('/student/compile', problemController.compileCode.bind(problemController));
 
 export default problemRouter
