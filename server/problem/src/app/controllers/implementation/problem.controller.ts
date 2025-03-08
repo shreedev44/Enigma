@@ -90,9 +90,9 @@ export class ProblemController implements IProblemController {
   async compileCode(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const {language, code} = req.body;
-      const languages = ["javascript", "python"]
+      const languages = ["javascript", "python", "java", "cpp"]
       if(!languages.includes(language)) {
-        res.status(HttpStatus.BAD_REQUEST).json({error: Messages})
+        res.status(HttpStatus.BAD_REQUEST).json({error: Messages.UNSUPPORTED_LANGUAGE})
         return;
       }
 

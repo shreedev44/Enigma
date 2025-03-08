@@ -11,7 +11,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import CodeEditor from "@/components/adminComponents/CodeEditor";
+import CodeEditor from "@/components/CodeEditor";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -106,7 +106,7 @@ const Problem = () => {
               className="min-h-[200px] w-full rounded-lg border md:min-w-[450px]"
             >
               <ResizablePanel defaultSize={70} minSize={50} maxSize={80}>
-                <CodeEditor code={code} setCode={setCode} />
+                <CodeEditor code={code} setCode={setCode} height="400px" />
               </ResizablePanel>
               <ResizableHandle withHandle />
               <ResizablePanel defaultSize={30} minSize={20} maxSize={50}>

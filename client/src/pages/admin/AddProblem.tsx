@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import CodeEditor from "@/components/adminComponents/CodeEditor";
+import CodeEditor from "@/components/CodeEditor";
 import { FaTrash } from "react-icons/fa6";
 import {
   DataTypes,
@@ -654,7 +654,7 @@ const AddProblem = () => {
               error.field === "evalFunction" ? "border border-red-500" : ""
             }`}
           >
-            <CodeEditor code={evalFunction} setCode={setEvalFunction} />
+            <CodeEditor code={evalFunction} setCode={setEvalFunction} height="400px" />
           </div>
         </div>
         <div className="mb-8">

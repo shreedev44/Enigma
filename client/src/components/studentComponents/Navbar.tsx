@@ -63,7 +63,7 @@ const Navbar = () => {
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>Community</DropdownMenuItem>
-            <DropdownMenuItem>Compiler</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate(studentRoutes.COMPILER)}>Compiler</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
         <Button
@@ -136,7 +136,7 @@ const Navbar = () => {
               <Button variant={"outline"}>Community</Button>
             </SheetClose>
             <SheetClose asChild>
-              <Button variant={"outline"}>Compiler</Button>
+              <Button variant={"outline"} onClick={() => navigate(studentRoutes.COMPILER)}>Compiler</Button>
             </SheetClose>
             <SheetClose asChild>
               <Button variant={"outline"} onClick={() => navigate(studentRoutes.PROBLEM_SET)}>Problems</Button>

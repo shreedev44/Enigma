@@ -54,4 +54,4 @@ export type ProblemListType = {
   status?: "listed" | "unlisted";
 };
 
-export type Language = "javascript" | "python"
+export type Language = "javascript" | "python" | "java" | "cpp"

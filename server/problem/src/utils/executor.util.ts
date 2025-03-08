@@ -23,8 +23,8 @@ const LANGUAGES = JSON.parse(
 export const executeCode = async (language: Language, code: string) => {
   const langConfig = LANGUAGES[language];
   const fileId = await generateUID();
-  const filePath = path.join(CODE_DIR, `${fileId}.${langConfig.extension}`);
-  const outputFile = path.join(CODE_DIR, `${fileId}.out`);
+  const filePath = path.join(CODE_DIR, `Main.${langConfig.extension}`);
+  const outputFile = path.join(CODE_DIR, `Main.out`);
   const containerName = `compiler-${fileId}`;
 
   fs.writeFileSync(filePath, code);
@@ -32,18 +32,18 @@ export const executeCode = async (language: Language, code: string) => {
   let compileCommand = langConfig.compile
     ? langConfig.compile.replace(
         '{filename}',
-        fileId + '.' + langConfig.extension
+        'Main' + '.' + langConfig.extension
       )
     : null;
 
   let execCommand = langConfig.command
-    .replace('{filename}', fileId + '.' + langConfig.extension)
-    .replace('{outputfile}', fileId)
-    .replace('{mainClass}', fileId);
+    .replace('{filename}', 'Main' + '.' + langConfig.extension)
+    .replace('{outputfile}', 'Main')
+    .replace('{mainClass}', 'Main');
 
   let cmd = '';
   if (compileCommand) cmd += `${compileCommand} && `;
-  cmd += `${execCommand} > /app/${fileId}.out 2>&1`;
+  cmd += `${execCommand} > /app/Main.out 2>&1`;
 
   console.log(`Running command in container: ${cmd}`);
 

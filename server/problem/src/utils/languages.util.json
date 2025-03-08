@@ -1,24 +1,24 @@
 {
   "javascript": {
     "extension": "js",
-    "image": "node:18",
+    "image": "node:alpine",
     "command": "node /app/{filename}"
   },
   "python": {
     "extension": "py",
-    "image": "python:3.11",
+    "image": "python:alpine",
     "command": "python3 /app/{filename}"
   },
   "java": {
     "extension": "java",
-    "image": "openjdk:17",
+    "image": "openjdk:alpine",
     "compile": "javac /app/{filename}",
     "command": "java -cp /app {mainClass}"
   },
   "cpp": {
-    "extension": "cpp",
     "image": "gcc:latest",
-    "compile": "g++ /app/{filename} -o /app/{outputfile}",
+    "extension": "cpp",
+    "compile": "g++ -o /app/{outputfile} /app/{filename}",
     "command": "/app/{outputfile}"
   }
 }

@@ -11,6 +11,9 @@ const PUBLIC_ROUTES: { method: string; path: string }[] = [
   { method: "POST", path: "/auth/changePassword" },
   { method: "PATCH", path: "/auth/resetPassword" },
   { method: "POST", path: "/auth/refreshToken" },
+  { method: "GET", path: "/problem/student/getProblems" },
+  { method: "GET", path: "/problem/student/findProblem" },
+  { method: "POST", path: "/problem/student/compile" },
 ];
 
 export function isPublic(req: Request): boolean {

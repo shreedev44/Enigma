@@ -1,6 +1,6 @@
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
-import { oneDark } from "@codemirror/theme-one-dark";
+import { customDark } from "@/utils/darkTheme";
 import { EditorView } from "@codemirror/view";
 import { bracketMatching } from "@codemirror/language";
 import { useTheme } from "@/context/ThemeContext";
@@ -8,9 +8,11 @@ import { useTheme } from "@/context/ThemeContext";
 const CodeEditor = ({
   code,
   setCode,
+  height
 }: {
   code: string;
   setCode: (value: string) => void;
+  height: string
 }) => {
   const { theme } = useTheme();
   const lightTheme = EditorView.theme(
@@ -28,8 +30,8 @@ const CodeEditor = ({
   return (
     <CodeMirror
       value={code}
-      height="400px"
-      theme={theme === 'light' ? lightTheme : oneDark}
+      height={height}
+      theme={theme === 'light' ? lightTheme : customDark}
       extensions={[javascript(), bracketMatching(), EditorView.lineWrapping]}
       onChange={(value) => setCode(value)}
     />
