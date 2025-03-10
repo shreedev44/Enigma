@@ -3,8 +3,10 @@ import fs from 'fs';
 import path from 'path';
 import { Language } from '../Types/types';
 import generateUID from './generate-uid.util';
+import { ContainerPool } from './container-pool.util';
 
 const CODE_DIR = '/app/temp';
+const EXECUTION_TIMEOUT = 3000
 
 if (!fs.existsSync(CODE_DIR)) {
   fs.mkdirSync(CODE_DIR, { recursive: true });
@@ -15,6 +17,8 @@ const docker = new Docker({
   port: 2375,
   protocol: 'http'
 });
+
+const containerPool = new ContainerPool(docker)
 
 const LANGUAGES = JSON.parse(
   fs.readFileSync(path.join(__dirname, 'languages.util.json'), 'utf8')
@@ -47,53 +51,47 @@ export const executeCode = async (language: Language, code: string) => {
 
   console.log(`Running command in container: ${cmd}`);
 
+  let container: Docker.Container | null = null;
+  let pooledContainer = false;
+
   try {
-    console.log(`Pulling image: ${langConfig.image}`);
-    await new Promise((resolve, reject) => {
-      docker.pull(langConfig.image, (err: any, stream: any) => {
-        if (err) {
-          console.error('Error pulling image:', err);
-          reject(err);
-          return;
+    container = await containerPool.getContainer(langConfig.image)
+    pooledContainer = !!container
+    
+
+    if(!container) {
+      container = await docker.createContainer({
+        Image: langConfig.image,
+        Cmd: ['sh', '-c', cmd],
+        HostConfig: {
+          Binds: [`${CODE_DIR}:/app`]
         }
-        
-        docker.modem.followProgress(stream, (err: any, output: any) => {
-          if (err) {
-            console.error('Error following pull progress:', err);
-            reject(err);
-            return;
-          }
-          resolve(output);
-        });
       });
-    });
 
-    const container = await docker.createContainer({
-      Image: langConfig.image,
-      name: containerName,
-      Cmd: ['sh', '-c', cmd],
-      HostConfig: {
-        Binds: [`${CODE_DIR}:/app`],
-        AutoRemove: true
-      }
-    });
+      await container.start()
+    } else {
+      const exec = await container.exec({
+        Cmd: ['sh', '-c', cmd],
+        AttachStdout: true,
+        AttachStderr: true
+      });
+      await exec.start({});
+    }
 
-    await container.start();
+    const waitPromise = pooledContainer ? new Promise((res, rej) => setTimeout(res, 100)) : container.wait();
 
-    const waitPromise = container.wait();
-    const timeoutPromise = new Promise((_, reject) => 
-      setTimeout(() => reject(new Error('Execution timed out')), 5000)
-    );
+    const timeoutPromise = new Promise((_, rej) => setTimeout(() => rej(new Error("Execution timed out")), EXECUTION_TIMEOUT))
 
     await Promise.race([waitPromise, timeoutPromise])
-      .catch(async (error) => {
-        console.error('Execution error or timeout:', error.message);
-        try {
-          await container.stop();
-        } catch (stopError) {
+      .catch(async (err) => {
+        console.error('Execution error or timeout:', err.message)
+        if(!pooledContainer) {
+          try {
+            await container?.stop();
+          } catch {}
         }
-        throw error;
-      });
+        throw err
+      })
 
     let output = '';
     if (fs.existsSync(outputFile)) {
@@ -103,9 +101,24 @@ export const executeCode = async (language: Language, code: string) => {
 
     if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
 
+    if(pooledContainer && container) {
+      await containerPool.returnContainer(langConfig.image, container)
+    } else if(container) {
+      try { await container.remove({force: true}); } catch {}
+    }
+
     return { stdout: output, stderr: '' };
   } catch (error) {
     console.error('Docker execution error:', error);
+    if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+    if (fs.existsSync(outputFile)) fs.unlinkSync(outputFile);
+    
+    if (pooledContainer && container) {
+      await containerPool.returnContainer(langConfig.image, container);
+    } else if (container) {
+      try { await container.remove({ force: true }); } catch {}
+    }
+
     return { 
       stdout: '', 
       stderr: error instanceof Error ? error.message : String(error) 
