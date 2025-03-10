@@ -14,11 +14,5 @@
     "image": "openjdk:alpine",
     "compile": "javac /app/{filename}",
     "command": "java -cp /app {mainClass}"
-  },
-  "cpp": {
-    "image": "gcc:latest",
-    "extension": "cpp",
-    "compile": "g++ -o /app/{outputfile} /app/{filename}",
-    "command": "/app/{outputfile}"
   }
 }

@@ -1,5 +1,7 @@
 import { IoLogoJavascript } from "react-icons/io5";
-import { FaPython, FaJava, FaChevronLeft, FaChevronRight, FaCode } from "react-icons/fa";
+import { FaPython, FaJava, FaCode } from "react-icons/fa";
+import { FiMaximize2 } from "react-icons/fi";
+
 // import { TbBrandCpp } from "react-icons/tb";
 import CodeEditor from "@/components/CodeEditor";
 import { useEffect, useState } from "react";
@@ -19,7 +21,8 @@ const Compiler = () => {
   const [code, setCode] = useState("");
   const [output, setOutput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [outputPanelSize, setOutputPanelSize] = useState(45)
+  const [panelSize, setPanelSize] = useState(45)
+  const [key, setKey] = useState(0)
 
   const { toast } = useToast();
 
@@ -27,6 +30,10 @@ const Compiler = () => {
     setCode(LANGUAGES[lanuguage].baseCode);
   }, [lanuguage]);
 
+  const shrinkOutput = () => {
+    setPanelSize(panelSize > 0 ? 0 : 45)
+    setKey(key === 0 ? 1 : 0)
+  }
 
   const handleRun = async () => {
     if (loading) return;
@@ -97,7 +104,7 @@ const Compiler = () => {
           direction="horizontal"
           className="w-full"
         >
-          <ResizablePanel defaultSize={100 - outputPanelSize} minSize={30}>
+          <ResizablePanel defaultSize={55} minSize={30}>
             <div className="w-full">
               <div className="flex justify-between border-b-2 items-center">
                 <p className="text-xl font-mono font-bold ml-3">
@@ -126,20 +133,16 @@ const Compiler = () => {
                     Clear
                   </Button>
 
-                  <Button variant={"outline"} className="mr-2" onClick={() => setOutputPanelSize(outputPanelSize === 0 ? 45 : 0)}>
-                    {outputPanelSize === 0 ? (
-                      <FaChevronLeft />
-                    ) : (
-                      <FaChevronRight />
-                    )}
+                  <Button variant={"outline"} className="mr-2" onClick={shrinkOutput}>
+                    <FiMaximize2 />
                   </Button>
                 </div>
               </div>
               <CodeEditor code={code} setCode={setCode} height="79vh" />
             </div>
           </ResizablePanel>
-          <ResizableHandle  />
-          <ResizablePanel maxSize={outputPanelSize} minSize={outputPanelSize} >
+          <ResizableHandle />
+          <ResizablePanel defaultSize={panelSize} maxSize={70} minSize={0} key={key} >
             <div className="w-full">
               <div className="flex justify-between border-b-2 items-center">
                 <p className="text-xl font-mono font-bold ml-3">Output</p>
