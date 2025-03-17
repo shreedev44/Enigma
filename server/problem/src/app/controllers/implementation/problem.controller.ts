@@ -90,7 +90,7 @@ export class ProblemController implements IProblemController {
   async compileCode(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const {language, code} = req.body;
-      const languages = ["javascript", "python", "java", "cpp"]
+      const languages = ["javascript", "python", "java", "golang", "cpp"]
       if(!languages.includes(language)) {
         res.status(HttpStatus.BAD_REQUEST).json({error: Messages.UNSUPPORTED_LANGUAGE})
         return;
@@ -98,6 +98,22 @@ export class ProblemController implements IProblemController {
 
       const result = await this._problemService.compileCode(code, language)
 
+      res.status(HttpStatus.OK).json({result})
+    } catch (err) {
+      next(err)
+    }
+  }
+
+  async runSolution(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { language, code, problemNo } = req.body;
+      const languages = ["javascript", "python", "java", "golang", "cpp"]
+        if(!languages.includes(language)) {
+          res.status(HttpStatus.BAD_REQUEST).json({error: Messages.UNSUPPORTED_LANGUAGE})
+          return;
+      }
+  
+      const result = await this._problemService.runSolution(code, language, problemNo)
       res.status(HttpStatus.OK).json({result})
     } catch (err) {
       next(err)

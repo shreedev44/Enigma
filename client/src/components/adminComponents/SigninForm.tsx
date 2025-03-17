@@ -15,6 +15,7 @@ import { useToast } from "@/hooks/use-toast";
 import { adminRoutes } from "@/constants/routeUrl";
 import { useDispatch } from "react-redux";
 import { setAdmin } from "@/redux/adminSlice";
+import ClassicSpinner from "../loaders/ClassicSpinner";
 
 const SigninForm = ({ className, ...props }: React.ComponentProps<"div">) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -160,7 +161,7 @@ const SigninForm = ({ className, ...props }: React.ComponentProps<"div">) => {
                 onClick={handleSubmission}
               >
                 {loading ? (
-                  <div className="w-6 h-6 border-4 border-t-black border-gray-300 rounded-full animate-spin"></div>
+                  <ClassicSpinner />
                 ) : (
                   "Sign In"
                 )}

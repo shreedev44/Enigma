@@ -3,14 +3,27 @@ import { HttpStatus } from "../../constants/status.constant";
 import { Messages } from "../../constants/message.constant";
 import { IProblemService } from "../interface/IProblemService";
 import { IProblemRepository } from "../../repositories/interface/IProblemRepository";
-import { Language, ProblemListType, ProblemType } from "../../Types/types";
-import { validateTestCase } from "../../utils/validate-parameters.util";
+import {
+  Language,
+  MakeOptional,
+  ProblemListType,
+  ProblemType,
+  TestCaseType,
+} from "../../Types/types";
 import { executeCode } from "../../utils/executor.util";
+import { generateConstraints } from "../../utils/generate-constraints.util";
+import { getPrompt } from "../../utils/ai-prompt.util";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { basePrompt } from "../../constants/prompt.constant";
+import { env } from "../../config/env.config";
+import { testFunctions } from "../../constants/test-functions.constants";
 
 export class ProblemService implements IProblemService {
   constructor(private _problemRepository: IProblemRepository) {}
 
-  async addProblem(problem: ProblemType): Promise<void> {
+  async addProblem(
+    problem: MakeOptional<ProblemType, "testCases">
+  ): Promise<void> {
     const problemExist = await this._problemRepository.findByTitle(
       problem.title
     );
@@ -19,19 +32,35 @@ export class ProblemService implements IProblemService {
       throw createHttpError(HttpStatus.CONFLICT, Messages.PROBLEM_TITLE_EXIST);
     }
 
-    problem.testCases.forEach((testCase) => {
-      if (!validateTestCase(testCase, problem.parameters)) {
-        throw createHttpError(
-          HttpStatus.BAD_REQUEST,
-          Messages.DATATYPE_NOT_MATCHING
-        );
-      }
+    const prompt = getPrompt(
+      problem.description,
+      {
+        functionReturnType: problem.functionReturnType,
+        functionReturnElemType: problem.functionReturnElemType,
+        functionReturnNestedType: problem.functionReturnNestedType,
+      },
+      problem.parameters
+    );
+    const genAI = new GoogleGenerativeAI(env.GEMINI_API_KEY);
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.0-pro-exp-02-05",
     });
 
+    const result = await model.generateContent(basePrompt + "\n\n\n" + prompt);
+
+
+    const testCases = JSON.parse(
+      result.response.text().replace(/```json\n|\n```/g, "")
+    );
+    
+    problem.testCases = testCases;
+    problem.constraints = problem.parameters
+    .map((parameter) => generateConstraints(parameter))
+    .flat();
     const latest = await this._problemRepository.findLatestProblem();
     problem.problemNo = (latest?.problemNo || 0) + 1;
-
-    await this._problemRepository.create(problem);
+    
+    await this._problemRepository.create(problem as ProblemType);
   }
 
   async getProblems(
@@ -77,9 +106,31 @@ export class ProblemService implements IProblemService {
     return problem;
   }
 
-  async compileCode(code: string, language: Language): Promise<{stdout: string, stderr: string}> {
+  async compileCode(
+    code: string,
+    language: Language
+  ): Promise<{ stdout: string; stderr: string }> {
     const result = await executeCode(language, code);
 
     return result;
+  }
+
+  async runSolution(
+    code: string,
+    language: Language,
+    problemNo: number
+  ): Promise<{ stdout: string; stderr: string }> {
+    const problem = await this._problemRepository.findProblemByNo(problemNo)
+    if(!problem) {
+      throw createHttpError(HttpStatus.NOT_FOUND, Messages.PROBLEM_NOT_FOUND);
+    }
+    const result = await executeCode(language, testFunctions[(language as Exclude<Language, "cpp">)](problem?.testCases, code, problem?.functionName))
+    try {
+      JSON.parse(result.stdout)
+    } catch (err) {
+      result.stderr = result.stdout
+      result.stdout = ''
+    }
+    return result
   }
 }

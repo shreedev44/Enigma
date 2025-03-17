@@ -42,7 +42,4 @@ export const validateProblem = (problem: ProblemType) => {
     if(!problem.evalFunction || !isValidFunctionString(problem.evalFunction)) {
         return {field: 'evalFunction', message: "Please provide a valid evaluating function"}
     }
-    if(!problem.testCases || problem.testCases?.length !== 5) {
-        return {field: 'testCases', message: "Please provide 5 test case"}
-    }
 }

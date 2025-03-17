@@ -10,8 +10,8 @@ export type DataTypes =
 export type DifficultyType = "Beginner" | "Intermediate" | "Advanced";
 
 export type TestCaseType = {
-  input: { parameter: string; value: string }[];
-  output: string;
+  input: { parameter: string; value: unknown }[];
+  output: unknown;
 };
 
 export type ProblemParameter = {
@@ -42,6 +42,7 @@ export type ProblemType = {
   status?: "listed" | "unlisted";
   createdAt?: Date;
   updatedAt?: Date;
+  constraints?: string[];
 };
 
 export type ProblemListType = {
@@ -54,4 +55,7 @@ export type ProblemListType = {
   status?: "listed" | "unlisted";
 };
 
-export type Language = "javascript" | "python" | "java" | "cpp"
+export type Language = "javascript" | "python" | "java" | "golang" | "cpp"
+
+export type MakeOptional<T, K extends keyof T> =
+Omit<T, K> & { [P in K]?: T[P] };

@@ -38,6 +38,21 @@ int main() {
     // Write C++ code here
 
     return 0;
-}`
+}`,
+  },
+  golang: {
+    baseCode: `package main
+import "fmt"
+
+func main() {
+  fmt.Println("Welcome to Enigma compiler")
+}`,
+    extension: "go",
+    reset: `package main
+import "fmt"
+
+func main() {
+  
+}`,
   },
 };

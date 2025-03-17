@@ -7,6 +7,7 @@ export const studentEndpoints = {
   GET_PROBLEMS: "/problem/student/getProblems",
   FIND_PROBLEM: "/problem/student/findProblem",
   COMPILE: "/problem/student/compile",
+  RUN_SOLUTION: "/problem/student/run-solution"
 };
 
 export const recruiterEndpoints = {

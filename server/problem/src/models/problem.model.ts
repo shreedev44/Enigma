@@ -5,10 +5,10 @@ const TestCaseSchema = new Schema<TestCaseType>({
   input: [
     {
       parameter: { type: String, required: true },
-      value: { type: String, required: true },
+      value: { type: Schema.Types.Mixed, required: true },
     },
   ],
-  output: { type: String, required: true },
+  output: { type: Schema.Types.Mixed, required: true },
 });
 
 const ProblemSchema: Schema = new Schema<ProblemType>(
@@ -98,8 +98,14 @@ const ProblemSchema: Schema = new Schema<ProblemType>(
     status: {
       type: String,
       enum: ["listed", "unlisted"],
-      default: "unlisted",
+      default: "listed",
     },
+    constraints: [
+      {
+        type: String,
+        required: true
+      }
+    ]
   },
   {
     timestamps: true,

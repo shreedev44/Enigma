@@ -5,4 +5,7 @@ export const env = {
   get MONGO_URI() {
     return process.env.MONGO_URI!;
   },
+  get GEMINI_API_KEY() {
+    return process.env.GEMINI_API_KEY!;
+  }
 };

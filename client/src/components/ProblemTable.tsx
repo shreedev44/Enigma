@@ -32,6 +32,7 @@ import { ProblemPagePropType } from "@/types/propsTypes";
 import { DynamicPagination } from "./ProblemPagination";
 import { useNavigate } from "react-router-dom";
 import { studentRoutes } from "@/constants/routeUrl";
+import ClassicSpinner from "./loaders/ClassicSpinner";
 
 const getColumn = (
   role: "student" | "admin",
@@ -240,7 +241,7 @@ const ProblemsTable = (props: ProblemPagePropType) => {
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24">
                   <div className="flex justify-start ml-32 md:justify-center md:ml-0">
-                    <div className="w-6 h-6 border-4 border-t-black border-gray-300 rounded-full animate-spin"></div>
+                    <ClassicSpinner />
                   </div>
                 </TableCell>
               </TableRow>

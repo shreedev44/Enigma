@@ -1,8 +1,8 @@
 import { IoLogoJavascript } from "react-icons/io5";
 import { FaPython, FaJava, FaCode } from "react-icons/fa";
 import { FiMaximize2 } from "react-icons/fi";
-
-// import { TbBrandCpp } from "react-icons/tb";
+import { TbBrandGolang } from "react-icons/tb";
+import { TbBrandCpp } from "react-icons/tb";
 import CodeEditor from "@/components/CodeEditor";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,8 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import ClassicSpinner from "@/components/loaders/ClassicSpinner";
 
 const Compiler = () => {
   const [lanuguage, setLanguage] = useState<Language>("javascript");
@@ -91,14 +93,22 @@ const Compiler = () => {
           >
             <FaJava size={30} className="m-1" />
           </div>
-          {/* <div
+          <div
+            className={`border ${
+              lanuguage === "golang" ? "border-fleace" : ""
+            } border-2 rounded-md m-1 my-3`}
+            onClick={() => setLanguage("golang")}
+          >
+            <TbBrandGolang size={30} className="m-1" />
+          </div>
+          <div
             className={`border ${
               lanuguage === "cpp" ? "border-fleace" : ""
             } border-2 rounded-md m-1 my-3`} 
             onClick={() => setLanguage("cpp")}
           >
             <TbBrandCpp size={30} className="m-1" />
-          </div> */}
+          </div>
         </div>
         <ResizablePanelGroup
           direction="horizontal"
@@ -117,7 +127,7 @@ const Compiler = () => {
                     disabled={loading}
                   >
                     {loading ? (
-                      <div className="w-6 h-6 border-4 border-t-black border-gray-300 rounded-full animate-spin"></div>
+                      <ClassicSpinner />
                     ) : (
                       "Run"
                     )}
@@ -138,7 +148,7 @@ const Compiler = () => {
                   </Button>
                 </div>
               </div>
-              <CodeEditor code={code} setCode={setCode} height="79vh" />
+              <CodeEditor code={code} setCode={setCode} height="79vh" language={lanuguage} />
             </div>
           </ResizablePanel>
           <ResizableHandle />
@@ -154,7 +164,9 @@ const Compiler = () => {
                   Clear
                 </Button>
               </div>
-              <div className="m-3 font-mono whitespace-pre-wrap">{output}</div>
+              <ScrollArea className="h-[79vh]">
+                <div className="m-3 font-mono whitespace-pre-wrap">{output}</div>
+              </ScrollArea>
             </div>
           </ResizablePanel>
         </ResizablePanelGroup>

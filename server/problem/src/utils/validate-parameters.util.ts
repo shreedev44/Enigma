@@ -1,18 +1,19 @@
 import { DataTypes, TestCaseType } from "../Types/types";
 
-export const validateParameter = (type: DataTypes, value: string): boolean => {
+export const validateParameter = (type: DataTypes, value: unknown): boolean => {
+  const newValue = String(value)
   switch (type) {
     case "Integer":
-      return /^-?\d+$/.test(value);
+      return /^-?\d+$/.test(newValue);
     case "Floating Point":
-      return /^-?\d+(\.\d+)?$/.test(value);
+      return /^-?\d+(\.\d+)?$/.test(newValue);
     case "String":
-      return typeof value === "string";
+      return typeof newValue === "string";
     case "Boolean":
-      return value === "true" || value === "false";
+      return newValue === "true" || newValue === "false";
     case "Array":
       try {
-        const parsed = JSON.parse(value);
+        const parsed = JSON.parse(newValue);
         return Array.isArray(parsed);
       } catch {
         return false;

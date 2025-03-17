@@ -129,3 +129,22 @@ export const compileCode = async (code: string, language: Language) => {
     return { success: false, error: message };
   }
 };
+
+export const runSolution = async (
+  code: string,
+  language: Language,
+  problemNo: number
+) => {
+  try {
+    const { data } = await Api.post(
+      studentEndpoints.RUN_SOLUTION,
+      { code, language, problemNo },
+      { headers }
+    );
+    return { success: true, data };
+  } catch (err) {
+    const error = err as any;
+    const message = error.response?.data?.error || "An error occured";
+    return { success: false, error: message };
+  }
+};

@@ -15,6 +15,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { LuCircleAlert } from "react-icons/lu";
 import { resetPassword } from "@/api/common";
 import { Role } from "@/types/formTypes";
+import ClassicSpinner from "@/components/loaders/ClassicSpinner";
 
 const ResetPassword = () => {
   const location = useLocation();
@@ -190,7 +191,7 @@ const ResetPassword = () => {
                 )}
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? (
-                    <div className="w-6 h-6 border-4 border-t-black border-gray-300 rounded-full animate-spin"></div>
+                    <ClassicSpinner />
                   ) : (
                     "Reset Password"
                   )}

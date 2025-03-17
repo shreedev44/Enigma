@@ -45,9 +45,5 @@ export const validateProblem = (req: Request, res: Response, next: NextFunction)
         res.status(HttpStatus.BAD_REQUEST).json({error: Messages.EVAL_FUNCTION_REQUIRED})
         return
     }
-    if(!req.body.testCases || req.body.testCases?.length !== 5) {
-        res.status(HttpStatus.BAD_REQUEST).json({error: Messages.NOT_ENOUGHT_TEST_CASES})
-        return
-    }
     next()
 }

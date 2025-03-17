@@ -5,4 +5,5 @@ export interface IProblemController {
     getProblems(req: Request, res: Response, next: NextFunction): Promise<void>;
     findProblem(req: Request, res: Response, next: NextFunction): Promise<void>;
     compileCode(req: Request, res: Response, next: NextFunction): Promise<void>;
+    runSolution(req: Request, res: Response, next: NextFunction): Promise<void>;
 }

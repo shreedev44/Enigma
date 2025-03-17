@@ -25,7 +25,7 @@ export class ContainerPool {
     }
   }
 
-  async prepopulatePool(image: string, count: number = 3) {
+  async prepopulatePool(image: string, count: number = 1) {
     if (!this.pools.has(image)) {
       this.pools.set(image, []);
     }

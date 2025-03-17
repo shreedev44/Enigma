@@ -2,17 +2,29 @@
   "javascript": {
     "extension": "js",
     "image": "node:alpine",
-    "command": "node /app/{filename}"
+    "command": "node /app/Main.js"
   },
   "python": {
     "extension": "py",
     "image": "python:alpine",
-    "command": "python3 /app/{filename}"
+    "command": "python3 /app/Main.py"
   },
   "java": {
     "extension": "java",
     "image": "openjdk:alpine",
-    "compile": "javac /app/{filename}",
-    "command": "java -cp /app {mainClass}"
+    "compile": "javac /app/Main.java",
+    "command": "java -cp /app Main",
+    "compileFileExtension": "class"
+  },
+  "golang": {
+    "extension": "go",
+    "image": "golang:alpine",
+    "command": "go run /app/Main.go"
+  },
+  "cpp": {
+    "extension": "cpp",
+    "image": "gcc:latest",
+    "compile": "g++ /app/Main.cpp -o /app/Main.out",
+    "command": "cp /app/Main.out /tmp/temp_main && chmod +x /tmp/temp_main && /tmp/temp_main"
   }
 }
