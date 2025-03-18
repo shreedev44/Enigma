@@ -28,6 +28,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useDispatch } from "react-redux";
 import { setRecruiter } from "@/redux/recruiterSlice";
 import { Textarea } from "@/components/ui/textarea";
+import ClassicSpinner from "../loaders/ClassicSpinner";
 
 const EditProfileModal = (props: RctrEditProfilePropType) => {
   const { toast } = useToast();
@@ -330,7 +331,7 @@ const EditProfileModal = (props: RctrEditProfilePropType) => {
       <DialogFooter>
         <Button type="submit" onClick={hanldeSubmit} disabled={loading}>
           {loading ? (
-            <div className="w-6 h-6 border-4 border-t-black border-gray-300 rounded-full animate-spin"></div>
+            <ClassicSpinner />
           ) : (
             "Save Changes"
           )}

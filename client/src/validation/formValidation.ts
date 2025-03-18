@@ -56,7 +56,7 @@ export const validateParameter = (
   if (alreadyExist) {
     return { field: "parameterName", message: "Parameter already exist" };
   }
-  if (Number(parameterField.paramMinValue) < 0) {
+  if (isNaN(Number(parameterField.paramMinValue))) {
     return {
       field: "paramMinValue",
       message: "Please enter a valid min value",
@@ -83,7 +83,7 @@ export const validateParameter = (
         message: "Max value is required",
       };
     }
-    if (Number(parameterField.elemMinValue) < 0) {
+    if (parameterField.elemType === 'Array' && Number(parameterField.elemMinValue) < 0) {
       return {
         field: "elemMinValue",
         message: "Please enter a valid min value",
@@ -110,7 +110,7 @@ export const validateParameter = (
           message: "Max value is required",
         };
       }
-      if (Number(parameterField.nestedMinValue) < 0) {
+      if (isNaN(Number(parameterField.nestedMinValue))) {
         return {
           field: "nestedMinValue",
           message: "Please enter a valid min value",

@@ -1,5 +1,5 @@
-import mongoose, { Schema } from "mongoose";
-import { UserType } from "../Types/types";
+import mongoose, { Schema } from 'mongoose'
+import { UserType } from '@types'
 
 const UserSchema: Schema = new Schema(
     {
@@ -9,7 +9,7 @@ const UserSchema: Schema = new Schema(
         email: {
             type: String,
             required: true,
-            unique:true
+            unique: true,
         },
         password: {
             type: String,
@@ -17,24 +17,24 @@ const UserSchema: Schema = new Schema(
         role: {
             type: String,
             required: true,
-            enum: ['student', 'recruiter', 'admin']
+            enum: ['student', 'recruiter', 'admin'],
         },
         status: {
             type: String,
             required: true,
             enum: ['active', 'blocked'],
-            default: 'active'
+            default: 'active',
         },
         subscriptionType: {
             type: String,
             required: true,
             enum: ['free', 'premium'],
-            default: 'free'
-        }
+            default: 'free',
+        },
     },
     {
-        timestamps: true
+        timestamps: true,
     }
 )
 
-export default mongoose.model<UserType>("User", UserSchema, "Users")
+export default mongoose.model<UserType>('User', UserSchema, 'Users')

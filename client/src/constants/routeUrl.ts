@@ -9,7 +9,8 @@ export const studentRoutes = {
     RESET_PASSWORD: "/reset-password",
     PROFILE: "/profile",
     PROBLEM_SET: '/problemset',
-    PROBLEM: "/problem"
+    PROBLEM: "/problem",
+    COMPILER: "/online-compiler"
 }
 
 export const recruiterRoutes = {

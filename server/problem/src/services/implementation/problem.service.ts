@@ -1,78 +1,121 @@
-import { createHttpError } from "../../utils/http-error.util";
-import { HttpStatus } from "../../constants/status.constant";
-import { Messages } from "../../constants/message.constant";
-import { IProblemService } from "../interface/IProblemService";
-import { IProblemRepository } from "../../repositories/interface/IProblemRepository";
-import { ProblemListType, ProblemType } from "../../Types/types";
-import { validateTestCase } from "../../utils/validate-parameters.util";
+import { createHttpError } from '@utils'
+import { _HttpStatus, Messages } from '@constants'
+import { IProblemService } from '@services/interface'
+import { IProblemRepository } from '@repositories/interface'
+import { Language, MakeOptional, ProblemListType, ProblemType } from '@types'
+import { executeCode } from '@utils'
+import { generateConstraints } from '@utils'
+import { getPrompt } from '@utils'
+import { GoogleGenerativeAI } from '@google/generative-ai'
+import { basePrompt } from '@constants'
+import { env } from '@configs'
+import { testFunctions } from '@constants'
 
 export class ProblemService implements IProblemService {
-  constructor(private _problemRepository: IProblemRepository) {}
+    constructor(private _problemRepository: IProblemRepository) {}
 
-  async addProblem(problem: ProblemType): Promise<void> {
-    const problemExist = await this._problemRepository.findByTitle(
-      problem.title
-    );
+    async addProblem(problem: MakeOptional<ProblemType, 'testCases'>): Promise<void> {
+        const problemExist = await this._problemRepository.findByTitle(problem.title)
 
-    if (problemExist) {
-      throw createHttpError(HttpStatus.CONFLICT, Messages.PROBLEM_TITLE_EXIST);
+        if (problemExist) {
+            throw createHttpError(_HttpStatus.CONFLICT, Messages.PROBLEM_TITLE_EXIST)
+        }
+
+        const prompt = getPrompt(
+            problem.description,
+            {
+                functionReturnType: problem.functionReturnType,
+                functionReturnElemType: problem.functionReturnElemType,
+                functionReturnNestedType: problem.functionReturnNestedType,
+            },
+            problem.parameters
+        )
+        const genAI = new GoogleGenerativeAI(env.GEMINI_API_KEY)
+        const model = genAI.getGenerativeModel({
+            model: 'gemini-2.0-pro-exp-02-05',
+        })
+
+        const result = await model.generateContent(basePrompt + '\n\n\n' + prompt)
+
+        const testCases = JSON.parse(result.response.text().replace(/```json\n|\n```/g, ''))
+
+        problem.testCases = testCases
+        problem.constraints = problem.parameters.map((parameter) => generateConstraints(parameter)).flat()
+        const latest = await this._problemRepository.findLatestProblem()
+        problem.problemNo = (latest?.problemNo || 0) + 1
+
+        await this._problemRepository.create(problem as ProblemType)
     }
 
-    problem.testCases.forEach((testCase) => {
-      if (!validateTestCase(testCase, problem.parameters)) {
-        throw createHttpError(
-          HttpStatus.BAD_REQUEST,
-          Messages.DATATYPE_NOT_MATCHING
-        );
-      }
-    });
+    async getProblems(
+        page: number,
+        sortBy: string,
+        sortOrder: 1 | -1,
+        filter: string | null
+    ): Promise<{ problems: ProblemListType[]; totalPages: number }> {
+        const sort = { [sortBy]: sortOrder }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        let query: any = { status: 'listed' }
+        if (filter) {
+            query = {
+                $and: [
+                    {
+                        $or: [
+                            { title: { $regex: filter, $options: 'i' } },
+                            { problemNo: { $regex: filter, $options: 'i' } },
+                            { difficulty: { $regex: filter, $options: 'i' } },
+                        ],
+                    },
+                    { status: 'listed' },
+                ],
+            }
+        }
 
-    const latest = await this._problemRepository.findLatestProblem();
-    problem.problemNo = (latest?.problemNo || 0) + 1;
+        const problems = await this._problemRepository.getProblems(sort, query)
 
-    await this._problemRepository.create(problem);
-  }
+        const dataPerPage = 1
+        const totalPages = Math.ceil(problems.length / dataPerPage)
 
-  async getProblems(
-    page: number,
-    sortBy: string,
-    sortOrder: 1 | -1,
-    filter: string | null
-  ): Promise<{ problems: ProblemListType[]; totalPages: number }> {
-    const sort = { [sortBy]: sortOrder };
-    let query: any = { status: "listed" };
-    if (filter) {
-      query = {
-        $and: [
-          {
-            $or: [
-              { title: { $regex: filter, $options: "i" } },
-              { problemNo: { $regex: filter, $options: "i" } },
-              { difficulty: { $regex: filter, $options: "i" } },
-            ],
-          },
-          { status: "listed" },
-        ],
-      };
+        const startIndex = (page - 1) * dataPerPage
+        const endIndex = startIndex + dataPerPage
+        return { problems: problems.slice(startIndex, endIndex), totalPages }
     }
 
-    const problems = await this._problemRepository.getProblems(sort, query);
+    async findProblem(problemNo: number): Promise<ProblemType> {
+        const problem = await this._problemRepository.findProblemByNo(problemNo)
 
-    const dataPerPage = 1;
-    const totalPages = Math.ceil(problems.length / dataPerPage);
+        if (!problem) {
+            throw createHttpError(_HttpStatus.NOT_FOUND, Messages.PROBLEM_NOT_FOUND)
+        }
 
-    const startIndex = (page - 1) * dataPerPage;
-    const endIndex = startIndex + dataPerPage;
-    return { problems: problems.slice(startIndex, endIndex), totalPages };
-  }
-
-  async findProblem(problemNo: number): Promise<ProblemType> {
-    const problem = await this._problemRepository.findProblemByNo(problemNo);
-
-    if (!problem) {
-      throw createHttpError(HttpStatus.NOT_FOUND, Messages.PROBLEM_NOT_FOUND);
+        return problem
     }
 
-    return problem;
-  }
+    async compileCode(code: string, language: Language): Promise<{ stdout: string; stderr: string }> {
+        const result = await executeCode(language, code)
+
+        return result
+    }
+
+    async runSolution(
+        code: string,
+        language: Language,
+        problemNo: number
+    ): Promise<{ stdout: string; stderr: string }> {
+        const problem = await this._problemRepository.findProblemByNo(problemNo)
+        if (!problem) {
+            throw createHttpError(_HttpStatus.NOT_FOUND, Messages.PROBLEM_NOT_FOUND)
+        }
+        const result = await executeCode(
+            language,
+            testFunctions[language as Exclude<Language, 'cpp'>](problem?.testCases, code, problem?.functionName)
+        )
+        try {
+            JSON.parse(result.stdout)
+        } catch (_err) {
+            result.stderr = result.stdout
+            result.stdout = ''
+        }
+        return result
+    }
 }

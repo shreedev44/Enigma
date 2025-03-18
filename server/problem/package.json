@@ -5,27 +5,42 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "dev": "nodemon src/index.ts",
-    "start": "node dist/index.js"
+    "dev": "nodemon -r tsconfig-paths/register src/index.ts",
+    "start": "node -r tsconfig-paths/register dist/index.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "@types/dockerode": "^3.3.35",
     "@types/express": "^5.0.0",
     "@types/morgan": "^1.9.9",
     "@types/node": "^22.13.2",
+    "eslint": "^9.22.0",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-prettier": "^5.2.3",
+    "globals": "^16.0.0",
     "nodemon": "^3.1.9",
+    "prettier": "^3.5.3",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.26.1"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.0",
     "child_process": "^1.0.2",
+    "dockerode": "^4.0.4",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "mongoose": "^8.10.0",
     "morgan": "^1.10.0",
-    "nanoid": "^5.1.2"
+    "nanoid": "^5.1.2",
+    "tsconfig-paths": "^4.2.0"
   }
 }

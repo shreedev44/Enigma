@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { verifyOtp } from "@/api/common";
 import { Button } from "@/components/ui/button";
 import { resendOtp } from "@/api/common";
+import ClassicSpinner from "@/components/loaders/ClassicSpinner";
 
 const Otp = () => {
   const [otp, setOtp] = useState("");
@@ -164,7 +165,7 @@ const Otp = () => {
         <div className="flex justify-center mt-10">
           <Button onClick={handleSubmission} disabled={loading}>
             {loading ? (
-              <div className="w-6 h-6 border-4 border-t-black border-gray-300 rounded-full animate-spin"></div>
+              <ClassicSpinner />
             ) : (
               "Verify OTP"
             )}

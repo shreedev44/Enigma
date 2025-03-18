@@ -55,17 +55,12 @@ const Navbar = () => {
         >
           Home
         </Button>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button className="bg-fleace font-bold text-fleace-foreground mr-3 hidden md:inline rounded-full">
-              Learn &nbsp; &#x25BC;
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem>Community</DropdownMenuItem>
-            <DropdownMenuItem>Compiler</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Button
+          className="bg-fleace font-bold text-fleace-foreground mr-3 hidden md:inline rounded-full"
+          onClick={() => navigate(studentRoutes.COMPILER)}
+        >
+          Compiler
+        </Button>
         <Button
           className="bg-fleace text-fleace-foreground font-bold mr-3 hidden md:inline rounded-full"
           onClick={() => navigate(studentRoutes.PROBLEM_SET)}
@@ -133,13 +128,20 @@ const Navbar = () => {
               </Button>
             </SheetClose>
             <SheetClose asChild>
-              <Button variant={"outline"}>Community</Button>
+              <Button
+                variant={"outline"}
+                onClick={() => navigate(studentRoutes.COMPILER)}
+              >
+                Compiler
+              </Button>
             </SheetClose>
             <SheetClose asChild>
-              <Button variant={"outline"}>Compiler</Button>
-            </SheetClose>
-            <SheetClose asChild>
-              <Button variant={"outline"} onClick={() => navigate(studentRoutes.PROBLEM_SET)}>Problems</Button>
+              <Button
+                variant={"outline"}
+                onClick={() => navigate(studentRoutes.PROBLEM_SET)}
+              >
+                Problems
+              </Button>
             </SheetClose>
             <SheetClose asChild>
               <Button variant={"outline"}>Online Interview</Button>

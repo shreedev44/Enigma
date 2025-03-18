@@ -13,6 +13,7 @@ import ResetPassword from "@/pages/ResetPassword";
 import Profile from "@/pages/student/Profile";
 import ProblemSet from "@/pages/student/ProblemSet";
 import Problem from "@/pages/student/Problem";
+import Compiler from "@/pages/student/Compiler";
 
 const StudentRoutes = () => {
   const ProtectRoute = ({ children }: { children: JSX.Element }) => {
@@ -83,9 +84,7 @@ const StudentRoutes = () => {
         <Route
           path={studentRoutes.HOME}
           element={
-            <ProtectRoute>
-              <Home />
-            </ProtectRoute>
+            <Home />
           }
         />
         <Route
@@ -99,17 +98,19 @@ const StudentRoutes = () => {
         <Route
           path={studentRoutes.PROBLEM_SET}
           element={
-            <ProtectRoute>
-              <ProblemSet />
-            </ProtectRoute>
+            <ProblemSet />
           }
         />
         <Route
           path={studentRoutes.PROBLEM + '/:problemNo'}
           element={
-            <ProtectRoute>
-              <Problem />
-            </ProtectRoute>
+            <Problem />
+          }
+        />
+        <Route
+          path={studentRoutes.COMPILER}
+          element={
+            <Compiler />
           }
         />
       </Routes>

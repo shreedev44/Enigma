@@ -13,6 +13,7 @@ import {
   studentRoutes,
 } from "@/constants/routeUrl";
 import { Role } from "@/types/formTypes";
+import ClassicSpinner from "@/components/loaders/ClassicSpinner";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -106,7 +107,7 @@ const ForgotPassword = () => {
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? (
-                    <div className="w-6 h-6 border-4 border-t-black border-gray-300 rounded-full animate-spin"></div>
+                    <ClassicSpinner />
                   ) : (
                     "Sent Link"
                   )}

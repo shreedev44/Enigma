@@ -1,0 +1,83 @@
+services:
+  authentication-service:
+    build: 
+      context: ./authentication/
+      dockerfile: Dockerfile
+    container_name: enigma-authentication
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./authentication:/app
+      - /app/node_modules 
+    command: sh -c "npm install && npm run dev"
+    depends_on:
+      - redis
+    networks:
+      - enigma-network
+
+  dind:
+    image: docker:24-dind
+    privileged: true
+    environment:
+      - DOCKER_TLS_CERTDIR= 
+    command: ["--host=tcp://0.0.0.0:2375", "--tls=false"]
+    networks:
+      - enigma-network
+    volumes:
+      - temp-storage:/app/temp
+      - dind-storage:/var/lib/docker
+    ports:
+      - "2375"
+    restart: always
+
+  problem-service:
+    build: 
+      context: ./problem/
+      dockerfile: Dockerfile
+    container_name: enigma-problem
+    ports:
+      - "3002:3002"
+    environment:
+      - DOCKER_HOST=tcp://dind:2375
+    volumes:
+      - ./problem:/app 
+      - /app/node_modules 
+      - temp-storage:/app/temp
+    command: sh -c "npm install && npm run dev"
+    networks:
+      - enigma-network
+    depends_on:
+      - dind
+
+  api-gateway:
+    build: 
+      context: ./api-gateway/
+      dockerfile: Dockerfile
+    container_name: enigma-api-gateway
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./api-gateway:/app
+      - /app/node_modules 
+    command: sh -c "npm install && npm run dev"
+    networks:
+      - enigma-network
+
+  redis:
+    container_name: enigma-redis
+    image: "redis:7.4"
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - enigma-network
+
+volumes:
+  redis-data:
+  temp-storage:
+  dind-storage:
+
+networks:
+  enigma-network:
+    driver: bridge

@@ -9,7 +9,22 @@
     "moduleResolution": "node",
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "typeRoots": ["./node_modules/@types", "./src/Types"]
+    "typeRoots": ["./node_modules/@types", "src/types"],
+    "paths": {
+      "@configs": ["./src/configs/index"],
+      "@constants": ["./src/constants/index"],
+      "@middlewares": ["./src/middlewares/index"],
+      "@utils": ["./src/utils/index"],
+      "@types": ["./src/types/index"],
+      "@controllers/implementation": ["./src/controllers/implementation/index"],
+      "@controllers/interface": ["./src/controllers/interface/index"],
+      "@services/implementation": ["./src/services/implementation/index"],
+      "@services/interface": ["./src/services/interface/index"],
+      "@repositories/implementation/*": ["./src/repositories/implementation/*"],
+      "@repositories/interface": ["./src/repositories/interface/index"],
+      "@routes/*": ["./src/routes/*"],
+      "@models/*": ["./src/models/*"]
+    }
   },
   "include": ["src/**/*"]
 }

@@ -36,10 +36,11 @@ export type ProblemType = {
   functionReturnElemType?: DataTypes;
   functionReturnNestedType?: Exclude<DataTypes, "Array">;
   evalFunction: string;
-  testCases: TestCaseType[];
+  testCases?: TestCaseType[];
   status?: "listed" | "unlisted";
   createdAt?: Date;
   updatedAt?: Date;
+  constraints?: string[]
 };
 
 export type ProblemListType = {
@@ -51,3 +52,5 @@ export type ProblemListType = {
   solved?: boolean;
   status?: "listed" | "unlisted";
 }
+
+export type Language = "javascript" | "python" | "java" | "golang" | "cpp"

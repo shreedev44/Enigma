@@ -1,152 +1,125 @@
-import {
-  nameRegex,
-  emailRegex,
-  passwordRegex,
-  optionalNameRegex,
-  optionalGithubRegex,
-  optionalLinkedinRegex,
-  optionalBioRegex,
-  optionalFacebookRegex,
-  optionalTwitterRegex,
-  optionalBasedAtRegex,
-} from "./regex.util";
-import { Messages } from "../constants/message.constant";
+import { Messages, Regex } from '@constants'
 
 const loginValidationSchema = {
-  email: {
-    rules: [emailRegex],
-    messages: [Messages.INVALID_EMAIL],
-  },
-  password: {
-    rules: [
-      passwordRegex.minLength,
-      passwordRegex.letter,
-      passwordRegex.digit,
-      passwordRegex.specialChar,
-    ],
-    messages: [
-      Messages.PASSWORD_LENGTH,
-      Messages.PASSWORD_LETTER,
-      Messages.PASSWORD_DIGIT,
-      Messages.PASSWORD_SPECIALCHAR,
-    ],
-  },
-};
+    email: {
+        rules: [Regex.EMAIL],
+        messages: [Messages.INVALID_EMAIL],
+    },
+    password: {
+        rules: [Regex.PASSWORD.minLength, Regex.PASSWORD.letter, Regex.PASSWORD.digit, Regex.PASSWORD.specialChar],
+        messages: [
+            Messages.PASSWORD_LENGTH,
+            Messages.PASSWORD_LETTER,
+            Messages.PASSWORD_DIGIT,
+            Messages.PASSWORD_SPECIALCHAR,
+        ],
+    },
+}
 
 const studentSignupValidationSchema = {
-  firstName: {
-    rules: [nameRegex],
-    messages: [Messages.INVALID_NAME],
-  },
-  lastName: {
-    rules: [nameRegex],
-    messages: [Messages.INVALID_NAME],
-  },
-  email: {
-    rules: [emailRegex],
-    messages: [Messages.INVALID_EMAIL],
-  },
-  password: {
-    rules: [
-      passwordRegex.minLength,
-      passwordRegex.letter,
-      passwordRegex.digit,
-      passwordRegex.specialChar,
-    ],
-    messages: [
-      Messages.PASSWORD_LENGTH,
-      Messages.PASSWORD_LETTER,
-      Messages.PASSWORD_DIGIT,
-      Messages.PASSWORD_SPECIALCHAR,
-    ],
-  },
-};
+    firstName: {
+        rules: [Regex.NAME],
+        messages: [Messages.INVALID_NAME],
+    },
+    lastName: {
+        rules: [Regex.NAME],
+        messages: [Messages.INVALID_NAME],
+    },
+    email: {
+        rules: [Regex.EMAIL],
+        messages: [Messages.INVALID_EMAIL],
+    },
+    password: {
+        rules: [Regex.PASSWORD.minLength, Regex.PASSWORD.letter, Regex.PASSWORD.digit, Regex.PASSWORD.specialChar],
+        messages: [
+            Messages.PASSWORD_LENGTH,
+            Messages.PASSWORD_LETTER,
+            Messages.PASSWORD_DIGIT,
+            Messages.PASSWORD_SPECIALCHAR,
+        ],
+    },
+}
 
 const studentProfileValidationSchema = {
-  firstName: {
-    rules: [nameRegex],
-    messages: [Messages.INVALID_NAME],
-    optional: true,
-  },
-  lastName: {
-    rules: [optionalNameRegex],
-    messages: [Messages.INVALID_NAME],
-    optional: true,
-  },
-  githubProfile: {
-    rules: [optionalGithubRegex],
-    messages: [Messages.INVALID_GITHUB],
-    optional: true,
-  },
-  linkedinProfile: {
-    rules: [optionalLinkedinRegex],
-    messages: [Messages.INVALID_LINKEDIN],
-    optional: true,
-  },
-};
+    firstName: {
+        rules: [Regex.NAME],
+        messages: [Messages.INVALID_NAME],
+        optional: true,
+    },
+    lastName: {
+        rules: [Regex.OPTIONAL_NAME],
+        messages: [Messages.INVALID_NAME],
+        optional: true,
+    },
+    githubProfile: {
+        rules: [Regex.OPTIONAL_GITHUB],
+        messages: [Messages.INVALID_GITHUB],
+        optional: true,
+    },
+    linkedinProfile: {
+        rules: [Regex.OPTIONAL_LINKEDIN],
+        messages: [Messages.INVALID_LINKEDIN],
+        optional: true,
+    },
+}
 
 const recruiterSignupValidation = {
-  companyName: {
-    rules: [nameRegex],
-    messages: [Messages.INVALID_NAME],
-  },
-  email: {
-    rules: [emailRegex],
-    messages: [Messages.INVALID_EMAIL],
-  },
-  password: {
-    rules: [
-      passwordRegex.minLength,
-      passwordRegex.letter,
-      passwordRegex.digit,
-      passwordRegex.specialChar,
-    ],
-    messages: [
-      Messages.PASSWORD_LENGTH,
-      Messages.PASSWORD_LETTER,
-      Messages.PASSWORD_DIGIT,
-      Messages.PASSWORD_SPECIALCHAR,
-    ],
-  },
-};
+    companyName: {
+        rules: [Regex.NAME],
+        messages: [Messages.INVALID_NAME],
+    },
+    email: {
+        rules: [Regex.EMAIL],
+        messages: [Messages.INVALID_EMAIL],
+    },
+    password: {
+        rules: [Regex.PASSWORD.minLength, Regex.PASSWORD.letter, Regex.PASSWORD.digit, Regex.PASSWORD.specialChar],
+        messages: [
+            Messages.PASSWORD_LENGTH,
+            Messages.PASSWORD_LETTER,
+            Messages.PASSWORD_DIGIT,
+            Messages.PASSWORD_SPECIALCHAR,
+        ],
+    },
+}
 
 const recruiterProfileValidationSchema = {
-  companyName: {
-    rules: [nameRegex],
-    messages: [Messages.INVALID_NAME],
-    optional: true,
-  },
-  bio: {
-    rules: [optionalBioRegex],
-    messages: [Messages.INVALID_BIO],
-    optional: true,
-  },
-  facebookProfile: {
-    rules: [optionalFacebookRegex],
-    messages: [Messages.INVALID_FACEBOOK],
-    optional: true,
-  },
-  linkedinProfile: {
-    rules: [optionalLinkedinRegex],
-    messages: [Messages.INVALID_LINKEDIN],
-    optional: true,
-  },
-  twitterProfile: {
-    rules: [optionalTwitterRegex],
-    messages: [Messages.INVALID_TWITTER],
-    optional: true,
-  },
-  basedAt: {
-    rules: [optionalBasedAtRegex],
-    messages: [Messages.INVALID_BASED_AT],
-    optional: true,
-  }
-};
+    companyName: {
+        rules: [Regex.NAME],
+        messages: [Messages.INVALID_NAME],
+        optional: true,
+    },
+    bio: {
+        rules: [Regex.OPTIONAL_BIO],
+        messages: [Messages.INVALID_BIO],
+        optional: true,
+    },
+    facebookProfile: {
+        rules: [Regex.OPTIONAL_FACEBOOK],
+        messages: [Messages.INVALID_FACEBOOK],
+        optional: true,
+    },
+    linkedinProfile: {
+        rules: [Regex.OPTIONAL_LINKEDIN],
+        messages: [Messages.INVALID_LINKEDIN],
+        optional: true,
+    },
+    twitterProfile: {
+        rules: [Regex.OPTIONAL_TWITTER],
+        messages: [Messages.INVALID_TWITTER],
+        optional: true,
+    },
+    basedAt: {
+        rules: [Regex.OPTIONAL_BASED_AT],
+        messages: [Messages.INVALID_BASED_AT],
+        optional: true,
+    },
+}
 
-export default {
-  loginValidationSchema,
-  studentSignupValidationSchema,
-  recruiterSignupValidation,
-  studentProfileValidationSchema,
-  recruiterProfileValidationSchema
-};
+export const validationSchemas = {
+    loginValidationSchema,
+    studentSignupValidationSchema,
+    recruiterSignupValidation,
+    studentProfileValidationSchema,
+    recruiterProfileValidationSchema,
+}

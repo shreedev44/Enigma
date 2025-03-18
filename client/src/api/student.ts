@@ -2,6 +2,7 @@
 import Api from "@/services/axios";
 import { StudentSignupFormType } from "@/types/formTypes";
 import { studentEndpoints } from "@/constants/endpointUrl";
+import { Language } from "@/types/types";
 
 const headers = {
   "x-user-level": "student",
@@ -104,6 +105,40 @@ export const findProblem = async (problemNo: number) => {
   try {
     const { data } = await Api.get(
       `${studentEndpoints.FIND_PROBLEM}/${problemNo}`,
+      { headers }
+    );
+    return { success: true, data };
+  } catch (err) {
+    const error = err as any;
+    const message = error.response?.data?.error || "An error occured";
+    return { success: false, error: message };
+  }
+};
+
+export const compileCode = async (code: string, language: Language) => {
+  try {
+    const { data } = await Api.post(
+      studentEndpoints.COMPILE,
+      { code, language },
+      { headers }
+    );
+    return { success: true, data };
+  } catch (err) {
+    const error = err as any;
+    const message = error.response?.data?.error || "An error occured";
+    return { success: false, error: message };
+  }
+};
+
+export const runSolution = async (
+  code: string,
+  language: Language,
+  problemNo: number
+) => {
+  try {
+    const { data } = await Api.post(
+      studentEndpoints.RUN_SOLUTION,
+      { code, language, problemNo },
       { headers }
     );
     return { success: true, data };

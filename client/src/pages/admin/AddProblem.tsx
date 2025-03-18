@@ -12,14 +12,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import CodeEditor from "@/components/adminComponents/CodeEditor";
+import CodeEditor from "@/components/CodeEditor";
 import { FaTrash } from "react-icons/fa6";
 import {
   DataTypes,
   DifficultyType,
   ProblemParameterType,
   ProblemType,
-  TestCaseType,
 } from "@/types/types";
 import { initialState, parameterReducer } from "@/reducers/parameterReducer";
 import { validateParameter } from "@/validation/formValidation";
@@ -28,6 +27,7 @@ import { validateProblem } from "@/validation/validateProblem";
 import { addProblem } from "@/api/admin";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import ClassicSpinner from "@/components/loaders/ClassicSpinner";
 
 const AddProblem = () => {
   const { setBreadcrumbs } = useSidebarContext();
@@ -58,8 +58,6 @@ const AddProblem = () => {
   const [evalFunction, setEvalFunction] = useState(
     `//return a boolean value\nfunction evaluate(output, expected) {\n\t//Your code here \n\treturn output === expected\n}`
   );
-  const [testCaseData, setTestCaseData] = useState<Record<string, string>>({});
-  const [testCases, setTestCases] = useState<TestCaseType[]>([]);
   const [error, setError] = useState<{ field: string; message: string }>({
     field: "",
     message: "",
@@ -71,27 +69,16 @@ const AddProblem = () => {
     field: "",
     message: "",
   });
-  const [testCaseError, setTestCaseError] = useState<{
-    field: string;
-    message: string;
-  }>({
-    field: "",
-    message: "",
-  });
-
-  useEffect(() => {
-    const initialData: { [key: string]: string } = { output: "" };
-    parameters.forEach((param) => {
-      initialData[param.name] = "";
-    });
-    setTestCaseData(initialData);
-  }, [parameters]);
+  const [loading, setLoading] = useState(false)
 
   const addParameter = () => {
     const error = validateParameter(parameterField, parameters);
     if (error) {
-      setError(error);
+      setParamError(error);
+      console.log(error)
       return;
+    } else {
+      setParamError({ field: "", message: "" });
     }
 
     const newParam: ProblemParameterType = {
@@ -124,46 +111,6 @@ const AddProblem = () => {
     setParameters(newParameters);
   };
 
-  const addTestCase = () => {
-    if (testCases.length >= 5) return;
-    if (!testCaseData.expectedOutput) {
-      setTestCaseError({
-        field: "expectedOutput",
-        message: "Output is required",
-      });
-      return;
-    }
-    const newTestCase: TestCaseType = { input: [], output: "" };
-    parameters.forEach((parameter) => {
-      if (!testCaseData[parameter.name]) {
-        setTestCaseError({
-          field: `param-${parameter.name}`,
-          message: `${parameter.name} input is required`,
-        });
-        return;
-      } else {
-        newTestCase.input.push({
-          parameter: parameter.name,
-          value: testCaseData[parameter.name],
-        });
-      }
-    });
-    newTestCase.output = testCaseData["expectedOutput"];
-    setTestCases([...testCases, newTestCase]);
-    setTestCaseError({ field: "", message: "" });
-    const newTestCaseData = testCaseData;
-    for (const key in newTestCaseData) {
-      newTestCaseData[key] = "";
-    }
-    setTestCaseData(newTestCaseData);
-  };
-
-  const removeTestCase = (index: number) => {
-    const newTestCases = [...testCases];
-    newTestCases.splice(index, 1);
-    setTestCases(newTestCases);
-  };
-
   const handleSubmit = async () => {
     const problem: ProblemType = {
       title,
@@ -175,14 +122,14 @@ const AddProblem = () => {
       functionReturnElemType: returnElementType,
       functionReturnNestedType: returnNestedType,
       evalFunction,
-      testCases,
     };
     const error = validateProblem(problem);
     if (error) {
       setError(error);
       return;
     }
-
+    
+    setLoading(true)
     const response = await addProblem(problem);
 
     if (response.success) {
@@ -190,11 +137,13 @@ const AddProblem = () => {
         description: response.data.message,
       });
       navigate(`/admin${adminRoutes.PROBLEMS}`);
+      setLoading(false)
     } else {
       toast({
         description: response.error,
         variant: "destructive",
       });
+      setLoading(false)
     }
   };
 
@@ -215,6 +164,7 @@ const AddProblem = () => {
             }`}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            disabled={loading}
           />
         </div>
         <div className="mb-8">
@@ -225,6 +175,7 @@ const AddProblem = () => {
           <Select
             value={difficulty}
             onValueChange={(value) => setDifficulty(value as DifficultyType)}
+            disabled={loading}
           >
             <SelectTrigger
               className={`md:w-[250px] w-full mb-2 md:mb-0 shadow-md md:mr-2 md:mt-3 
@@ -263,6 +214,7 @@ const AddProblem = () => {
             placeholder="Your discription here..."
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            disabled={loading}
           />
         </div>
         <div className="mb-8">
@@ -279,6 +231,7 @@ const AddProblem = () => {
             }`}
             value={functionName}
             onChange={(e) => setFunctionName(e.target.value)}
+            disabled={loading}
           />
         </div>
         <div
@@ -303,14 +256,14 @@ const AddProblem = () => {
               onChange={(e) =>
                 parameterDispatch({ type: "name", payload: e.target.value })
               }
-              disabled={parameters.length >= 5}
+              disabled={parameters.length >= 5 || loading}
             />
             <Select
               value={parameterField.type}
               onValueChange={(value) =>
                 parameterDispatch({ type: "type", payload: value })
               }
-              disabled={parameters.length >= 5}
+              disabled={parameters.length >= 5 || loading}
             >
               <SelectTrigger className="md:w-[250px] w-full mb-2 shadow-md md:mb-0 md:mr-2">
                 <SelectValue placeholder="Parameter Type" />
@@ -346,7 +299,7 @@ const AddProblem = () => {
                   payload: e.target.value,
                 })
               }
-              disabled={parameters.length >= 5}
+              disabled={parameters.length >= 5 || loading}
             />
             <Input
               type="text"
@@ -371,7 +324,7 @@ const AddProblem = () => {
                   payload: e.target.value,
                 })
               }
-              disabled={parameters.length >= 5}
+              disabled={parameters.length >= 5 || loading}
             />
           </div>
           {parameterField.type === "Array" ? (
@@ -386,6 +339,7 @@ const AddProblem = () => {
                 onValueChange={(value) =>
                   parameterDispatch({ type: "elemType", payload: value })
                 }
+                disabled={loading}
               >
                 <SelectTrigger
                   className={`md:w-[250px] w-full mb-2 md:mb-0 shadow-md md:mr-2`}
@@ -423,6 +377,7 @@ const AddProblem = () => {
                     payload: e.target.value,
                   })
                 }
+                disabled={loading}
               />
               <Input
                 type="text"
@@ -447,6 +402,7 @@ const AddProblem = () => {
                     payload: e.target.value,
                   })
                 }
+                disabled={loading}
               />
             </div>
           ) : (
@@ -462,6 +418,7 @@ const AddProblem = () => {
                 onValueChange={(value) =>
                   parameterDispatch({ type: "nestedType", payload: value })
                 }
+                disabled={loading}
               >
                 <SelectTrigger
                   className={`md:w-[250px] w-full mb-2 md:mb-0 shadow-md md:mr-2`}
@@ -498,6 +455,7 @@ const AddProblem = () => {
                     payload: e.target.value,
                   })
                 }
+                disabled={loading}
               />
               <Input
                 type="text"
@@ -522,6 +480,7 @@ const AddProblem = () => {
                     payload: e.target.value,
                   })
                 }
+                disabled={loading}
               />
             </div>
           ) : (
@@ -529,7 +488,7 @@ const AddProblem = () => {
           )}
           <div className="md:flex md:justify-end items-center md:mt-5">
             <p className="text-red-500 mr-3">{paramError.message}</p>
-            <Button onClick={addParameter} disabled={parameters.length >= 5}>
+            <Button onClick={addParameter} disabled={parameters.length >= 5 || loading}>
               Add Parameter
             </Button>
           </div>
@@ -570,6 +529,7 @@ const AddProblem = () => {
             <Select
               value={returnType}
               onValueChange={(value) => setReturnType(value as DataTypes)}
+              disabled={loading}
             >
               <SelectTrigger
                 className={`md:w-[250px] w-full mb-2 md:mb-0 md:mr-2 ${
@@ -592,6 +552,7 @@ const AddProblem = () => {
                 onValueChange={(value) =>
                   setReturnElementType(value as DataTypes)
                 }
+                disabled={loading}
               >
                 <SelectTrigger
                   className={`md:w-[250px] w-full mb-2 md:mb-0 md:mr-2 ${
@@ -622,6 +583,7 @@ const AddProblem = () => {
                 onValueChange={(value) =>
                   setReturnNestedType(value as Exclude<DataTypes, "Array">)
                 }
+                disabled={loading}
               >
                 <SelectTrigger
                   className={`md:w-[250px] w-full mb-2 md:mb-0 ${
@@ -654,121 +616,30 @@ const AddProblem = () => {
               error.field === "evalFunction" ? "border border-red-500" : ""
             }`}
           >
-            <CodeEditor code={evalFunction} setCode={setEvalFunction} />
-          </div>
-        </div>
-        <div className="mb-8">
-          <Label htmlFor="testCase" className="text-sm">
-            <strong className="mr-3 text-lg">Test Case</strong>Please provide 5
-            test cases
-          </Label>
-          <div
-            id="testCases"
-            className={`mb-3 bg-gray-200 dark:bg-zinc-900 rounded-md p-2 md:p-4 md:mt-3 ${
-              error.field === "testCases" ? "border border-red-500" : ""
-            }`}
-          >
-            {parameters.length ? (
-              <>
-                <strong>Input</strong>
-                <div className="md:flex">
-                  {parameters.map((value, index) => {
-                    return (
-                      <div
-                        className="rounded-md p-1 md: p-2 dark:border-white"
-                        key={index}
-                      >
-                        <div className="flex justify-start md:ml-4">
-                          <Input
-                            type="text"
-                            placeholder={value.name}
-                            id="max"
-                            className={`md:mr-2 mb-2 md:mb-0 shadow-md ${
-                              error.field === `param-${value.name}`
-                                ? "border-red-500"
-                                : ""
-                            }`}
-                            value={testCaseData[value.name]}
-                            onChange={(e) =>
-                              setTestCaseData({
-                                ...testCaseData,
-                                [value.name]: e.target.value,
-                              })
-                            }
-                            disabled={testCases.length >= 5}
-                          />
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-                <div>
-                  <strong>Output</strong>
-                  <Input
-                    type="text"
-                    placeholder={"Expected Output"}
-                    id="max"
-                    className={`md:mx-2 mb-2 md:mb-0 md:w-1/4 mt-2 shadow-md ${
-                      error.field === `expectedOutput` ? "border-red-500" : ""
-                    }`}
-                    value={testCaseData.expectedOutput}
-                    onChange={(e) =>
-                      setTestCaseData({
-                        ...testCaseData,
-                        expectedOutput: e.target.value,
-                      })
-                    }
-                    disabled={testCases.length >= 5}
-                  />
-                </div>
-                <div className="md:flex md:justify-start items-end md:p-3">
-                  <Button
-                    className="md:mx-3 md:mt-5"
-                    onClick={addTestCase}
-                    disabled={testCases.length >= 5}
-                  >
-                    Add Test Case
-                  </Button>
-                  <p className="text-red-500 mr-3">{testCaseError.message}</p>
-                </div>
-              </>
-            ) : (
-              "Please Add parameters"
-            )}
-          </div>
-        </div>
-        <div className="mb-8">
-          <Label htmlFor="testCases" className="mr-3 text-sm">
-            Current Test Cases: {testCases.length}
-          </Label>
-          <div id="testCases" className="md:mt-3">
-            {testCases.map((testCase, index) => {
-              return (
-                <div
-                  className="rounded-md bg-bluegrey text-fleace-foreground border px-4 py-2 font-mono text-sm md:w-1/2 text-center mb-2 flex justify-between"
-                  key={index}
-                >
-                  <span>{`Input ${truncate(
-                    testCase.input.map((input) => input.value).join(""),
-                    20
-                  )}\t\tOutput ${truncate(testCase.output, 10)}`}</span>
-                  <FaTrash
-                    className="cursor-pointer"
-                    onClick={() => removeTestCase(index)}
-                  />
-                </div>
-              );
-            })}
+            <CodeEditor
+              code={evalFunction}
+              setCode={setEvalFunction}
+              height="400px"
+              language="javascript"
+            />
           </div>
         </div>
         <div className="mb-24">
+          <Label htmlFor="" className="text-sm text-yellow-500">
+            It may take a while to generate the test cases.
+          </Label>
           <p className="text-red-500 mb-3">{error.message}</p>
           <Button
             size={"lg"}
             className="font-bold font-mono mr-2 bg-mildgreen"
             onClick={handleSubmit}
+            disabled={loading}
           >
-            Add Problem
+            {loading ? (
+              <ClassicSpinner size={8} />
+            ) : (
+              "Add Problem"
+            )}
           </Button>
         </div>
       </form>

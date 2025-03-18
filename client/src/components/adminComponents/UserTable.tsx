@@ -39,6 +39,7 @@ import { Badge } from "../ui/badge";
 import { RecruiterData, StudentData } from "@/types/formTypes";
 import { UsersPagePropType } from "@/types/propsTypes";
 import { DynamicPagination } from "../UserPagination";
+import ClassicSpinner from "../loaders/ClassicSpinner";
 
 const studentColumns = (
   loading: boolean = false,
@@ -486,7 +487,7 @@ export function DataTable(props: UsersPagePropType) {
                   className="h-24"
                 >
                   <div className="flex justify-start ml-32 md:justify-center md:ml-0">
-                    <div className="w-6 h-6 border-4 border-t-black border-gray-300 rounded-full animate-spin"></div>
+                    <ClassicSpinner />
                   </div>
                 </TableCell>
               </TableRow>

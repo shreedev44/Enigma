@@ -18,6 +18,7 @@ import { setRecruiter } from "@/redux/recruiterSlice";
 import { googleAuth } from "@/api/recruiter";
 import { useGoogleLogin } from "@react-oauth/google";
 import { decodeToken } from "@/utils/googleTokenDecode";
+import ClassicSpinner from "../loaders/ClassicSpinner";
 
 const SigninForm = ({ className, ...props }: React.ComponentProps<"div">) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -213,7 +214,7 @@ const SigninForm = ({ className, ...props }: React.ComponentProps<"div">) => {
                 onClick={handleSubmission}
               >
                 {loading ? (
-                  <div className="w-6 h-6 border-4 border-t-black border-gray-300 rounded-full animate-spin"></div>
+                  <ClassicSpinner />
                 ) : (
                   "Sign In"
                 )}

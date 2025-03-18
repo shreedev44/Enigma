@@ -1,5 +1,5 @@
-export default function forgotPasswordPage(resetLink: string) {
-  return `<!DOCTYPE html>
+export function forgotPasswordPage(resetLink: string) {
+    return `<!DOCTYPE html>
         <html lang="en">
         <head>
         <meta charset="UTF-8">
@@ -124,5 +124,5 @@ export default function forgotPasswordPage(resetLink: string) {
             </div>
         </div>
         </body>
-        </html>`;
+        </html>`
 }
