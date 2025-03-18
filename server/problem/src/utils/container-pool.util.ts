@@ -3,7 +3,7 @@ import path from "path";
 import fs from "fs";
 
 const LANGUAGES = JSON.parse(
-  fs.readFileSync(path.join(__dirname, "languages.util.json"), "utf8")
+  fs.readFileSync(path.join(__dirname, "../constants/languages.constant.json"), "utf8")
 );
 
 const CODE_DIR = "/app/temp";

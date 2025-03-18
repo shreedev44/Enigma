@@ -1,4 +1,4 @@
-import { DataTypes, TestCaseType } from "../Types/types";
+import { DataTypes, TestCaseType } from "@types";
 
 export const validateParameter = (type: DataTypes, value: unknown): boolean => {
   const newValue = String(value)

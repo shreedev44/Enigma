@@ -1,15 +1,14 @@
 import { NextFunction, Request, Response } from "express";
-import { HttpStatus } from "../../constants/status.constant";
-import { Messages } from "../../constants/message.constant";
-import { camelCaseRegex, nameRegex } from "../../utils/regex.util";
-import { isValidFunctionString } from "../../utils/validate-parameters.util";
+import { HttpStatus, Messages } from "@constants";
+import { Regex } from "@constants";
+import { isValidFunctionString } from "@utils";
 
 const difficulties = ['Beginner', 'Intermediate', 'Advanced']
 const DataTypes = ["Array", "Floating Point", "Integer", "String", "Boolean"]
 
 
 export const validateProblem = (req: Request, res: Response, next: NextFunction): void => {
-    if(!req.body.title || !nameRegex.test(req.body.title)) {
+    if(!req.body.title || !Regex.NAME.test(req.body.title)) {
         res.status(HttpStatus.BAD_REQUEST).json({error: Messages.TITLE_REQUIRED})
         return;
     }
@@ -21,7 +20,7 @@ export const validateProblem = (req: Request, res: Response, next: NextFunction)
         res.status(HttpStatus.BAD_REQUEST).json({error: Messages.DESCRIPTION_REQUIRED})
         return
     }
-    if(!req.body.functionName || !camelCaseRegex.test(req.body.functionName)) {
+    if(!req.body.functionName || !Regex.CAMEL_CASE.test(req.body.functionName)) {
         res.status(HttpStatus.BAD_REQUEST).json({error: Messages.FUNCTION_NAME_REQUIRED})
         return;
     }

@@ -1,4 +1,4 @@
-import { Language, ProblemListType, ProblemType } from "../../Types/types";
+import { Language, ProblemListType, ProblemType } from "@types";
 
 export interface IProblemService {
     addProblem(problem: ProblemType): Promise<void>;

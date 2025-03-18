@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { env } from "./env.config";
+import { env } from "@configs";
 
 export default function connectDB() {
     mongoose.connect(env.MONGO_URI as string)

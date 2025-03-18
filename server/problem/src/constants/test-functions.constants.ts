@@ -1,4 +1,4 @@
-import { TestCaseType } from "../Types/types"
+import { TestCaseType } from "@types"
 
 export const testFunctions = {
     javascript: (testCases: TestCaseType[], solution: string, functionName: string) => {

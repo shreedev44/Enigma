@@ -1,22 +1,20 @@
-import { createHttpError } from "../../utils/http-error.util";
-import { HttpStatus } from "../../constants/status.constant";
-import { Messages } from "../../constants/message.constant";
-import { IProblemService } from "../interface/IProblemService";
-import { IProblemRepository } from "../../repositories/interface/IProblemRepository";
+import { createHttpError } from "@utils";
+import { HttpStatus, Messages } from "@constants";
+import { IProblemService } from "@services/interface";
+import { IProblemRepository } from "@repositories/interface";
 import {
   Language,
   MakeOptional,
   ProblemListType,
   ProblemType,
-  TestCaseType,
-} from "../../Types/types";
-import { executeCode } from "../../utils/executor.util";
-import { generateConstraints } from "../../utils/generate-constraints.util";
-import { getPrompt } from "../../utils/ai-prompt.util";
+} from "@types";
+import { executeCode } from "@utils";
+import { generateConstraints } from "@utils";
+import { getPrompt } from "@utils";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { basePrompt } from "../../constants/prompt.constant";
-import { env } from "../../config/env.config";
-import { testFunctions } from "../../constants/test-functions.constants";
+import { basePrompt } from "@constants";
+import { env } from "@configs";
+import { testFunctions } from "@constants";
 
 export class ProblemService implements IProblemService {
   constructor(private _problemRepository: IProblemRepository) {}

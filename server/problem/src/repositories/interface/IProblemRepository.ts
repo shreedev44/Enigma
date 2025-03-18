@@ -1,4 +1,4 @@
-import { ProblemListType, ProblemType } from "../../Types/types";
+import { ProblemListType, ProblemType } from "@types";
 
 export interface IProblemRepository {
     create(problem: ProblemType): Promise<ProblemType>;

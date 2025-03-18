@@ -1,5 +1,5 @@
-import { DataTypes, ProblemParameter } from "../Types/types";
-import { generateConstraints } from "./generate-constraints.util";
+import { DataTypes, ProblemParameter } from "@types";
+import { generateConstraints } from "@utils";
 
 export function getPrompt(
   description: string,

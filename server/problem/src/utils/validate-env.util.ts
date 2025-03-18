@@ -1,4 +1,4 @@
-import { env } from '../config/env.config'
+import { env } from "@configs"
 
 export default function validateEnv() {
     if(!env.PORT) {

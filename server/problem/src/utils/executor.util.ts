@@ -1,8 +1,8 @@
 import Docker from "dockerode";
 import fs from "fs";
 import path from "path";
-import { Language } from "../Types/types";
-import { ContainerPool } from "./container-pool.util";
+import { Language } from "@types";
+import { ContainerPool } from "@utils";
 
 const CODE_DIR = "/app/temp";
 const EXECUTION_TIMEOUT = 3000;
@@ -20,7 +20,7 @@ const docker = new Docker({
 const containerPool = new ContainerPool(docker);
 
 const LANGUAGES = JSON.parse(
-  fs.readFileSync(path.join(__dirname, "languages.util.json"), "utf8")
+  fs.readFileSync(path.join(__dirname, "../constants/languages.constant.json"), "utf8")
 );
 
 export const executeCode = async (language: Language, code: string) => {

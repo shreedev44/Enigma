@@ -1,4 +1,4 @@
-import { ProblemParameter } from "../Types/types";
+import { ProblemParameter } from "@types";
 
 export function generateConstraints(param: ProblemParameter) {
   let constraints: string[] = [];
