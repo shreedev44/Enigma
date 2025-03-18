@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from "express";
-import { HttpError } from "@utils";
-import { HttpStatus, Messages } from "@constants";
+import { Request, Response, NextFunction } from 'express'
+import { HttpError } from '@utils'
+import { HttpStatus, Messages } from '@constants'
 
 export const errorHandler = (
   err: HttpError | Error,
@@ -8,19 +8,23 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  let statusCode = 500;
-  let message = Messages.SERVER_ERROR;
+  let statusCode = 500
+  let message = Messages.SERVER_ERROR
 
   if (err instanceof HttpError) {
-    statusCode = err.statusCode;
-    message = err.message;
+    statusCode = err.statusCode
+    message = err.message
   } else {
-    console.error("Unhandled", err);
+    console.error('Unhandled', err)
   }
 
-  res.status(statusCode).json({ error: message });
-};
+  res.status(statusCode).json({ error: message })
+}
 
-export const notFoundHandler = (req: Request, res: Response, next: NextFunction) => {
+export const notFoundHandler = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   next(new HttpError(Messages.INVALID_REQUEST, HttpStatus.NOT_FOUND))
 }

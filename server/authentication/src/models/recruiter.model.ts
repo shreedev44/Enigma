@@ -1,5 +1,5 @@
-import mongoose, { Schema } from "mongoose";
-import { RecruiterProfileType } from "@types";
+import mongoose, { Schema } from 'mongoose'
+import { RecruiterProfileType } from '@types'
 
 const RecruiterSchema = new Schema(
   {
@@ -9,27 +9,27 @@ const RecruiterSchema = new Schema(
     },
     bio: {
       type: String,
-      default: "",
+      default: '',
     },
     basedAt: {
       type: String,
-      default: "",
+      default: '',
     },
     facebookProfile: {
       type: String,
-      default: "",
+      default: '',
     },
     linkedinProfile: {
       type: String,
-      default: "",
+      default: '',
     },
     twitterProfile: {
       type: String,
-      default: "",
+      default: '',
     },
     profilePicture: {
       type: String,
-      default: "",
+      default: '',
     },
     userId: {
       type: mongoose.Types.ObjectId,
@@ -39,10 +39,10 @@ const RecruiterSchema = new Schema(
   {
     timestamps: true,
   }
-);
+)
 
 export default mongoose.model<RecruiterProfileType>(
-  "RecruiterProfile",
+  'RecruiterProfile',
   RecruiterSchema,
-  "RecruiterProfiles"
-);
+  'RecruiterProfiles'
+)

@@ -149,5 +149,5 @@ export function otpPage(otp: string) {
         </div>
     </div>
     </body>
-    </html>`;
+    </html>`
 }

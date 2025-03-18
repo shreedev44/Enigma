@@ -1,7 +1,7 @@
-import { createClient, RedisClientType } from "redis";
-import { env } from "@configs";
+import { createClient, RedisClientType } from 'redis'
+import { env } from '@configs'
 
-let redisClient: RedisClientType;
+let redisClient: RedisClientType
 
 const initRedisClient = () => {
   if (!redisClient) {
@@ -9,30 +9,32 @@ const initRedisClient = () => {
       url: env.REDIS_URL,
       socket: {
         reconnectStrategy: (retries) => {
-          if(retries > 3) {
-            console.error("Max retry reached: Redis has reached its max connection retry attempts")
+          if (retries > 3) {
+            console.error(
+              'Max retry reached: Redis has reached its max connection retry attempts'
+            )
             return false
           }
-          console.log(`Retrying redis connection. Retries: ${retries + 1}`);
+          console.log(`Retrying redis connection. Retries: ${retries + 1}`)
           return Math.min(retries * 500, 5000)
-        }
-      }
-    });
+        },
+      },
+    })
 
-    redisClient.on("connect", () => {
-      console.log("Redis client connected");
-    });
+    redisClient.on('connect', () => {
+      console.log('Redis client connected')
+    })
 
-    redisClient.on("error", (err: Error) => {
-      console.error(err);
-    });
+    redisClient.on('error', (err: Error) => {
+      console.error(err)
+    })
 
     redisClient.connect().catch((err) => {
-      console.error("Error connecting to redis:", err);
-    });
+      console.error('Error connecting to redis:', err)
+    })
   }
 
-  return redisClient;
-};
+  return redisClient
+}
 
-export { redisClient, initRedisClient };
+export { redisClient, initRedisClient }

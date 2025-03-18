@@ -1,5 +1,5 @@
-import mongoose, { Schema } from "mongoose";
-import { StudentProfileType } from "@types";
+import mongoose, { Schema } from 'mongoose'
+import { StudentProfileType } from '@types'
 
 const UserSchema: Schema = new Schema(
   {
@@ -9,19 +9,19 @@ const UserSchema: Schema = new Schema(
     },
     lastName: {
       type: String,
-      default: ""
+      default: '',
     },
     githubProfile: {
       type: String,
-      default: "",
+      default: '',
     },
     linkedinProfile: {
       type: String,
-      default: "",
+      default: '',
     },
     profilePicture: {
       type: String,
-      default: "",
+      default: '',
     },
     userId: {
       type: mongoose.Types.ObjectId,
@@ -31,10 +31,10 @@ const UserSchema: Schema = new Schema(
   {
     timestamps: true,
   }
-);
+)
 
 export default mongoose.model<StudentProfileType>(
-  "StudentProfile",
+  'StudentProfile',
   UserSchema,
-  "StudentProfiles"
-);
+  'StudentProfiles'
+)

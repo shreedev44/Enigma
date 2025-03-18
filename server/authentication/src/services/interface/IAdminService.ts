@@ -1,7 +1,4 @@
-import {
-  RecruiterWithProfileType,
-  StudentWithProfileType,
-} from "@types";
+import { RecruiterWithProfileType, StudentWithProfileType } from '@types'
 
 export interface IAdminService {
   getStudents(
@@ -9,12 +6,12 @@ export interface IAdminService {
     sortBy: string,
     sortOrder: number,
     filter: string | null
-  ): Promise<{ students: StudentWithProfileType[]; totalPages: number }>;
+  ): Promise<{ students: StudentWithProfileType[]; totalPages: number }>
   getRecruiters(
     page: number,
     sortBy: string,
     sortOrder: number,
     filter: string | null
-  ): Promise<{ recruiters: RecruiterWithProfileType[]; totalPages: number }>;
-  blockOrUnblockUser(userId: string, block: boolean): Promise<boolean>;
+  ): Promise<{ recruiters: RecruiterWithProfileType[]; totalPages: number }>
+  blockOrUnblockUser(userId: string, block: boolean): Promise<boolean>
 }

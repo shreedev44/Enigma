@@ -1,3 +1,3 @@
-export * from "./IRecruiterRepository";
-export * from "./IStudentRepository";
-export * from "./IUserRepository";
+export * from './IRecruiterRepository'
+export * from './IStudentRepository'
+export * from './IUserRepository'

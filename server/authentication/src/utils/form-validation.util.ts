@@ -1,5 +1,4 @@
-import { Messages, Regex } from "@constants";
-
+import { Messages, Regex } from '@constants'
 
 const loginValidationSchema = {
   email: {
@@ -20,7 +19,7 @@ const loginValidationSchema = {
       Messages.PASSWORD_SPECIALCHAR,
     ],
   },
-};
+}
 
 const studentSignupValidationSchema = {
   firstName: {
@@ -49,7 +48,7 @@ const studentSignupValidationSchema = {
       Messages.PASSWORD_SPECIALCHAR,
     ],
   },
-};
+}
 
 const studentProfileValidationSchema = {
   firstName: {
@@ -72,7 +71,7 @@ const studentProfileValidationSchema = {
     messages: [Messages.INVALID_LINKEDIN],
     optional: true,
   },
-};
+}
 
 const recruiterSignupValidation = {
   companyName: {
@@ -97,7 +96,7 @@ const recruiterSignupValidation = {
       Messages.PASSWORD_SPECIALCHAR,
     ],
   },
-};
+}
 
 const recruiterProfileValidationSchema = {
   companyName: {
@@ -129,13 +128,13 @@ const recruiterProfileValidationSchema = {
     rules: [Regex.OPTIONAL_BASED_AT],
     messages: [Messages.INVALID_BASED_AT],
     optional: true,
-  }
-};
+  },
+}
 
 export const validationSchemas = {
   loginValidationSchema,
   studentSignupValidationSchema,
   recruiterSignupValidation,
   studentProfileValidationSchema,
-  recruiterProfileValidationSchema
-};
+  recruiterProfileValidationSchema,
+}

@@ -1,39 +1,39 @@
-import User from "@models/user.model";
+import User from '@models/user.model'
 import {
   RecruiterWithProfileType,
   StudentWithProfileType,
   UserType,
-} from "@types";
-import { IUserRepository } from "@repositories/interface";
+} from '@types'
+import { IUserRepository } from '@repositories/interface'
 
 class UserRepository implements IUserRepository {
   async create(user: UserType): Promise<UserType> {
     try {
-      const userData = await User.create(user);
-      return userData;
+      const userData = await User.create(user)
+      return userData
     } catch (err) {
-      console.error(err);
-      throw new Error("Error creating user");
+      console.error(err)
+      throw new Error('Error creating user')
     }
   }
 
   async findByEmail(email: string): Promise<UserType | null> {
     try {
-      const user = await User.findOne({ email });
-      return user;
+      const user = await User.findOne({ email })
+      return user
     } catch (err) {
-      console.error(err);
-      throw new Error("Error finding user by email");
+      console.error(err)
+      throw new Error('Error finding user by email')
     }
   }
 
   async findById(id: string): Promise<UserType | null> {
     try {
-      const user = await User.findById(id);
-      return user;
+      const user = await User.findById(id)
+      return user
     } catch (err) {
-      console.error(err);
-      throw new Error("Error finding user by id");
+      console.error(err)
+      throw new Error('Error finding user by id')
     }
   }
 
@@ -42,11 +42,11 @@ class UserRepository implements IUserRepository {
     data: Partial<UserType>
   ): Promise<UserType | null> {
     try {
-      const user = await User.findByIdAndUpdate(id, data);
-      return user;
+      const user = await User.findByIdAndUpdate(id, data)
+      return user
     } catch (err) {
-      console.log(err);
-      throw new Error("Error updating user by id");
+      console.log(err)
+      throw new Error('Error updating user by id')
     }
   }
 
@@ -58,13 +58,13 @@ class UserRepository implements IUserRepository {
       const users = await User.aggregate([
         {
           $lookup: {
-            from: "StudentProfiles",
-            localField: "_id",
-            foreignField: "userId",
-            as: "profile",
+            from: 'StudentProfiles',
+            localField: '_id',
+            foreignField: 'userId',
+            as: 'profile',
           },
         },
-        { $unwind: "$profile" },
+        { $unwind: '$profile' },
         {
           $project: {
             _id: 1,
@@ -72,21 +72,21 @@ class UserRepository implements IUserRepository {
             role: 1,
             status: 1,
             createdAt: 1,
-            firstName: "$profile.firstName",
-            lastName: "$profile.lastName",
-            githubProfile: "$profile.githubProfile",
-            linkedinProfile: "$profile.linkedinProfile",
-            profilePicture: "$profile.profilePicture",
+            firstName: '$profile.firstName',
+            lastName: '$profile.lastName',
+            githubProfile: '$profile.githubProfile',
+            linkedinProfile: '$profile.linkedinProfile',
+            profilePicture: '$profile.profilePicture',
           },
         },
         { $match: filter },
         { $sort: sort },
-      ]);
+      ])
 
-      return users;
+      return users
     } catch (err) {
-      console.log(err);
-      throw new Error("Error feching students");
+      console.log(err)
+      throw new Error('Error feching students')
     }
   }
 
@@ -98,13 +98,13 @@ class UserRepository implements IUserRepository {
       const users = await User.aggregate([
         {
           $lookup: {
-            from: "RecruiterProfiles",
-            localField: "_id",
-            foreignField: "userId",
-            as: "profile",
+            from: 'RecruiterProfiles',
+            localField: '_id',
+            foreignField: 'userId',
+            as: 'profile',
           },
         },
-        { $unwind: "$profile" },
+        { $unwind: '$profile' },
         {
           $project: {
             _id: 1,
@@ -113,47 +113,47 @@ class UserRepository implements IUserRepository {
             status: 1,
             createdAt: 1,
             subscriptionType: 1,
-            companyName: "$profile.companyName",
-            bio: "$profile.bio",
-            basedAt: "$profile.basedAt",
-            linkedinProfile: "$profile.linkedinProfile",
-            facebookProfile: "$profile.facebookProfile",
-            twitterProfile: "$profile.twitterProfile",
-            profilePicture: "$profile.profilePicture",
+            companyName: '$profile.companyName',
+            bio: '$profile.bio',
+            basedAt: '$profile.basedAt',
+            linkedinProfile: '$profile.linkedinProfile',
+            facebookProfile: '$profile.facebookProfile',
+            twitterProfile: '$profile.twitterProfile',
+            profilePicture: '$profile.profilePicture',
           },
         },
         { $match: filter },
         { $sort: sort },
-      ]);
+      ])
 
-      return users;
+      return users
     } catch (err) {
-      console.log(err);
-      throw new Error("Error fetching recruiters");
+      console.log(err)
+      throw new Error('Error fetching recruiters')
     }
   }
 
   async blockUserById(id: string): Promise<boolean> {
     try {
-      const user = await User.findByIdAndUpdate(id, {status: 'blocked'})
-      if(user) return true;
-      return false;
+      const user = await User.findByIdAndUpdate(id, { status: 'blocked' })
+      if (user) return true
+      return false
     } catch (err) {
-      console.log(err);
-      throw new Error("Error blocking user");
+      console.log(err)
+      throw new Error('Error blocking user')
     }
   }
 
   async unBlockUserById(id: string): Promise<boolean> {
     try {
-      const user = await User.findByIdAndUpdate(id, {status: "active"})
-      if(user) return true;
+      const user = await User.findByIdAndUpdate(id, { status: 'active' })
+      if (user) return true
       return false
     } catch (err) {
       console.log(err)
-      throw new Error("Error unblocking user");
+      throw new Error('Error unblocking user')
     }
   }
 }
 
-export default new UserRepository();
+export default new UserRepository()

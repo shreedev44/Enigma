@@ -124,5 +124,5 @@ export function forgotPasswordPage(resetLink: string) {
             </div>
         </div>
         </body>
-        </html>`;
+        </html>`
 }
