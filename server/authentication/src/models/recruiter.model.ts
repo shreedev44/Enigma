@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { RecruiterProfileType } from "../Types/types";
+import { RecruiterProfileType } from "@types";
 
 const RecruiterSchema = new Schema(
   {

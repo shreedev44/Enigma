@@ -1,4 +1,4 @@
-export default function otpPage(otp: string) {
+export function otpPage(otp: string) {
   return `<!DOCTYPE html>
     <html lang="en">
     <head>

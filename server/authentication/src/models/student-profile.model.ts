@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { StudentProfileType } from "../Types/types";
+import { StudentProfileType } from "@types";
 
 const UserSchema: Schema = new Schema(
   {

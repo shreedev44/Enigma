@@ -1,4 +1,4 @@
-export default function forgotPasswordPage(resetLink: string) {
+export function forgotPasswordPage(resetLink: string) {
   return `<!DOCTYPE html>
         <html lang="en">
         <head>

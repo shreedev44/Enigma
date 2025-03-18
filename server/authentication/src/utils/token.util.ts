@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
-import { env } from "../config/env.config";
-import { Role } from "../Types/types";
+import { env } from "@configs";
+import { Role } from "@types";
 
 export function generateAccessToken(userId: string, role: Role) {
     return jwt.sign({id: userId, role}, env.JWT_ACCESS_SECRET, {expiresIn: '1h'});
