@@ -7,4 +7,5 @@ export interface IRecruiterRepository {
     userId: string,
     data: Partial<RecruiterProfileType>
   ): Promise<RecruiterProfileType | null>;
+  findPicById(userId: string): Promise<string | undefined>;
 }

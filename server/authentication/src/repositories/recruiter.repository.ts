@@ -36,6 +36,16 @@ class RecruiterRepository implements IRecruiterRepository {
       throw new Error("Error updating recruiter profile by userId");
     }
   }
+
+  async findPicById(userId: string): Promise<string | undefined> {
+    try {
+      const user = await Recruiter.findOne({ userId });
+      return user?.profilePicture;
+    } catch (err) {
+      console.log(err);
+      throw new Error("Error finding recruiter profile pic by userId");
+    }
+  }
 }
 
 export default new RecruiterRepository();

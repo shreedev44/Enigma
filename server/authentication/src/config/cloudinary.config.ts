@@ -27,7 +27,32 @@ function uploadToCloudinary(fileBuffer: Buffer): Promise<string> {
   });
 }
 
-export async function hanldeCloudinaryUpload(fileBuffer: Buffer) {
+function deleteDromCloudinary(publicId: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.destroy(publicId, {type: "upload", resource_type: "image"}, 
+      (error, reuslt) => {
+        if(error) {
+          reject(error);
+        } else {
+          resolve(reuslt)
+        }
+      }
+    )
+  })
+}
+
+export async function handleCloudinaryDelete(url: string) {
+  const urlArr = url.split('/')
+  let publicId = [urlArr[urlArr.length - 2], urlArr[urlArr.length - 1]].join('/')
+  publicId = publicId.split('.')[0]
+  try {
+    await deleteDromCloudinary(publicId);
+  } catch (error) {
+    console.log("cloudinary error: ", error)
+  }
+}
+
+export async function handleCloudinaryUpload(fileBuffer: Buffer) {
   const imageUrl = await uploadToCloudinary(fileBuffer);
   return imageUrl;
 }

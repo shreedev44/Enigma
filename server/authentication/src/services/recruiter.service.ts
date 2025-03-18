@@ -4,7 +4,7 @@ import { Messages } from "../constants/message.constant";
 import { FileType, RecruiterProfileType } from "../Types/types";
 import { IRecruiterService } from "../interfaces/recruiter/IRecruiterService";
 import { IRecruiterRepository } from "../interfaces/recruiter/IRecruiterRepository";
-import { hanldeCloudinaryUpload } from "../config/cloudinary.config";
+import { handleCloudinaryDelete, handleCloudinaryUpload } from "../config/cloudinary.config";
 
 export class RecruiterService implements IRecruiterService {
   constructor(private _recruiterRepository: IRecruiterRepository) {}
@@ -24,8 +24,12 @@ export class RecruiterService implements IRecruiterService {
     profilePicture: FileType | undefined
   ): Promise<RecruiterProfileType> {
     if (profilePicture) {
-      const imageUrl = await hanldeCloudinaryUpload(profilePicture.buffer);
+      const imageUrl = await handleCloudinaryUpload(profilePicture.buffer);
       data.profilePicture = imageUrl;
+      const url = await this._recruiterRepository.findPicById(userId)
+      if(url && url.split('/')[2] === 'res.cloudinary.com') {
+        await handleCloudinaryDelete(url)
+      }
     }
 
     const profile = await this._recruiterRepository.updateById(userId, data);
