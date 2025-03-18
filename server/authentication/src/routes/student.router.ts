@@ -11,15 +11,12 @@ const studentController = new StudentController(studentService)
 
 const studentRouter = Router()
 
-studentRouter.get(
-  '/getProfile',
-  studentController.getProfile.bind(studentController)
-)
+studentRouter.get('/getProfile', studentController.getProfile.bind(studentController))
 studentRouter.patch(
-  '/updateProfile',
-  upload.single('profilePicture'),
-  validateData(validationSchemas.studentProfileValidationSchema),
-  studentController.updateProfile.bind(studentController)
+    '/updateProfile',
+    upload.single('profilePicture'),
+    validateData(validationSchemas.studentProfileValidationSchema),
+    studentController.updateProfile.bind(studentController)
 )
 
 export default studentRouter

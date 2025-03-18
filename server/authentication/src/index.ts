@@ -19,45 +19,43 @@ import recruiterRouter from '@routes/recruiter.router'
 import adminRouter from '@routes/admin.router'
 
 class App {
-  public app: Application
+    public app: Application
 
-  constructor() {
-    validateEnv()
+    constructor() {
+        validateEnv()
 
-    this.app = express()
+        this.app = express()
 
-    this.initializeMiddlewares()
-    this.initializeRoutes()
-    this.initializeDatabase()
-  }
+        this.initializeMiddlewares()
+        this.initializeRoutes()
+        this.initializeDatabase()
+    }
 
-  private initializeMiddlewares(): void {
-    this.app.use(express.json())
-    this.app.use(express.urlencoded({ extended: true }))
-    this.app.use(cookieParser())
-    this.app.use(morgan('combined'))
-  }
+    private initializeMiddlewares(): void {
+        this.app.use(express.json())
+        this.app.use(express.urlencoded({ extended: true }))
+        this.app.use(cookieParser())
+        this.app.use(morgan('combined'))
+    }
 
-  private initializeRoutes(): void {
-    this.app.use('/', userRouter)
-    this.app.use('/student', studentRouter)
-    this.app.use('/recruiter', recruiterRouter)
-    this.app.use('/admin', adminRouter)
-    this.app.use(notFoundHandler)
-    this.app.use(errorHandler)
-  }
+    private initializeRoutes(): void {
+        this.app.use('/', userRouter)
+        this.app.use('/student', studentRouter)
+        this.app.use('/recruiter', recruiterRouter)
+        this.app.use('/admin', adminRouter)
+        this.app.use(notFoundHandler)
+        this.app.use(errorHandler)
+    }
 
-  private initializeDatabase(): void {
-    connectDB()
-    initRedisClient()
-    cloudinaryConfig()
-  }
+    private initializeDatabase(): void {
+        connectDB()
+        initRedisClient()
+        cloudinaryConfig()
+    }
 
-  public listen(): void {
-    this.app.listen(env.PORT, () =>
-      console.log(`Server running on http://localhost:${env.PORT}`)
-    )
-  }
+    public listen(): void {
+        this.app.listen(env.PORT, () => console.log(`Server running on http://localhost:${env.PORT}`))
+    }
 }
 
 const app = new App()

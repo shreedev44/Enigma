@@ -1,4 +1,4 @@
-import { TestCaseType } from "@types"
+import { TestCaseType } from '@types'
 
 export const testFunctions = {
     javascript: (testCases: TestCaseType[], solution: string, functionName: string) => {
@@ -149,5 +149,5 @@ func main() {
 
 	fmt.Println(string(resultJSON))
 }`
-    }
+    },
 }

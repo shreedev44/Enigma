@@ -1,1 +1,1 @@
-export * from "./IProblemController"
+export * from './IProblemController'

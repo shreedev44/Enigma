@@ -1,5 +1,5 @@
 export function otpPage(otp: string) {
-  return `<!DOCTYPE html>
+    return `<!DOCTYPE html>
     <html lang="en">
     <head>
     <meta charset="UTF-8">
