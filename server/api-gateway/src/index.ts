@@ -1,10 +1,10 @@
 import express from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
 import dotenv from "dotenv";
-import { env, validateEnv } from "./configs/envConfig";
+import { env, validateEnv } from "./configs/env.config";
 import cors from "cors";
 import morgan from "morgan";
-import verifyToken from "./middleware/verifyToken";
+import verifyToken from "./middleware/verify-token.middleware";
 import helmet from "helmet";
 
 dotenv.config();

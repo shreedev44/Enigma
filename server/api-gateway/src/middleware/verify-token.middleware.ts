@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { isPublic } from "../utils/publicRoutes";
-import { env } from "../configs/envConfig";
+import { isPublic } from "../utils/public-routes.util";
+import { env } from "../configs/env.config";
 import jwt from "jsonwebtoken";
-import { UserPayloadType } from "../types/types";
+import { UserPayloadType } from "../types";
 
 export default function verifyToken(
   req: Request,
