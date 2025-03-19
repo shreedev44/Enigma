@@ -1,6 +1,7 @@
 import { IAdminService } from '@services/interface'
 import { IUserRepository } from '@repositories/interface'
 import { RecruiterWithProfileType, StudentWithProfileType } from '@types'
+import { redisClient } from '@configs'
 
 export class AdminService implements IAdminService {
     constructor(private _userRepository: IUserRepository) {}
@@ -78,12 +79,16 @@ export class AdminService implements IAdminService {
     async blockOrUnblockUser(userId: string, block: boolean): Promise<boolean> {
         if (block) {
             const blocked = await this._userRepository.blockUserById(userId)
-            if (blocked) return true
-            else return false
+            if (blocked) {
+                await redisClient.setEx(`blacklist:${userId}`, 3600, '1')
+                return true
+            } else return false
         } else {
             const unBlocked = await this._userRepository.unBlockUserById(userId)
-            if (unBlocked) return true
-            else return false
+            if (unBlocked) {
+                await redisClient.del(`blacklist:${userId}`)
+                return true
+            } else return false
         }
     }
 }

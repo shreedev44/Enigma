@@ -43,6 +43,7 @@ const Navbar = () => {
     toast({
       description: Messages.LOGOUT_SUCCESS
     })
+    navigate(`/recruiter${recruiterRoutes.HOME}`)
   };
 
   return (

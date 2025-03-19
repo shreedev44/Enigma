@@ -6,6 +6,7 @@ import cors from "cors";
 import morgan from "morgan";
 import verifyToken from "./middleware/verify-token.middleware";
 import helmet from "helmet";
+import { initRedisClient } from "./configs/redis.config";
 
 dotenv.config();
 validateEnv();
@@ -55,6 +56,8 @@ services.forEach((service) => {
     })
   );
 });
+
+initRedisClient()
 
 
 app.listen(env.PORT, () => console.log(`API gateway listening to ${env.PORT}`));

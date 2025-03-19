@@ -380,16 +380,16 @@ export class UserService implements IUserService {
         const payload = verifyToken(token)
 
         if (!payload) {
-            throw createHttpError(_HttpStatus.FORBIDDEN, Messages.INVALID_TOKEN)
+            throw createHttpError(_HttpStatus.UNAUTHORIZED, Messages.INVALID_TOKEN)
         }
 
         const user = await this._userRepository.findById(payload.id)
 
         if (!user) {
-            throw createHttpError(_HttpStatus.FORBIDDEN, Messages.USER_NOT_FOUND)
+            throw createHttpError(_HttpStatus.UNAUTHORIZED, Messages.USER_NOT_FOUND)
         }
         if (user.status !== 'active') {
-            throw createHttpError(_HttpStatus.FORBIDDEN, Messages.USER_BLOCKED)
+            throw createHttpError(_HttpStatus.UNAUTHORIZED, Messages.USER_BLOCKED)
         }
 
         const accessToken = generateAccessToken(String(user._id), user.role)

@@ -3,12 +3,13 @@ import { isPublic } from "../utils/public-routes.util";
 import { env } from "../configs/env.config";
 import jwt from "jsonwebtoken";
 import { UserPayloadType } from "../types";
+import { redisClient } from "../configs/redis.config";
 
-export default function verifyToken(
+export default async function verifyToken(
   req: Request,
   res: Response,
   next: NextFunction
-): void | Response {
+): Promise<void | Response> {
   try {
     if (isPublic(req)) {
       return next();
@@ -33,6 +34,13 @@ export default function verifyToken(
 
     if (payload.role !== req.path.split("/")[2]) {
       return res.status(401).json({ error: "Unauthorized access" });
+    }
+
+    const isBlocked = await redisClient.exists(`blacklist:${payload.id}`)
+    if(isBlocked) {
+      res.status(401).json({error: "Your are blocked from Enigma"})
+      await redisClient.del(`blacklist:${payload.id}`)
+      return
     }
 
     req.headers["x-user-payload"] = JSON.stringify(payload);
