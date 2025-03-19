@@ -17,7 +17,7 @@ const PUBLIC_ROUTES: { method: string; path: string }[] = [
 ];
 
 export function isPublic(req: Request): boolean {
-  return PUBLIC_ROUTES.some(
-    (request) => request.method === req.method && request.path === req.path
-  );
+  return PUBLIC_ROUTES.some(({method, path}) => {
+    return method === req.method && req.path.includes(path)
+  })
 }
