@@ -23,4 +23,9 @@ export const Messages = {
     PROBLEM_NOT_FOUND: 'Problem not found',
     INVALID_PROBLEM_NO: 'Please provide a valid problem number',
     UNSUPPORTED_LANGUAGE: 'Code language not supported',
+    SOLUTION_REQUIRED: 'Please provide a solution',
+    FAILED_TESTCASE: 'Failed test case',
+    ATTEMPT_NOT_FOUND: 'Attempt not found',
+    STATS_NOT_RETRIEVED: 'Problem stats cannot be retrieved at the moment',
+    ATTENDANCE_NOT_RETRIEVED: 'Attempt attendance cannot be retrieved',
 }

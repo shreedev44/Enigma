@@ -6,50 +6,68 @@ import { UserPayloadType } from "../types";
 import { redisClient } from "../configs/redis.config";
 
 export default async function verifyToken(
-  req: Request,
-  res: Response,
-  next: NextFunction
+	req: Request,
+	res: Response,
+	next: NextFunction
 ): Promise<void | Response> {
-  try {
-    if (isPublic(req)) {
-      return next();
-    }
+	try {
+		const authHeader = req.headers.authorization;
 
-    const authHeader = req.headers.authorization;
+		if (!authHeader || !authHeader.startsWith("Bearer")) {
+			if (isPublic(req)) {
+				return next();
+			}
+			return res
+			.status(401)
+			.json({ error: "Access denied, No token provided" });
+		}
+		
+		const token = authHeader.split(" ")[1];
+		
+		if (!token) {
+			if (isPublic(req)) {
+				return next();
+			}
+			return res
+				.status(401)
+				.json({ error: "Access denied, No token provided" });
+		}
 
-    if (!authHeader || !authHeader.startsWith("Bearer")) {
-      return res
-        .status(401)
-        .json({ error: "Access denied, No token provided" });
-    }
+		const payload = jwt.verify(
+			token,
+			env.JWT_ACCESS_SECRET
+		) as UserPayloadType;
 
-    const token = authHeader.split(" ")[1];
-    if (!token) {
-      return res
-        .status(401)
-        .json({ error: "Access denied, No token provided" });
-    }
+		if (payload.role !== req.headers["x-user-level"]) {
+			return res.status(401).json({ error: "Unauthorized access" });
+		}
 
-    const payload = jwt.verify(token, env.JWT_ACCESS_SECRET) as UserPayloadType;
+		const isBlocked = await redisClient.exists(`blacklist:${payload.id}`);
+		if (isBlocked) {
+			if (isPublic(req)) {
+				return next();
+			}
+			res.status(401).json({ error: "You are blocked from Enigma" });
+			await redisClient.del(`blacklist:${payload.id}`);
+			return;
+		}
 
-    if (payload.role !== req.path.split("/")[2]) {
-      return res.status(401).json({ error: "Unauthorized access" });
-    }
+		req.headers["x-user-payload"] = JSON.stringify(payload);
 
-    const isBlocked = await redisClient.exists(`blacklist:${payload.id}`)
-    if(isBlocked) {
-      res.status(401).json({error: "Your are blocked from Enigma"})
-      await redisClient.del(`blacklist:${payload.id}`)
-      return
-    }
+		if (isPublic(req)) {
+			return next();
+		}
 
-    req.headers["x-user-payload"] = JSON.stringify(payload);
-    next();
-  } catch (err: any) {
-    if (err.name === "TokenExpiredError") {
-      return res.status(403).json({ error: "Token has expired" });
-    } else {
-      return res.status(401).json({ error: "Invalid token" });
-    }
-  }
+		next();
+	} catch (err: any) {
+		if (isPublic(req)) {
+			return next();
+		}
+
+		if (err.name === "TokenExpiredError") {
+			return res.status(403).json({ error: "Token has expired" });
+		} else {
+			return res.status(401).json({ error: "Invalid token" });
+		}
+	}
 }

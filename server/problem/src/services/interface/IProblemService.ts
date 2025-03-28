@@ -6,7 +6,8 @@ export interface IProblemService {
         page: number,
         sortBy: string,
         sortOrder: 1 | -1,
-        filter: string | null
+        filter: string | null,
+        userId: string | null
     ): Promise<{ problems: ProblemListType[]; totalPages: number }>
     findProblem(problemNo: number): Promise<ProblemType>
     compileCode(code: string, language: Language): Promise<{ stdout: string; stderr: string }>

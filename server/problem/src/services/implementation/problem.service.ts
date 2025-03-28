@@ -51,7 +51,8 @@ export class ProblemService implements IProblemService {
         page: number,
         sortBy: string,
         sortOrder: 1 | -1,
-        filter: string | null
+        filter: string | null,
+        userId: string | null
     ): Promise<{ problems: ProblemListType[]; totalPages: number }> {
         const sort = { [sortBy]: sortOrder }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -71,7 +72,12 @@ export class ProblemService implements IProblemService {
             }
         }
 
-        const problems = await this._problemRepository.getProblems(sort, query)
+        let problems: ProblemListType[]
+        if (userId) {
+            problems = await this._problemRepository.getProblemsWithStatus(sort, query, userId)
+        } else {
+            problems = await this._problemRepository.getProblems(sort, query)
+        }
 
         const dataPerPage = 1
         const totalPages = Math.ceil(problems.length / dataPerPage)
@@ -87,7 +93,7 @@ export class ProblemService implements IProblemService {
         if (!problem) {
             throw createHttpError(_HttpStatus.NOT_FOUND, Messages.PROBLEM_NOT_FOUND)
         }
-
+        problem.testCases = problem.testCases.slice(0, 3)
         return problem
     }
 
@@ -108,7 +114,11 @@ export class ProblemService implements IProblemService {
         }
         const result = await executeCode(
             language,
-            testFunctions[language as Exclude<Language, 'cpp'>](problem?.testCases, code, problem?.functionName)
+            testFunctions[language as Exclude<Language, 'cpp'>](
+                problem?.testCases?.slice(0, 3),
+                code,
+                problem?.functionName
+            )
         )
         try {
             JSON.parse(result.stdout)

@@ -63,8 +63,8 @@ const getColumn = (
             </Button>
           ),
           cell: ({ row }: { row: Row<ProblemListType> }) => (
-            <div className="capitalize">
-              {row.getValue("solved") ? <Check /> : ""}
+            <div className="capitalize ml-6">
+              {row.getValue("solved") === "solved" ? <Check /> : ""}
             </div>
           ),
         }
@@ -92,7 +92,7 @@ const getColumn = (
         </Button>
       ),
       cell: ({ row }: { row: Row<ProblemListType> }) => (
-        <div className="capitalize">{row.getValue("successRate")}</div>
+        <div className="capitalize ml-9">{row.getValue("successRate")}</div>
       ),
     },
     role === "admin"

@@ -10,12 +10,12 @@ const problemController = new ProblemController(problemService)
 const problemRouter = Router()
 
 //! --------------- Admin ---------------- //
-problemRouter.post('/admin/addProblem', validateProblem, problemController.addProblem.bind(problemController))
+problemRouter.post('/addProblem', validateProblem, problemController.addProblem.bind(problemController))
 
 //! --------------- Student ---------------- //
-problemRouter.get('/student/getProblems', problemController.getProblems.bind(problemController))
-problemRouter.get('/student/findProblem/:problemNo', problemController.findProblem.bind(problemController))
-problemRouter.post('/student/compile', problemController.compileCode.bind(problemController))
-problemRouter.post('/student/run-solution', problemController.runSolution.bind(problemController))
+problemRouter.get('/getProblems', problemController.getProblems.bind(problemController))
+problemRouter.get('/findProblem/:problemNo', problemController.findProblem.bind(problemController))
+problemRouter.post('/compile', problemController.compileCode.bind(problemController))
+problemRouter.post('/run-solution', problemController.runSolution.bind(problemController))
 
 export default problemRouter
