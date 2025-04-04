@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import { _HttpStatus, Messages } from '@constants'
 import { IRecruiterService } from '@services/interface'
 import { IRecruiterController } from '@controllers/interface'
-import { FileType, RecruiterProfileType } from '@types'
+import { FileType } from '@types'
 
 export class RecruiterController implements IRecruiterController {
     constructor(private _recruiterService: IRecruiterService) {}
@@ -17,7 +17,7 @@ export class RecruiterController implements IRecruiterController {
                 return
             }
 
-            const profile = (await this._recruiterService.getProfile(id as string)) as RecruiterProfileType
+            const profile = await this._recruiterService.getProfile(id as string)
 
             res.status(_HttpStatus.OK).json({ profile })
         } catch (err) {

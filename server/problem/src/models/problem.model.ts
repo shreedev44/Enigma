@@ -1,5 +1,6 @@
 import mongoose, { Schema } from 'mongoose'
 import { ProblemType, TestCaseType } from '@types'
+import { IProblemSchema } from '../entities/IProblem'
 
 const TestCaseSchema = new Schema<TestCaseType>({
     input: [
@@ -11,7 +12,7 @@ const TestCaseSchema = new Schema<TestCaseType>({
     output: { type: Schema.Types.Mixed, required: true },
 })
 
-const ProblemSchema: Schema = new Schema<ProblemType>(
+const ProblemSchema: Schema = new Schema<IProblemSchema>(
     {
         problemNo: {
             type: Number,
@@ -112,4 +113,6 @@ const ProblemSchema: Schema = new Schema<ProblemType>(
     }
 )
 
-export default mongoose.model<ProblemType>('Problem', ProblemSchema, 'Problems')
+export interface ProblemDocument extends Document, ProblemType {}
+
+export default mongoose.model<ProblemDocument>('Problem', ProblemSchema, 'Problems')

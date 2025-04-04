@@ -1,7 +1,8 @@
 import { AttemptType } from '@types'
-import mongoose, { Schema } from 'mongoose'
+import mongoose, { Schema, Document } from 'mongoose'
+import { IAttemptSchema } from '../entities/IAttempt'
 
-const AttemptSchema: Schema = new Schema<AttemptType>(
+const AttemptSchema: Schema = new Schema<IAttemptSchema>(
     {
         userId: {
             type: String,
@@ -52,5 +53,7 @@ const AttemptSchema: Schema = new Schema<AttemptType>(
         timestamps: true,
     }
 )
+
+export interface AttemptDocument extends Document, AttemptType {}
 
 export default mongoose.model<AttemptType>('Attempt', AttemptSchema, 'Attempts')

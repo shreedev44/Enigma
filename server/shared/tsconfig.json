@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+	  "outDir": "dist",
+	  "rootDir": "src",
+	  "module": "NodeNext",
+	  "moduleResolution": "NodeNext",
+	  "target": "ESNext",
+	  "declaration": true,
+	  "declarationMap": true,
+	  "emitDeclarationOnly": false,
+	  "sourceMap": true,
+	  "strict": true,
+	  "esModuleInterop": true,
+	  "resolveJsonModule": true
+	},
+	"include": ["src"]
+  }

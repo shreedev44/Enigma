@@ -1,7 +1,8 @@
 import mongoose, { Schema } from 'mongoose'
 import { UserType } from '@types'
+import { IUserSchema } from '../entities/IUser'
 
-const UserSchema: Schema = new Schema(
+const UserSchema: Schema = new Schema<IUserSchema>(
     {
         name: {
             type: String,
@@ -37,4 +38,6 @@ const UserSchema: Schema = new Schema(
     }
 )
 
-export default mongoose.model<UserType>('User', UserSchema, 'Users')
+export interface UserDocument extends Document, UserType {}
+
+export default mongoose.model<UserDocument>('User', UserSchema, 'Users')

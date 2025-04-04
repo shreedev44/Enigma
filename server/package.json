@@ -1,0 +1,5 @@
+{
+  "name": "enigma-backend",
+  "private": true,
+  "workspaces": ["shared/*", "authentication/*", "problem/*"]
+}

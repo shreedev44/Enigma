@@ -1,4 +1,5 @@
-import { AttemptsPerDay, AttemptType, Language, ProfileStatType } from '@types'
+import { AttemptDTO } from '@dtos'
+import { Language } from '@types'
 
 export interface IAttemptService {
     submitSolution(
@@ -6,12 +7,9 @@ export interface IAttemptService {
         userId: string,
         solution: string,
         language: Language
-    ): Promise<Omit<AttemptType, 'problemNo' | 'updatedAt' | 'userId'>>
-    getAttempts(
-        userId: string,
-        problemNo: number
-    ): Promise<Pick<AttemptType, '_id' | 'createdAt' | 'language' | 'status'>[]>
-    findAttempt(attemptId: string): Promise<AttemptType>
-    getProfileStats(userId: string): Promise<ProfileStatType>
-    getAttemptsPerDay(userId: string): Promise<AttemptsPerDay[]>
+    ): Promise<InstanceType<typeof AttemptDTO.AttemptInfo>>
+    getAttempts(userId: string, problemNo: number): Promise<InstanceType<typeof AttemptDTO.GetAttempts>[]>
+    findAttempt(attemptId: string): Promise<InstanceType<typeof AttemptDTO.AttemptInfo>>
+    getProfileStats(userId: string): Promise<InstanceType<typeof AttemptDTO.ProfileStats>>
+    getAttemptsPerDay(userId: string): Promise<InstanceType<typeof AttemptDTO.AttemptsAttendance>[]>
 }

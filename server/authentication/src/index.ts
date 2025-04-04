@@ -5,12 +5,12 @@ import express, { Application } from 'express'
 import morgan from 'morgan'
 import cookieParser from 'cookie-parser'
 
+dotenv.config({ path: path.resolve(__dirname, '../.env') })
+
 //* Importing configs and initializers
 import { connectDB, initRedisClient, env, cloudinaryConfig } from '@configs'
 import { validateEnv } from '@utils'
 import { errorHandler, notFoundHandler } from '@middlewares'
-
-dotenv.config({ path: path.resolve(__dirname, '../.env') })
 
 //* Importing routers
 import userRouter from '@routes/user.router'

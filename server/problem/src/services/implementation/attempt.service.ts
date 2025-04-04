@@ -1,8 +1,9 @@
 import { _HttpStatus, Messages, testFunctions } from '@constants'
 import { IAttemptRepository, IProblemRepository } from '@repositories/interface'
 import { IAttemptService } from '@services/interface'
-import { Language, AttemptType, MakeOptional, ProfileStatType, AttemptsPerDay } from '@types'
+import { Language, AttemptType, MakeOptional } from '@types'
 import { createHttpError, executeCode } from '@utils'
+import { AttemptDTO } from '@dtos'
 
 export class AttemptService implements IAttemptService {
     constructor(
@@ -15,7 +16,7 @@ export class AttemptService implements IAttemptService {
         userId: string,
         solution: string,
         language: Language
-    ): Promise<Omit<AttemptType, 'problemNo' | 'updatedAt' | 'userId'>> {
+    ): Promise<InstanceType<typeof AttemptDTO.AttemptInfo>> {
         const problem = await this._problemRepository.findProblemByNo(problemNo)
 
         if (!problem) {
@@ -27,10 +28,7 @@ export class AttemptService implements IAttemptService {
             testFunctions[language as Exclude<Language, 'cpp'>](problem?.testCases, solution, problem?.functionName)
         )
 
-        const attempt: MakeOptional<
-            AttemptType,
-            '_id' | 'createdAt' | 'updatedAt' | 'rejectedTestCase' | 'rejectionMessage' | 'status'
-        > = {
+        const attempt: Partial<AttemptType> = {
             language,
             memory: ouptut.stats.memoryUsage,
             runTime: ouptut.stats.executionTime,
@@ -71,40 +69,39 @@ export class AttemptService implements IAttemptService {
             attempt.status = 'Compile Error'
             attempt.testCasePassed = 0
         }
-        return await this._attemptRepository.create(attempt)
+        const attemptData = await this._attemptRepository.create(attempt)
+        return new AttemptDTO.AttemptInfo(attemptData)
     }
 
-    async getAttempts(
-        userId: string,
-        problemNo: number
-    ): Promise<Pick<AttemptType, '_id' | 'createdAt' | 'language' | 'status'>[]> {
-        return await this._attemptRepository.getAttemptsOfUser(userId, problemNo)
+    async getAttempts(userId: string, problemNo: number): Promise<InstanceType<typeof AttemptDTO.GetAttempts>[]> {
+        const attempts = await this._attemptRepository.getAttemptsOfUser(userId, problemNo)
+        return attempts.map((attempt) => new AttemptDTO.GetAttempts(attempt))
     }
 
-    async findAttempt(attemptId: string): Promise<AttemptType> {
+    async findAttempt(attemptId: string): Promise<InstanceType<typeof AttemptDTO.AttemptInfo>> {
         const attempt = await this._attemptRepository.findAttemptById(attemptId)
 
         if (!attempt) {
             throw createHttpError(_HttpStatus.NOT_FOUND, Messages.ATTEMPT_NOT_FOUND)
         }
-        return attempt
+        return new AttemptDTO.AttemptInfo(attempt)
     }
 
-    async getProfileStats(userId: string): Promise<ProfileStatType> {
+    async getProfileStats(userId: string): Promise<InstanceType<typeof AttemptDTO.ProfileStats>> {
         const stats = await this._attemptRepository.getProblemStats(userId)
 
         if (!stats) {
             throw createHttpError(_HttpStatus.NOT_FOUND, Messages.STATS_NOT_RETRIEVED)
         }
-        return stats
+        return new AttemptDTO.ProfileStats(stats)
     }
 
-    async getAttemptsPerDay(userId: string): Promise<AttemptsPerDay[]> {
+    async getAttemptsPerDay(userId: string): Promise<InstanceType<typeof AttemptDTO.AttemptsAttendance>[]> {
         const attemptsPerDay = await this._attemptRepository.attemptsPerDay(userId)
 
         if (!attemptsPerDay) {
             throw createHttpError(_HttpStatus.NOT_FOUND, Messages.ATTENDANCE_NOT_RETRIEVED)
         }
-        return attemptsPerDay
+        return attemptsPerDay.map((attempt) => new AttemptDTO.AttemptsAttendance(attempt))
     }
 }

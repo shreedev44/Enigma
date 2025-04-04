@@ -1,12 +1,8 @@
-import { AttemptsPerDay, AttemptType, MakeOptional, ProfileStatType } from '@types'
+import { AttemptsPerDay, AttemptType, ProfileStatType } from '@types'
+import { IBaseRepository } from '@shreedev44/enigma-shared'
 
-export interface IAttemptRepository {
-    create(
-        attempt: MakeOptional<
-            AttemptType,
-            '_id' | 'createdAt' | 'updatedAt' | 'rejectedTestCase' | 'rejectionMessage' | 'status'
-        >
-    ): Promise<Omit<AttemptType, 'problemNo' | 'updatedAt' | 'userId'>>
+export interface IAttemptRepository extends IBaseRepository<AttemptType> {
+    create(attempt: Partial<AttemptType>): Promise<AttemptType>
     getAttemptsOfUser(
         userId: string,
         problemNo: number

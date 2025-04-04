@@ -1,11 +1,15 @@
-import User from '@models/user.model'
+import User, { UserDocument } from '@models/user.model'
 import { RecruiterWithProfileType, StudentWithProfileType, UserType } from '@types'
 import { IUserRepository } from '@repositories/interface'
+import { BaseRepository } from '@shreedev44/enigma-shared'
 
-class UserRepository implements IUserRepository {
-    async create(user: UserType): Promise<UserType> {
+class UserRepository extends BaseRepository<UserDocument> implements IUserRepository {
+    constructor() {
+        super(User)
+    }
+    async create(user: Partial<UserDocument>): Promise<UserDocument> {
         try {
-            const userData = await User.create(user)
+            const userData = await this.model.create(user)
             return userData
         } catch (err) {
             console.error(err)
@@ -15,7 +19,7 @@ class UserRepository implements IUserRepository {
 
     async findByEmail(email: string): Promise<UserType | null> {
         try {
-            const user = await User.findOne({ email })
+            const user = await this.model.findOne({ email })
             return user
         } catch (err) {
             console.error(err)
@@ -25,7 +29,7 @@ class UserRepository implements IUserRepository {
 
     async findById(id: string): Promise<UserType | null> {
         try {
-            const user = await User.findById(id)
+            const user = await this.model.findById(id)
             return user
         } catch (err) {
             console.error(err)
@@ -35,7 +39,7 @@ class UserRepository implements IUserRepository {
 
     async updateById(id: string, data: Partial<UserType>): Promise<UserType | null> {
         try {
-            const user = await User.findByIdAndUpdate(id, data)
+            const user = await this.model.findByIdAndUpdate(id, data)
             return user
         } catch (err) {
             console.log(err)
@@ -48,7 +52,7 @@ class UserRepository implements IUserRepository {
         filter: Record<string, string>
     ): Promise<StudentWithProfileType[]> {
         try {
-            const users = await User.aggregate([
+            const users = await this.model.aggregate([
                 {
                     $lookup: {
                         from: 'StudentProfiles',
@@ -88,7 +92,7 @@ class UserRepository implements IUserRepository {
         filter: Record<string, string>
     ): Promise<RecruiterWithProfileType[]> {
         try {
-            const users = await User.aggregate([
+            const users = await this.model.aggregate([
                 {
                     $lookup: {
                         from: 'RecruiterProfiles',
@@ -128,7 +132,7 @@ class UserRepository implements IUserRepository {
 
     async blockUserById(id: string): Promise<boolean> {
         try {
-            const user = await User.findByIdAndUpdate(id, { status: 'blocked' })
+            const user = await this.model.findByIdAndUpdate(id, { status: 'blocked' })
             if (user) return true
             return false
         } catch (err) {
@@ -139,7 +143,7 @@ class UserRepository implements IUserRepository {
 
     async unBlockUserById(id: string): Promise<boolean> {
         try {
-            const user = await User.findByIdAndUpdate(id, { status: 'active' })
+            const user = await this.model.findByIdAndUpdate(id, { status: 'active' })
             if (user) return true
             return false
         } catch (err) {

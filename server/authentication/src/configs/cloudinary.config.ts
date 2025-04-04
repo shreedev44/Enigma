@@ -3,7 +3,7 @@ import { env } from '@configs'
 
 export function cloudinaryConfig() {
     cloudinary.config({
-        cloud_name: 'dgdimswvi',
+        cloud_name: env.CLOUDINARY_CLOUD_NAME,
         api_key: env.CLOUDINARY_API_KEY,
         api_secret: env.CLOUDINARY_API_SECRET,
     })

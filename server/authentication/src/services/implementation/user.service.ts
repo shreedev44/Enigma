@@ -17,6 +17,7 @@ import { IUserService } from '@services/interface'
 import { IUserRepository } from '@repositories/interface'
 import { IStudentRepository } from '@repositories/interface'
 import { IRecruiterRepository } from '@repositories/interface'
+import { UserDTO } from '@dtos'
 
 export class UserService implements IUserService {
     constructor(
@@ -71,7 +72,7 @@ export class UserService implements IUserService {
             throw createHttpError(_HttpStatus.BAD_REQUEST, Messages.INCORRECT_OTP)
         }
 
-        const userObject: UserType = {
+        const userObject: Partial<UserType> = {
             email: userData.email as string,
             password: userData.password as string,
             role: userData.role as Role,
@@ -80,14 +81,14 @@ export class UserService implements IUserService {
         const user = await this._userRepository.create(userObject)
 
         if (user.role === 'student') {
-            const profileObject: StudentProfileType = {
+            const profileObject: Partial<StudentProfileType> = {
                 firstName: userData.firstName,
                 lastName: userData.lastName,
                 userId: user._id as ObjectId,
             }
             await this._studentRepository.create(profileObject)
         } else if (user.role === 'recruiter') {
-            const profileObject: RecruiterProfileType = {
+            const profileObject: Partial<RecruiterProfileType> = {
                 companyName: userData.companyName,
                 userId: user._id as ObjectId,
             }
@@ -162,12 +163,12 @@ export class UserService implements IUserService {
         let profile: StudentProfileType | RecruiterProfileType
         if (role === 'student') {
             profile = await this._studentRepository.findByUserId(String(user._id))
-            return { accessToken, refreshToken, user, profile }
+            return new UserDTO.VerifyUser({ accessToken, refreshToken, user, profile })
         } else if (role === 'recruiter') {
             profile = await this._recruiterRepository.findByUserId(String(user._id))
-            return { accessToken, refreshToken, user, profile }
+            return new UserDTO.VerifyUser({ accessToken, refreshToken, user, profile })
         } else {
-            return { accessToken, refreshToken, user }
+            return new UserDTO.VerifyUser({ accessToken, refreshToken, user })
         }
     }
 
@@ -201,7 +202,7 @@ export class UserService implements IUserService {
                         profilePicture: user.profilePicture,
                     })) as StudentProfileType
                 }
-                return { accessToken, refreshToken, user: userExist, profile }
+                return new UserDTO.VerifyUser({ accessToken, refreshToken, user: userExist, profile })
             } else {
                 profile = await this._recruiterRepository.findByUserId(String(userExist._id))
                 if (profile.profilePicture === '') {
@@ -209,10 +210,10 @@ export class UserService implements IUserService {
                         profilePicture: user.profilePicture,
                     })) as RecruiterProfileType
                 }
-                return { accessToken, refreshToken, user: userExist, profile }
+                return new UserDTO.VerifyUser({ accessToken, refreshToken, user: userExist, profile })
             }
         } else {
-            const userObject: UserType = {
+            const userObject: Partial<UserType> = {
                 email: user.email,
                 role,
             }
@@ -221,7 +222,7 @@ export class UserService implements IUserService {
 
             let profile
             if (userData.role === 'student') {
-                const profileObject: StudentProfileType = {
+                const profileObject: Partial<StudentProfileType> = {
                     firstName: user.firstName as string,
                     lastName: user.lastName as string,
                     userId: userData._id as ObjectId,
@@ -229,7 +230,7 @@ export class UserService implements IUserService {
                 }
                 profile = await this._studentRepository.create(profileObject)
             } else {
-                const profileObject: RecruiterProfileType = {
+                const profileObject: Partial<RecruiterProfileType> = {
                     companyName: user.companyName as string,
                     userId: userData._id as ObjectId,
                     profilePicture: user.profilePicture,
@@ -240,7 +241,7 @@ export class UserService implements IUserService {
             const accessToken = generateAccessToken(String(userData._id), role)
             const refreshToken = generateRefreshToken(String(userData._id), role)
 
-            return { accessToken, refreshToken, user: userData, profile }
+            return new UserDTO.VerifyUser({ accessToken, refreshToken, user: userData, profile })
         }
     }
 
@@ -304,17 +305,17 @@ export class UserService implements IUserService {
                 )) as StudentProfileType
             }
 
-            return { accessToken, refreshToken, user: userExist, profile }
+            return new UserDTO.VerifyUser({ accessToken, refreshToken, user: userExist, profile })
         }
 
-        const userObject: UserType = {
+        const userObject: Partial<UserType> = {
             email: user.email,
             role: 'student',
         }
 
         const userData = await this._userRepository.create(userObject)
 
-        const profileObject: StudentProfileType = {
+        const profileObject: Partial<StudentProfileType> = {
             firstName: user.login,
             profilePicture: user.avatar_url,
             githubProfile: user.html_url,
@@ -326,7 +327,7 @@ export class UserService implements IUserService {
         const accessToken = generateAccessToken(String(userData._id), 'student')
         const refreshToken = generateRefreshToken(String(userData._id), 'student')
 
-        return { accessToken, refreshToken, user: userData, profile }
+        return new UserDTO.VerifyUser({ accessToken, refreshToken, user: userData, profile })
     }
 
     async changePassword(email: string): Promise<void> {

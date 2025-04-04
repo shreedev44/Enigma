@@ -58,11 +58,7 @@ const HeatMapChart = ({
 				style={{ "--rhm-rect": "#3f3f3f" }}
 				legendCellSize={0}
 				startDate={new Date(formatDate(startDate))}
-				endDate={
-					value.length
-						? new Date(value[value.length - 1]?.date)
-						: new Date(Date.now())
-				}
+				endDate={new Date(Date.now())}
 				monthLabels={[
 					"Jan",
 					"Feb",

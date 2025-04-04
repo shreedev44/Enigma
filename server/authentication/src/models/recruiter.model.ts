@@ -1,7 +1,8 @@
-import mongoose, { Schema } from 'mongoose'
+import mongoose, { Document, Schema } from 'mongoose'
 import { RecruiterProfileType } from '@types'
+import { IRecruiterSchema } from '../entities/IRecruiter'
 
-const RecruiterSchema = new Schema(
+const RecruiterSchema = new Schema<IRecruiterSchema>(
     {
         companyName: {
             type: String,
@@ -40,5 +41,7 @@ const RecruiterSchema = new Schema(
         timestamps: true,
     }
 )
+
+export interface RecruiterDocument extends Document, RecruiterProfileType {}
 
 export default mongoose.model<RecruiterProfileType>('RecruiterProfile', RecruiterSchema, 'RecruiterProfiles')

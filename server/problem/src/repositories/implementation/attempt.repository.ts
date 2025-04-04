@@ -1,29 +1,17 @@
-import Attempt from '@models/attempt.model'
-import { AttemptsPerDay, AttemptType, MakeOptional, ProblemSolvedByDifficulty, ProfileStatType } from '@types'
+import Attempt, { AttemptDocument } from '@models/attempt.model'
+import { AttemptsPerDay, AttemptType, ProblemSolvedByDifficulty, ProfileStatType } from '@types'
 import { IAttemptRepository } from '@repositories/interface'
+import { BaseRepository } from '@shreedev44/enigma-shared'
 
-class AttemptRepository implements IAttemptRepository {
-    async create(
-        attempt: MakeOptional<
-            AttemptType,
-            '_id' | 'createdAt' | 'updatedAt' | 'rejectedTestCase' | 'rejectionMessage' | 'status'
-        >
-    ): Promise<Omit<AttemptType, 'problemNo' | 'updatedAt' | 'userId'>> {
+class AttemptRepository extends BaseRepository<AttemptDocument> implements IAttemptRepository {
+    constructor() {
+        super(Attempt)
+    }
+
+    async create(attempt: Partial<AttemptType>): Promise<AttemptDocument> {
         try {
-            const attemptData = await Attempt.create(attempt)
-            const returnObj = {
-                _id: attemptData._id,
-                status: attemptData.status,
-                language: attemptData.language,
-                runTime: attemptData.runTime,
-                memory: attemptData.memory,
-                createdAt: attemptData.createdAt,
-                testCasePassed: attemptData.testCasePassed,
-                rejectedTestCase: attemptData.rejectedTestCase,
-                rejectionMessage: attemptData.rejectionMessage,
-                solution: attemptData.solution,
-            }
-            return returnObj
+            const attemptData = this.model.create(attempt)
+            return attemptData
         } catch (err) {
             console.log(err)
             throw new Error('Error creating attempt')
@@ -33,9 +21,9 @@ class AttemptRepository implements IAttemptRepository {
     async getAttemptsOfUser(
         userId: string,
         problemNo: number
-    ): Promise<Pick<AttemptType, '_id' | 'createdAt' | 'language' | 'status'>[]> {
+    ): Promise<Pick<AttemptDocument, '_id' | 'createdAt' | 'language' | 'status'>[]> {
         try {
-            const attempts = await Attempt.find({ userId, problemNo }).sort({ createdAt: -1 })
+            const attempts = await this.model.find({ userId, problemNo }).sort({ createdAt: -1 })
             return attempts
         } catch (err) {
             console.log(err)
@@ -43,9 +31,9 @@ class AttemptRepository implements IAttemptRepository {
         }
     }
 
-    async findAttemptById(attemptId: string): Promise<AttemptType | null> {
+    async findAttemptById(attemptId: string): Promise<AttemptDocument | null> {
         try {
-            const attempt = await Attempt.findById(attemptId)
+            const attempt = await this.model.findById(attemptId)
             return attempt
         } catch (err) {
             console.log(err)
@@ -55,7 +43,7 @@ class AttemptRepository implements IAttemptRepository {
 
     async getProblemStats(userId: string): Promise<ProfileStatType | null> {
         try {
-            const result = await Attempt.aggregate([
+            const result = await this.model.aggregate([
                 {
                     $match: { userId },
                 },
@@ -114,7 +102,7 @@ class AttemptRepository implements IAttemptRepository {
                 },
             ])
 
-            const attemptStats = await Attempt.aggregate([
+            const attemptStats = await this.model.aggregate([
                 {
                     $match: { userId },
                 },
@@ -151,7 +139,7 @@ class AttemptRepository implements IAttemptRepository {
 
     async attemptsPerDay(userId: string): Promise<AttemptsPerDay[] | null> {
         try {
-            const attemptsPerDay = await Attempt.aggregate([
+            const attemptsPerDay = await this.model.aggregate([
                 {
                     $match: { userId },
                 },

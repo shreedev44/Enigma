@@ -1,11 +1,15 @@
-import Student from '@models/student-profile.model'
+import Student, { StudentDocument } from '@models/student-profile.model'
 import { StudentProfileType } from '@types'
 import { IStudentRepository } from '@repositories/interface'
+import { BaseRepository } from '@shreedev44/enigma-shared'
 
-class StudentRepository implements IStudentRepository {
-    async create(user: StudentProfileType): Promise<StudentProfileType> {
+class StudentRepository extends BaseRepository<StudentDocument> implements IStudentRepository {
+    constructor() {
+        super(Student)
+    }
+    async create(user: Partial<StudentDocument>): Promise<StudentDocument> {
         try {
-            const studentProfile = await Student.create(user)
+            const studentProfile = await this.model.create(user)
             return studentProfile
         } catch (err) {
             console.error(err)
@@ -13,10 +17,10 @@ class StudentRepository implements IStudentRepository {
         }
     }
 
-    async findByUserId(userId: string): Promise<StudentProfileType> {
+    async findByUserId(userId: string): Promise<StudentDocument> {
         try {
-            const user = await Student.findOne({ userId })
-            return user as StudentProfileType
+            const user = await this.model.findOne({ userId })
+            return user as StudentDocument
         } catch (err) {
             console.error(err)
             throw new Error('Error finding profile by userId')
@@ -25,8 +29,8 @@ class StudentRepository implements IStudentRepository {
 
     async updateById(userId: string, data: Partial<StudentProfileType>): Promise<StudentProfileType | null> {
         try {
-            await Student.updateOne({ userId }, data)
-            const user = Student.findOne({ userId })
+            await this.model.updateOne({ userId }, data)
+            const user = this.model.findOne({ userId })
             return user
         } catch (err) {
             console.error(err)
@@ -36,7 +40,7 @@ class StudentRepository implements IStudentRepository {
 
     async findPicById(userId: string): Promise<string> {
         try {
-            const user = await Student.findOne({ userId })
+            const user = await this.model.findOne({ userId })
             return user?.profilePicture as string
         } catch (err) {
             console.error(err)

@@ -92,7 +92,7 @@ const getColumn = (
         </Button>
       ),
       cell: ({ row }: { row: Row<ProblemListType> }) => (
-        <div className="capitalize ml-9">{row.getValue("successRate")}</div>
+        <div className="capitalize ml-9">{Number(row.getValue("successRate")).toFixed(2)}%</div>
       ),
     },
     role === "admin"
