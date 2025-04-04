@@ -24,7 +24,7 @@ const services = [
   }
 ];
 
-const allowedOrigins = ["http://localhost:5173"];
+const allowedOrigins = ["http://localhost:5173", "https://enigma-riddles.vercel.app"];
 
 app.use(
   cors({
