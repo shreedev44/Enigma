@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose, { Document } from 'mongoose'
 
 export type DataTypes = 'Array' | 'Floating Point' | 'String' | 'Integer' | 'Boolean'
 
@@ -22,7 +22,7 @@ export type ProblemParameter = {
     nestedMaxValue?: number
 }
 
-export type ProblemType = {
+export interface ProblemType extends Document {
     problemNo?: number
     title: string
     difficulty: DifficultyType
@@ -46,10 +46,54 @@ export type ProblemListType = {
     difficulty: DifficultyType
     problemNo?: number
     successRate?: number
-    solved?: boolean
+    solved?: 'solved' | 'unsolved'
     status?: 'listed' | 'unlisted'
 }
 
 export type Language = 'javascript' | 'python' | 'java' | 'golang' | 'cpp'
 
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [P in K]?: T[P] }
+
+export interface AttemptType extends Document {
+    userId: string
+    problemNo: number
+    status: 'Accepted' | 'Rejected' | 'Compile Error'
+    language: Language
+    solution: string
+    runTime: string
+    memory: string
+    testCasePassed: number
+    rejectionMessage?: string
+    rejectedTestCase?: {
+        expected: string
+        output: string
+    }
+    createdAt: Date
+    updatedAt: Date
+}
+
+export type ProblemSolvedByDifficulty = {
+    beginner: number
+    intermediate: number
+    advanced: number
+}
+
+export type AggregationResult = {
+    problemsSolvedByDifficulty: { _id: string; count: number }[]
+    totalProblemsSolved: { totalSolved: number }[]
+    totalProblemsExist: { totalExist: number }[]
+    attemptStats: { _id: string; count: number }[]
+}
+
+export type ProfileStatType = {
+    problemsSolvedByDifficulty: ProblemSolvedByDifficulty
+    totalProblemsSolved: number
+    totalProblemsExist: number
+    acceptedAttempts: number
+    notAcceptedAttempts: number
+}
+
+export type AttemptsPerDay = {
+    date: string
+    count: number
+}

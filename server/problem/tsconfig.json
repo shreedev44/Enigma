@@ -3,7 +3,7 @@
     "target": "es6",
     "module": "NodeNext",
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": "../../",
     "strict": true,
     "esModuleInterop": true,
     "moduleResolution": "nodenext",
@@ -23,7 +23,9 @@
       "@services/implementation": ["./src/services/implementation/index"],
       "@services/interface": ["./src/services/interface/index"],
       "@types": ["./src/types/index"],
-      "@utils": ["./src/utils/index"]
+      "@utils": ["./src/utils/index"],
+      "@dtos": ["./src/dtos/index"],
+      // "@shared": ["../../shared/src/index"]
     }
   },
   "include": ["src/**/*"]

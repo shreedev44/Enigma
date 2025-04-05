@@ -3,24 +3,25 @@ import { FileType, RecruiterProfileType } from '@types'
 import { IRecruiterService } from '@services/interface'
 import { IRecruiterRepository } from '@repositories/interface'
 import { handleCloudinaryDelete, handleCloudinaryUpload, createHttpError } from '@utils'
+import { RecruiterDTO } from '@dtos'
 
 export class RecruiterService implements IRecruiterService {
     constructor(private _recruiterRepository: IRecruiterRepository) {}
 
-    async getProfile(userId: string): Promise<RecruiterProfileType | null> {
+    async getProfile(userId: string): Promise<InstanceType<typeof RecruiterDTO.ProfileInfo>> {
         const profile = await this._recruiterRepository.findByUserId(userId)
 
         if (!profile) {
             throw createHttpError(_HttpStatus.NOT_FOUND, Messages.NO_PROFILE)
         }
-        return profile
+        return new RecruiterDTO.ProfileInfo(profile)
     }
 
     async updateProfile(
         userId: string,
         data: Partial<RecruiterProfileType>,
         profilePicture: FileType | undefined
-    ): Promise<RecruiterProfileType> {
+    ): Promise<InstanceType<typeof RecruiterDTO.ProfileInfo>> {
         if (profilePicture) {
             const imageUrl = await handleCloudinaryUpload(profilePicture.buffer)
             data.profilePicture = imageUrl
@@ -35,6 +36,6 @@ export class RecruiterService implements IRecruiterService {
         if (!profile) {
             throw createHttpError(_HttpStatus.NOT_FOUND, Messages.NO_PROFILE)
         }
-        return profile
+        return new RecruiterDTO.ProfileInfo(profile)
     }
 }

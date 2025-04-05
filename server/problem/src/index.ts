@@ -14,6 +14,7 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') })
 
 //* Importing routers
 import problemRouter from '@routes/problem.router'
+import attemptRouter from '@routes/attempt.router'
 
 class App {
     public app: Application
@@ -35,6 +36,7 @@ class App {
 
     private initializeRoutes(): void {
         this.app.use('/', problemRouter)
+        this.app.use('/attempt', attemptRouter)
         this.app.use(notFoundHandler)
         this.app.use(errorHandler)
     }

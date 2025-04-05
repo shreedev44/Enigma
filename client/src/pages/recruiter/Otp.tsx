@@ -17,7 +17,7 @@ const Otp = () => {
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [email, setEmail] = useState(localStorage.getItem("email") as string);
+  const [email, _setEmail] = useState(localStorage.getItem("email") as string);
   const [timer, setTimer] = useState(
     Number(localStorage.getItem("timer")) || 30
   );

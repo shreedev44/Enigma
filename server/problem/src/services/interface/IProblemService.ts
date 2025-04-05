@@ -1,4 +1,5 @@
-import { Language, ProblemListType, ProblemType } from '@types'
+import { ProblemDTO } from '@dtos'
+import { Language, ProblemType } from '@types'
 
 export interface IProblemService {
     addProblem(problem: ProblemType): Promise<void>
@@ -6,9 +7,10 @@ export interface IProblemService {
         page: number,
         sortBy: string,
         sortOrder: 1 | -1,
-        filter: string | null
-    ): Promise<{ problems: ProblemListType[]; totalPages: number }>
-    findProblem(problemNo: number): Promise<ProblemType>
-    compileCode(code: string, language: Language): Promise<{ stdout: string; stderr: string }>
-    runSolution(code: string, language: Language, problemNo: number): Promise<{ stdout: string; stderr: string }>
+        filter: string | null,
+        userId: string | null
+    ): Promise<InstanceType<typeof ProblemDTO.GetProblems>>
+    findProblem(problemNo: number): Promise<InstanceType<typeof ProblemDTO.ProblemInfo>>
+    compileCode(code: string, language: Language): Promise<InstanceType<typeof ProblemDTO.Compile>>
+    runSolution(code: string, language: Language, problemNo: number): Promise<InstanceType<typeof ProblemDTO.Compile>>
 }

@@ -16,7 +16,7 @@ export class StudentController implements IStudentController {
                 })
                 return
             }
-            const profile: StudentProfileType = await this._studentService.getProfile(id as string)
+            const profile = await this._studentService.getProfile(id as string)
             res.status(_HttpStatus.OK).json({ profile })
         } catch (err) {
             next(err)

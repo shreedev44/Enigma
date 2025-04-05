@@ -11,13 +11,13 @@ const PUBLIC_ROUTES: { method: string; path: string }[] = [
   { method: "POST", path: "/auth/changePassword" },
   { method: "PATCH", path: "/auth/resetPassword" },
   { method: "POST", path: "/auth/refreshToken" },
-  { method: "GET", path: "/problem/student/getProblems" },
-  { method: "GET", path: "/problem/student/findProblem" },
-  { method: "POST", path: "/problem/student/compile" },
+  { method: "GET", path: "/problem/getProblems" },
+  { method: "GET", path: "/problem/findProblem" },
+  { method: "POST", path: "/problem/compile" },
 ];
 
 export function isPublic(req: Request): boolean {
-  return PUBLIC_ROUTES.some(
-    (request) => request.method === req.method && request.path === req.path
-  );
+  return PUBLIC_ROUTES.some(({method, path}) => {
+    return method === req.method && req.path.includes(path)
+  })
 }

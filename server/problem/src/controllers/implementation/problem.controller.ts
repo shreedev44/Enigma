@@ -34,11 +34,17 @@ export class ProblemController implements IProblemController {
                 res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_SORT_VALUE })
                 return
             }
+            let userId: string | null = null
+            if (req.headers['x-user-payload']) {
+                const { id } = JSON.parse(req.headers['x-user-payload'] as string)
+                userId = id as string
+            }
             const { problems, totalPages } = await this._problemService.getProblems(
                 Number(page),
                 String(sortBy),
                 Number(sortOrder) as 1 | -1,
-                filter ? String(filter) : null
+                filter ? String(filter) : null,
+                userId
             )
             res.status(_HttpStatus.OK).json({ problems: problems, totalPages })
         } catch (err) {
@@ -80,12 +86,15 @@ export class ProblemController implements IProblemController {
 
     async runSolution(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const { language, code, problemNo } = req.body
-            const languages = ['javascript', 'python', 'java', 'golang', 'cpp']
+            const { language, problemNo } = req.body
+            let { code } = req.body
+            const languages = ['javascript', 'python']
             if (!languages.includes(language)) {
                 res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.UNSUPPORTED_LANGUAGE })
                 return
             }
+
+            code = code.replace(/console\.\w+\(.*?\);?/g, '')
 
             const result = await this._problemService.runSolution(code, language, problemNo)
             res.status(_HttpStatus.OK).json({ result })

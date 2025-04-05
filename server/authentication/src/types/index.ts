@@ -1,7 +1,7 @@
-import { ObjectId } from 'mongoose'
+import { Document, ObjectId } from 'mongoose'
 
-export interface UserType {
-    _id?: ObjectId
+export interface UserType extends Document {
+    name: string
     email: string
     password?: string
     role: 'student' | 'recruiter' | 'admin'
@@ -13,8 +13,7 @@ export interface UserType {
 
 export type Role = 'student' | 'recruiter' | 'admin'
 
-export interface StudentProfileType {
-    _id?: ObjectId
+export interface StudentProfileType extends Document {
     firstName: string
     lastName?: string
     githubProfile?: string
@@ -25,8 +24,7 @@ export interface StudentProfileType {
     updatedAt?: Date
 }
 
-export interface RecruiterProfileType {
-    _id?: ObjectId
+export interface RecruiterProfileType extends Document {
     companyName: string
     bio?: string
     basedAt?: string

@@ -10,6 +10,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 import { basePrompt } from '@constants'
 import { env } from '@configs'
 import { testFunctions } from '@constants'
+import { ProblemDTO } from '@dtos'
 
 export class ProblemService implements IProblemService {
     constructor(private _problemRepository: IProblemRepository) {}
@@ -51,8 +52,9 @@ export class ProblemService implements IProblemService {
         page: number,
         sortBy: string,
         sortOrder: 1 | -1,
-        filter: string | null
-    ): Promise<{ problems: ProblemListType[]; totalPages: number }> {
+        filter: string | null,
+        userId: string | null
+    ): Promise<InstanceType<typeof ProblemDTO.GetProblems>> {
         const sort = { [sortBy]: sortOrder }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let query: any = { status: 'listed' }
@@ -71,44 +73,53 @@ export class ProblemService implements IProblemService {
             }
         }
 
-        const problems = await this._problemRepository.getProblems(sort, query)
+        let problems: ProblemListType[]
+        if (userId) {
+            problems = await this._problemRepository.getProblemsWithStatus(sort, query, userId)
+        } else {
+            problems = await this._problemRepository.getProblems(sort, query)
+        }
 
         const dataPerPage = 1
         const totalPages = Math.ceil(problems.length / dataPerPage)
 
         const startIndex = (page - 1) * dataPerPage
         const endIndex = startIndex + dataPerPage
-        return { problems: problems.slice(startIndex, endIndex), totalPages }
+        return new ProblemDTO.GetProblems({ problems: problems.slice(startIndex, endIndex), totalPages })
     }
 
-    async findProblem(problemNo: number): Promise<ProblemType> {
+    async findProblem(problemNo: number): Promise<InstanceType<typeof ProblemDTO.ProblemInfo>> {
         const problem = await this._problemRepository.findProblemByNo(problemNo)
 
         if (!problem) {
             throw createHttpError(_HttpStatus.NOT_FOUND, Messages.PROBLEM_NOT_FOUND)
         }
-
-        return problem
+        problem.testCases = problem.testCases.slice(0, 3)
+        return new ProblemDTO.ProblemInfo(problem)
     }
 
-    async compileCode(code: string, language: Language): Promise<{ stdout: string; stderr: string }> {
+    async compileCode(code: string, language: Language): Promise<InstanceType<typeof ProblemDTO.Compile>> {
         const result = await executeCode(language, code)
 
-        return result
+        return new ProblemDTO.Compile(result)
     }
 
     async runSolution(
         code: string,
         language: Language,
         problemNo: number
-    ): Promise<{ stdout: string; stderr: string }> {
+    ): Promise<InstanceType<typeof ProblemDTO.Compile>> {
         const problem = await this._problemRepository.findProblemByNo(problemNo)
         if (!problem) {
             throw createHttpError(_HttpStatus.NOT_FOUND, Messages.PROBLEM_NOT_FOUND)
         }
         const result = await executeCode(
             language,
-            testFunctions[language as Exclude<Language, 'cpp'>](problem?.testCases, code, problem?.functionName)
+            testFunctions[language as Exclude<Language, 'cpp'>](
+                problem?.testCases?.slice(0, 3),
+                code,
+                problem?.functionName
+            )
         )
         try {
             JSON.parse(result.stdout)
@@ -116,6 +127,6 @@ export class ProblemService implements IProblemService {
             result.stderr = result.stdout
             result.stdout = ''
         }
-        return result
+        return new ProblemDTO.Compile(result)
     }
 }

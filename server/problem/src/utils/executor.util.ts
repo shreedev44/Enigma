@@ -33,7 +33,7 @@ export const executeCode = async (language: Language, code: string) => {
         ? langConfig.compile.replace('{filename}', 'Main' + '.' + langConfig.extension)
         : null
 
-    const execCommand = langConfig.command
+    const execCommand = `{ sh -c '${langConfig.command}'; echo "===END==="; times; echo "Max Memory Usage: $(grep VmPeak /proc/self/status | awk "{print \\$2}") KB"; } 2>&1 | tee /app/output.log`
 
     let cmd = ''
     if (compileCommand) cmd += `${compileCommand} && `
@@ -43,6 +43,9 @@ export const executeCode = async (language: Language, code: string) => {
 
     let container: Docker.Container | null = null
     let pooledContainer = false
+
+    let executionTime = 'N/A'
+    let memoryUsage = 'N/A'
 
     try {
         container = await containerPool.getContainer(langConfig.image)
@@ -62,9 +65,6 @@ export const executeCode = async (language: Language, code: string) => {
             const containerData = await container.inspect()
             if (!containerData.State.Running) {
                 await container.start()
-                console.log(
-                    'resuming container================================================================================================================='
-                )
             }
             const exec = await container.exec({
                 Cmd: ['sh', '-c', cmd],
@@ -101,6 +101,20 @@ export const executeCode = async (language: Language, code: string) => {
 
         const output = await waitForFile(outputFile)
 
+        const [actualOutput, stats] = output.split('===END===').map((s) => s.trim())
+
+        const memoryUsageMatch = stats.match(/Max Memory Usage: (\d+) KB/)
+        memoryUsage = memoryUsageMatch ? `${memoryUsageMatch[1]} KB` : 'Unknown'
+
+        const timeMatches = stats.match(/(\d+)m([\d.]+)s/g)
+
+        if (timeMatches && timeMatches.length >= 4) {
+            const [userMinutes, userSeconds] = timeMatches[0].split('m').map((v) => parseFloat(v))
+            const [systemMinutes, systemSeconds] = timeMatches[2].split('m').map((v) => parseFloat(v))
+
+            executionTime = (userMinutes * 60 + userSeconds + (systemMinutes * 60 + systemSeconds)).toFixed(3)
+        }
+
         fs.unlinkSync(outputFile)
         if (fs.existsSync(compileFile)) {
             fs.unlinkSync(compileFile)
@@ -117,7 +131,7 @@ export const executeCode = async (language: Language, code: string) => {
             }
         }
 
-        return { stdout: output, stderr: '' }
+        return { stdout: actualOutput, stderr: '', stats: { memoryUsage, executionTime } }
     } catch (error) {
         console.error('Docker execution error:', error)
         if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
@@ -136,6 +150,7 @@ export const executeCode = async (language: Language, code: string) => {
         return {
             stdout: '',
             stderr: error instanceof Error ? error.message : String(error),
+            stats: { memoryUsage, executionTime },
         }
     }
 }

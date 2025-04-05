@@ -1,0 +1,23 @@
+{
+  "name": "@shreedev44/enigma-shared",
+  "version": "1.0.6",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "mongoose": "^8.13.1"
+  },
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "@types/mongoose": "^5.11.96",
+    "@types/node": "^22.14.0",
+    "typescript": "^5.8.2"
+  },
+  "author": "Shreedev",
+  "license": "MIT"
+}

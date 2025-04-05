@@ -29,6 +29,9 @@ export const env = {
     get FRONTEND_ORIGIN() {
         return process.env.FRONTEND_ORIGIN!
     },
+    get CLOUDINARY_CLOUD_NAME() {
+        return process.env.CLOUDINARY_CLOUD_NAME!
+    },
     get CLOUDINARY_API_KEY() {
         return process.env.CLOUDINARY_API_KEY!
     },

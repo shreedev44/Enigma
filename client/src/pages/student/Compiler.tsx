@@ -151,7 +151,7 @@ const Compiler = () => {
               <CodeEditor code={code} setCode={setCode} height="79vh" language={lanuguage} />
             </div>
           </ResizablePanel>
-          <ResizableHandle />
+          <ResizableHandle withHandle />
           <ResizablePanel defaultSize={panelSize} maxSize={70} minSize={0} key={key} >
             <div className="w-full">
               <div className="flex justify-between border-b-2 items-center">

@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose'
 import { StudentProfileType } from '@types'
 
-const UserSchema: Schema = new Schema(
+const UserSchema: Schema = new Schema<StudentProfileType>(
     {
         firstName: {
             type: String,
@@ -33,4 +33,6 @@ const UserSchema: Schema = new Schema(
     }
 )
 
-export default mongoose.model<StudentProfileType>('StudentProfile', UserSchema, 'StudentProfiles')
+export interface StudentDocument extends Document, StudentProfileType {}
+
+export default mongoose.model<StudentDocument>('StudentProfile', UserSchema, 'StudentProfiles')

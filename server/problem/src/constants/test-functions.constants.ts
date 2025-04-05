@@ -4,11 +4,27 @@ export const testFunctions = {
     javascript: (testCases: TestCaseType[], solution: string, functionName: string) => {
         return `${solution};
         function evaluate(expected, output) {
-            if(typeof expected === "object") {
-                return JSON.stringify(expected.sort((a, b) => a - b)) === JSON.stringify(output.sort((a, b) => a - b))
-            }
-            return expected === output
-        }
+  if (Array.isArray(expected) && Array.isArray(output)) {
+    return compareArrays(expected, output);
+  } else if (typeof expected === "object" && typeof output === "object") {
+    return compareObjects(expected, output);
+  } else {
+    return expected === output;
+  }
+}
+
+function compareArrays(arr1, arr2) {
+  if (arr1.length !== arr2.length) return false;
+
+  const sortedArr1 = arr1.map(item => JSON.stringify(item)).sort();
+  const sortedArr2 = arr2.map(item => JSON.stringify(item)).sort();
+
+  return JSON.stringify(sortedArr1) === JSON.stringify(sortedArr2);
+}
+
+function compareObjects(obj1, obj2) {
+  return JSON.stringify(obj1) === JSON.stringify(obj2);
+}
         (() => {
     let testCases = ${JSON.stringify(testCases)}
 
@@ -36,10 +52,25 @@ export const testFunctions = {
 
 import json
 
-def evaluate(user_output, expected_output):
-    if type(expected_output) is list:
-        return json.dumps(user_output.sort() == json.dumps(expected_output))
-    return user_output == expected_output
+def evaluate(expected, output):
+    if isinstance(expected, list) and isinstance(output, list):
+        return compare_lists(expected, output)
+    elif isinstance(expected, dict) and isinstance(output, dict):
+        return compare_dicts(expected, output)
+    else:
+        return expected == output
+
+def compare_lists(list1, list2):
+    if len(list1) != len(list2):
+        return False
+
+    sorted_list1 = sorted(json.dumps(item, sort_keys=True) for item in list1)
+    sorted_list2 = sorted(json.dumps(item, sort_keys=True) for item in list2)
+
+    return sorted_list1 == sorted_list2
+
+def compare_dicts(dict1, dict2):
+    return json.dumps(dict1, sort_keys=True) == json.dumps(dict2, sort_keys=True)
 
 if __name__ == "__main__":
     test_cases = '''${JSON.stringify(testCases, null, 2)}'''

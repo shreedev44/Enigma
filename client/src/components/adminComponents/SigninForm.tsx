@@ -51,7 +51,7 @@ const SigninForm = ({ className, ...props }: React.ComponentProps<"div">) => {
     if (response.success) {
       setLoading(false);
       toast({
-        description: response.data.message,
+        description: "Signed in successfully",
       });
       dispatch(
         setAdmin({

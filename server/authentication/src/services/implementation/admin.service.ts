@@ -1,6 +1,8 @@
 import { IAdminService } from '@services/interface'
 import { IUserRepository } from '@repositories/interface'
 import { RecruiterWithProfileType, StudentWithProfileType } from '@types'
+import { redisClient } from '@configs'
+import { AdminDTO } from '@dtos'
 
 export class AdminService implements IAdminService {
     constructor(private _userRepository: IUserRepository) {}
@@ -36,7 +38,7 @@ export class AdminService implements IAdminService {
         const startIndex = (page - 1) * dataPerPage
         const endIndex = startIndex + dataPerPage
 
-        return { students: students.slice(startIndex, endIndex), totalPages }
+        return new AdminDTO.GetStudents({ students: students.slice(startIndex, endIndex), totalPages })
     }
 
     async getRecruiters(
@@ -69,21 +71,25 @@ export class AdminService implements IAdminService {
         const startIndex = (page - 1) * dataPerPage
         const endIndex = startIndex + dataPerPage
 
-        return {
+        return new AdminDTO.GetRecruiters({
             recruiters: recruiters.slice(startIndex, endIndex),
             totalPages,
-        }
+        })
     }
 
     async blockOrUnblockUser(userId: string, block: boolean): Promise<boolean> {
         if (block) {
             const blocked = await this._userRepository.blockUserById(userId)
-            if (blocked) return true
-            else return false
+            if (blocked) {
+                await redisClient.setEx(`blacklist:${userId}`, 3600, '1')
+                return true
+            } else return false
         } else {
             const unBlocked = await this._userRepository.unBlockUserById(userId)
-            if (unBlocked) return true
-            else return false
+            if (unBlocked) {
+                await redisClient.del(`blacklist:${userId}`)
+                return true
+            } else return false
         }
     }
 }
