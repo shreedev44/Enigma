@@ -14,50 +14,52 @@ validateEnv();
 const app = express();
 
 const services = [
-  {
-    route: "/auth",
-    target: env.AUTH,
-  },
-  {
-    route: "/problem",
-    target: env.PROBLEM
-  }
+	{
+		route: "/auth",
+		target: env.AUTH,
+	},
+	{
+		route: "/problem",
+		target: env.PROBLEM,
+	},
 ];
 
-const allowedOrigins = ["http://localhost:5173", "https://enigma-riddles.vercel.app"];
+const allowedOrigins = [
+	"http://localhost:5173",
+	"https://enigma-riddles.vercel.app",
+];
 
 app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (allowedOrigins.includes(origin as string)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-  })
+	cors({
+		origin: function (origin, callback) {
+			if (allowedOrigins.includes(origin as string)) {
+				callback(null, true);
+			} else {
+				callback(new Error("Not allowed by CORS"));
+			}
+		},
+		credentials: true,
+	})
 );
 
 app.use((req, res, next) => {
-  verifyToken(req, res, next)
-})
+	verifyToken(req, res, next);
+});
 
 app.use(morgan("combined"));
 
-app.use(helmet())
+app.use(helmet());
 
 services.forEach((service) => {
-  app.use(
-    service.route,
-    createProxyMiddleware({
-      target: service.target,
-      changeOrigin: true,
-    })
-  );
+	app.use(
+		`/api${service.route}`,
+		createProxyMiddleware({
+			target: service.target,
+			changeOrigin: true,
+		})
+	);
 });
 
-initRedisClient()
-
+initRedisClient();
 
 app.listen(env.PORT, () => console.log(`API gateway listening to ${env.PORT}`));
