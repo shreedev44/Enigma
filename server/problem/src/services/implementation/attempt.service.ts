@@ -1,7 +1,7 @@
 import { _HttpStatus, Messages, testFunctions } from '@constants'
 import { IAttemptRepository, IProblemRepository } from '@repositories/interface'
 import { IAttemptService } from '@services/interface'
-import { Language, AttemptType, MakeOptional } from '@types'
+import { Language, AttemptType } from '@types'
 import { createHttpError, executeCode } from '@utils'
 import { AttemptDTO } from '@dtos'
 

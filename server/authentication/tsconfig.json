@@ -24,7 +24,8 @@
       "@repositories/interface": ["./src/repositories/interface/index"],
       "@routes/*": ["./src/routes/*"],
       "@models/*": ["./src/models/*"],
-      "@dtos": ["./src/dtos/index"]
+      "@dtos": ["./src/dtos/index"],
+      "@loggers/*": ["./src/loggers/*"]
     }
   },
   "include": ["src/**/*"]

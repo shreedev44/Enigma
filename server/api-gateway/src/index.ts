@@ -3,10 +3,10 @@ import { createProxyMiddleware } from "http-proxy-middleware";
 import dotenv from "dotenv";
 import { env, validateEnv } from "./configs/env.config";
 import cors from "cors";
-import morgan from "morgan";
 import verifyToken from "./middleware/verify-token.middleware";
 import helmet from "helmet";
 import { initRedisClient } from "./configs/redis.config";
+import morganLogger from "./loggers/morgan.logger";
 
 dotenv.config();
 validateEnv();
@@ -46,7 +46,7 @@ app.use((req, res, next) => {
 	verifyToken(req, res, next);
 });
 
-app.use(morgan("combined"));
+app.use(morganLogger);
 
 app.use(helmet());
 

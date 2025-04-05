@@ -2,15 +2,15 @@
 import dotenv from 'dotenv'
 import path from 'path'
 import express, { Application } from 'express'
-import morgan from 'morgan'
 import cookieParser from 'cookie-parser'
 
 dotenv.config({ path: path.resolve(__dirname, '../.env') })
 
-//* Importing configs and initializers
+//* Importing configs, loggers and initializers
 import { connectDB, initRedisClient, env, cloudinaryConfig } from '@configs'
 import { validateEnv } from '@utils'
 import { errorHandler, notFoundHandler } from '@middlewares'
+import morganLogger from '@loggers/morgan.logger'
 
 //* Importing routers
 import userRouter from '@routes/user.router'
@@ -35,7 +35,7 @@ class App {
         this.app.use(express.json())
         this.app.use(express.urlencoded({ extended: true }))
         this.app.use(cookieParser())
-        this.app.use(morgan('combined'))
+        this.app.use(morganLogger)
     }
 
     private initializeRoutes(): void {

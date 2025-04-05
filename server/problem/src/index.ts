@@ -1,14 +1,14 @@
 //* Importing libraries and packages
 import dotenv from 'dotenv'
 import express, { Application } from 'express'
-import morgan from 'morgan'
 import path from 'path'
 
-//* Importing configs and initializers
+//* Importing configs, loggers and initializers
 import connectDB from './configs/mongo.config'
 import validateEnv from './utils/validate-env.util'
 import { env } from './configs/env.config'
 import { errorHandler, notFoundHandler } from '@middlewares'
+import morganLogger from '@loggers/morgan.logger'
 
 dotenv.config({ path: path.resolve(__dirname, '../.env') })
 
@@ -31,7 +31,7 @@ class App {
     private initializeMiddlewares(): void {
         this.app.use(express.json())
         this.app.use(express.urlencoded({ extended: true }))
-        this.app.use(morgan('tiny'))
+        this.app.use(morganLogger)
     }
 
     private initializeRoutes(): void {

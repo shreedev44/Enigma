@@ -25,7 +25,7 @@
       "@types": ["./src/types/index"],
       "@utils": ["./src/utils/index"],
       "@dtos": ["./src/dtos/index"],
-      // "@shared": ["../../shared/src/index"]
+      "@loggers/*": ["./src/loggers/*"]
     }
   },
   "include": ["src/**/*"]

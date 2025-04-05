@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import { _HttpStatus, Messages } from '@constants'
 import { IStudentService } from '@services/interface'
 import { IStudentController } from '@controllers/interface'
-import { FileType, StudentProfileType } from '@types'
+import { FileType } from '@types'
 
 export class StudentController implements IStudentController {
     constructor(private _studentService: IStudentService) {}
