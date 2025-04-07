@@ -1,4 +1,5 @@
 import winston from 'winston'
+import LokiTransport from 'winston-loki'
 
 const winstonLogger = winston.createLogger({
     level: 'info',
@@ -6,10 +7,13 @@ const winstonLogger = winston.createLogger({
     defaultMeta: { service: 'authentication-service' },
     transports: [
         new winston.transports.Console(),
-        new winston.transports.File({ filename: 'logs/combined.log' }),
-        new winston.transports.File({
-            filename: 'logs/error.log',
-            level: 'error',
+        new LokiTransport({
+            host: 'http://loki:3100',
+            labels: { job: 'authentication-service' },
+            json: true,
+            batching: false,
+            interval: 5000,
+            format: winston.format.json(),
         }),
     ],
 })

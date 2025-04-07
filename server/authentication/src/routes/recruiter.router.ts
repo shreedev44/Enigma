@@ -11,9 +11,9 @@ const recruiterController = new RecruiterController(recruiterService)
 
 const recruiterRouter = Router()
 
-recruiterRouter.get('/getProfile', recruiterController.getProfile.bind(recruiterController))
+recruiterRouter.get('/get-profile', recruiterController.getProfile.bind(recruiterController))
 recruiterRouter.patch(
-    '/updateProfile',
+    '/update-profile',
     upload.single('profilePicture'),
     validateData(validationSchemas.recruiterProfileValidationSchema),
     recruiterController.updateProfile.bind(recruiterController)

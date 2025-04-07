@@ -4,8 +4,6 @@ services:
       context: ./authentication/
       dockerfile: Dockerfile
     container_name: enigma-authentication
-    ports:
-      - "3001:3001"
     volumes:
       - ./authentication:/app
       - /app/node_modules 
@@ -35,8 +33,6 @@ services:
       context: ./problem/
       dockerfile: Dockerfile
     container_name: enigma-problem
-    ports:
-      - "3002:3002"
     environment:
       - DOCKER_HOST=tcp://dind:2375
     volumes:
@@ -92,10 +88,37 @@ services:
   #     KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
   #     KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./loki/loki-config.yaml:/etc/loki/local-config.yaml
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - enigma-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3100/ready"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3200:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    networks:
+      - enigma-network
+
 volumes:
   redis-data:
   temp-storage:
   dind-storage:
+  grafana-storage:
 
 networks:
   enigma-network:

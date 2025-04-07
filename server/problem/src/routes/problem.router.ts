@@ -10,11 +10,11 @@ const problemController = new ProblemController(problemService)
 const problemRouter = Router()
 
 //! --------------- Admin ---------------- //
-problemRouter.post('/addProblem', validateProblem, problemController.addProblem.bind(problemController))
+problemRouter.post('/add-problem', validateProblem, problemController.addProblem.bind(problemController))
 
 //! --------------- Student ---------------- //
-problemRouter.get('/getProblems', problemController.getProblems.bind(problemController))
-problemRouter.get('/findProblem/:problemNo', problemController.findProblem.bind(problemController))
+problemRouter.get('/get-problems', problemController.getProblems.bind(problemController))
+problemRouter.get('/find-problem/:problemNo', problemController.findProblem.bind(problemController))
 problemRouter.post('/compile', problemController.compileCode.bind(problemController))
 problemRouter.post('/run-solution', problemController.runSolution.bind(problemController))
 

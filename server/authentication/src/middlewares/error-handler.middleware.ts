@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { HttpError } from '@utils'
 import { _HttpStatus, Messages } from '@constants'
+import winstonLogger from '@loggers/winston.logger'
 
 export const errorHandler = (err: HttpError | Error, _req: Request, res: Response, _next: NextFunction) => {
     let statusCode = 500
@@ -11,6 +12,7 @@ export const errorHandler = (err: HttpError | Error, _req: Request, res: Respons
         message = err.message
     } else {
         console.error('Unhandled', err)
+        winstonLogger.error('Unhandled:', { details: err })
     }
 
     res.status(statusCode).json({ error: message })

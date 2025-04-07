@@ -22,18 +22,18 @@ userRouter.post(
     validateData(validationSchemas.recruiterSignupValidation),
     userController.register.bind(userController)
 )
-userRouter.post('/verifyOtp', userController.verifyOtp.bind(userController))
-userRouter.post('/resendOtp', userController.resendOtp.bind(userController))
+userRouter.post('/verify-otp', userController.verifyOtp.bind(userController))
+userRouter.post('/resend-otp', userController.resendOtp.bind(userController))
 userRouter.post(
     '/signin',
     validateData(validationSchemas.loginValidationSchema),
     userController.verifyUser.bind(userController)
 )
-userRouter.post('/googleAuth', userController.googleAuth.bind(userController))
-userRouter.post('/githubAuth', userController.githubAuth.bind(userController))
+userRouter.post('/google-auth', userController.googleAuth.bind(userController))
+userRouter.post('/github-auth', userController.githubAuth.bind(userController))
 
-userRouter.post('/changePassword', userController.changePassword.bind(userController))
-userRouter.patch('/resetPassword', userController.resetPassword.bind(userController))
-userRouter.post('/refreshToken', userController.refreshToken.bind(userController))
+userRouter.post('/change-password', userController.changePassword.bind(userController))
+userRouter.patch('/reset-password', userController.resetPassword.bind(userController))
+userRouter.post('/refresh-token', userController.refreshToken.bind(userController))
 
 export default userRouter

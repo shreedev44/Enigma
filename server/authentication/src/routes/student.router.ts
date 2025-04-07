@@ -11,9 +11,9 @@ const studentController = new StudentController(studentService)
 
 const studentRouter = Router()
 
-studentRouter.get('/getProfile', studentController.getProfile.bind(studentController))
+studentRouter.get('/get-profile', studentController.getProfile.bind(studentController))
 studentRouter.patch(
-    '/updateProfile',
+    '/update-profile',
     upload.single('profilePicture'),
     validateData(validationSchemas.studentProfileValidationSchema),
     studentController.updateProfile.bind(studentController)
