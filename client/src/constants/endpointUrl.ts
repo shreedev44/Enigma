@@ -1,11 +1,11 @@
 export const studentEndpoints = {
 	SIGNUP: "/auth/student/register",
-	GOOGLE_AUTH: "/auth/googleAuth",
-	GITHUB_AUTH: "/auth/githubAuth",
-	FETCH_PROFILE: "/auth/student/getProfile",
-	UPDATE_PROFILE: "/auth/student/updateProfile",
-	GET_PROBLEMS: "/problem/getProblems",
-	FIND_PROBLEM: "/problem/findProblem",
+	GOOGLE_AUTH: "/auth/google-auth",
+	GITHUB_AUTH: "/auth/github-auth",
+	FETCH_PROFILE: "/auth/student/get-profile",
+	UPDATE_PROFILE: "/auth/student/update-profile",
+	GET_PROBLEMS: "/problem/get-problems",
+	FIND_PROBLEM: "/problem/find-problem",
 	COMPILE: "/problem/compile",
 	RUN_SOLUTION: "/problem/run-solution",
 	SUBMIT_SOLUTION: "/problem/attempt/submit-solution",
@@ -17,23 +17,23 @@ export const studentEndpoints = {
 
 export const recruiterEndpoints = {
 	SIGNUP: "/auth/recruiter/register",
-	GOOGLE_AUTH: "/auth/googleAuth",
-	FETCH_PROFILE: "/auth/recruiter/getProfile",
-	UPDATE_PROFILE: "/auth/recruiter/updateProfile",
+	GOOGLE_AUTH: "/auth/google-auth",
+	FETCH_PROFILE: "/auth/recruiter/get-profile",
+	UPDATE_PROFILE: "/auth/recruiter/update-profile",
 };
 
 export const adminEndpoints = {
-	FETCH_STUDENTS: "/auth/admin/getStudents",
-	FETCH_RECRUITERS: "/auth/admin/getRecruiters",
-	BLOCK_ACTION: "/auth/admin/blockOrUnblock",
-	ADD_PROBLEM: "/problem/addProblem",
+	FETCH_STUDENTS: "/auth/admin/get-students",
+	FETCH_RECRUITERS: "/auth/admin/get-recruiters",
+	BLOCK_ACTION: "/auth/admin/block-or-unblock",
+	ADD_PROBLEM: "/problem/add-problem",
 };
 
 export const commonEndpoints = {
-	VERIFY_OTP: "/auth/verifyOtp",
-	RESEND_OTP: "/auth/resendOtp",
+	VERIFY_OTP: "/auth/verify-otp",
+	RESEND_OTP: "/auth/resend-otp",
 	SIGNIN: "/auth/signin",
-	FORGOT_PASSWORD: "/auth/changePassword",
-	RESET_PASSWORD: "/auth/resetPassword",
-	REFRESH_TOKEN: `${import.meta.env.VITE_BASE_URL}/auth/refreshToken`,
+	FORGOT_PASSWORD: "/auth/change-password",
+	RESET_PASSWORD: "/auth/reset-password",
+	REFRESH_TOKEN: `${import.meta.env.VITE_BASE_URL}/auth/refresh-token`,
 };

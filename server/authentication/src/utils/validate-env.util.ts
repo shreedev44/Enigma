@@ -40,4 +40,7 @@ export function validateEnv() {
     if (!env.CLOUDINARY_CLOUD_NAME) {
         throw new Error('CLOUDINARY_CLOUD_NAME is not found in the env')
     }
+    if (!env.LOKI_HOST) {
+        throw new Error('LOKI_HOST is not found in the env')
+    }
 }

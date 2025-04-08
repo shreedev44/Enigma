@@ -8,4 +8,7 @@ export const env = {
     get GEMINI_API_KEY() {
         return process.env.GEMINI_API_KEY!
     },
+    get LOKI_HOST() {
+        return process.env.LOKI_HOST!
+    },
 }

@@ -14,6 +14,9 @@ export const env = {
 	get REDIS_URL() {
 		return process.env.REDIS_URL!;
 	},
+	get LOKI_HOST() {
+		return process.env.LOKI_HOST!;
+	},
 };
 
 export function validateEnv() {
@@ -31,5 +34,8 @@ export function validateEnv() {
 	}
 	if (!env.REDIS_URL) {
 		throw new Error("REDIS_URL is not found in the env");
+	}
+	if (!env.LOKI_HOST) {
+		throw new Error("LOKI_HOST is not found in the env");
 	}
 }

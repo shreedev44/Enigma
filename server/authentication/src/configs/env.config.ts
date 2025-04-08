@@ -38,4 +38,7 @@ export const env = {
     get CLOUDINARY_API_SECRET() {
         return process.env.CLOUDINARY_API_SECRET!
     },
+    get LOKI_HOST() {
+        return process.env.LOKI_HOST!
+    },
 }

@@ -10,4 +10,7 @@ export default function validateEnv() {
     if (!env.GEMINI_API_KEY) {
         throw new Error('GEMINI_API_KEY is not found in the env')
     }
+    if (!env.LOKI_HOST) {
+        throw new Error('LOKI_HOST is not found in the env')
+    }
 }

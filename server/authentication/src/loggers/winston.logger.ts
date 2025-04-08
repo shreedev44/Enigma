@@ -1,3 +1,4 @@
+import { env } from '@configs'
 import winston from 'winston'
 import LokiTransport from 'winston-loki'
 
@@ -8,7 +9,7 @@ const winstonLogger = winston.createLogger({
     transports: [
         new winston.transports.Console(),
         new LokiTransport({
-            host: 'http://loki:3100',
+            host: env.LOKI_HOST,
             labels: { job: 'authentication-service' },
             json: true,
             batching: false,
