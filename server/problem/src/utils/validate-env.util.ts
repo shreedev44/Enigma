@@ -1,6 +1,6 @@
 import { env } from '@configs'
 
-export default function validateEnv() {
+export function validateEnv() {
     if (!env.PORT) {
         throw new Error('PORT is not found in the env')
     }

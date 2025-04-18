@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import { env } from '@configs'
 
-export default function connectDB() {
+export function connectDB() {
     mongoose
         .connect(env.MONGO_URI as string)
         .then(() => console.log('MongoDB connected'))

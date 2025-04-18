@@ -6,9 +6,8 @@ import path from 'path'
 dotenv.config({ path: path.resolve(__dirname, '../.env') })
 
 //* Importing configs, loggers and initializers
-import connectDB from './configs/mongo.config'
-import validateEnv from './utils/validate-env.util'
-import { env } from './configs/env.config'
+import { connectDB, env } from '@configs'
+import { validateEnv } from '@utils'
 import { errorHandler, notFoundHandler } from '@middlewares'
 import morganLogger from '@loggers/morgan.logger'
 
