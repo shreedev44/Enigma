@@ -97,3 +97,17 @@ export type AttemptsPerDay = {
     date: string
     count: number
 }
+
+export interface LeaderboardType extends Document {
+    userId: string
+    username: string
+    profilePicture: string
+    solved: {
+        beginner: number
+        intermediate: number
+        advanced: number
+    }
+    rank: number
+    createdAt: Date
+    updatedAt: Date
+}

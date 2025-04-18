@@ -1,5 +1,5 @@
 import { _HttpStatus, Messages, testFunctions } from '@constants'
-import { IAttemptRepository, IProblemRepository } from '@repositories/interface'
+import { IAttemptRepository, ILeaderboardRepository, IProblemRepository } from '@repositories/interface'
 import { IAttemptService } from '@services/interface'
 import { Language, AttemptType } from '@types'
 import { createHttpError, executeCode } from '@utils'
@@ -8,7 +8,8 @@ import { AttemptDTO } from '@dtos'
 export class AttemptService implements IAttemptService {
     constructor(
         private _attemptRepository: IAttemptRepository,
-        private _problemRepository: IProblemRepository
+        private _problemRepository: IProblemRepository,
+        private _leaderboardRepository: ILeaderboardRepository
     ) {}
 
     async submitSolution(
@@ -55,6 +56,10 @@ export class AttemptService implements IAttemptService {
             if (evalaution.allPassed) {
                 attempt.status = 'Accepted'
                 attempt.testCasePassed = problem.testCases.length
+                const solved = await this._attemptRepository.isSolved(userId, problemNo)
+                if (solved) {
+                    await this._leaderboardRepository.problemSolved(userId, problem.difficulty)
+                }
             } else {
                 attempt.status = 'Rejected'
                 attempt.rejectedTestCase = {

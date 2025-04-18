@@ -168,6 +168,16 @@ class AttemptRepository extends BaseRepository<AttemptDocument> implements IAtte
             throw new Error('Error getting attempts per day')
         }
     }
+
+    async isSolved(userId: string, problemNo: number): Promise<boolean> {
+        try {
+            const attempt = await this.model.findOne({ userId, problemNo, status: 'Accepted' })
+            return attempt ? true : false
+        } catch (err) {
+            console.log(err)
+            throw new Error('Error checking whether problem is solved')
+        }
+    }
 }
 
 export default new AttemptRepository()

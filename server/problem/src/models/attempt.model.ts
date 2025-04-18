@@ -1,6 +1,6 @@
 import { AttemptType } from '@types'
 import mongoose, { Schema, Document } from 'mongoose'
-import { IAttemptSchema } from '../entities/IAttempt'
+import { IAttemptSchema } from '@entities'
 
 const AttemptSchema: Schema = new Schema<IAttemptSchema>(
     {

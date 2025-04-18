@@ -3,8 +3,9 @@ import { AttemptController } from '@controllers/implementation'
 import { AttemptService } from '@services/implementation'
 import ProblemRepository from '@repositories/implementation/problem.repository'
 import AttemptRepository from '@repositories/implementation/attempt.repository'
+import LeaderboardRepository from '@repositories/implementation/leaderboard.repository'
 
-const attemptService = new AttemptService(AttemptRepository, ProblemRepository)
+const attemptService = new AttemptService(AttemptRepository, ProblemRepository, LeaderboardRepository)
 const attemptController = new AttemptController(attemptService)
 
 const attemptRouter = Router()

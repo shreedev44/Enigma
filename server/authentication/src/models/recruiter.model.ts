@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema } from 'mongoose'
 import { RecruiterProfileType } from '@types'
-import { IRecruiterSchema } from '../entities/IRecruiter'
+import { IRecruiterSchema } from '@entities'
 
 const RecruiterSchema = new Schema<IRecruiterSchema>(
     {

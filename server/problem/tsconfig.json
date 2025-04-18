@@ -25,7 +25,9 @@
       "@types": ["./src/types/index"],
       "@utils": ["./src/utils/index"],
       "@dtos": ["./src/dtos/index"],
-      "@loggers/*": ["./src/loggers/*"]
+      "@entities": ["./src/entities/index"],
+      "@loggers/*": ["./src/loggers/*"],
+      "@consumers": ["./src/kafka/consumers/index"]
     }
   },
   "include": ["src/**/*"]

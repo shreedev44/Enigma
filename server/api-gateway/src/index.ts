@@ -1,15 +1,17 @@
 import express from "express";
-import { createProxyMiddleware } from "http-proxy-middleware";
 import dotenv from "dotenv";
-import { env, validateEnv } from "./configs/env.config";
 import cors from "cors";
-import verifyToken from "./middleware/verify-token.middleware";
 import helmet from "helmet";
-import { initRedisClient } from "./configs/redis.config";
-import morganLogger from "./loggers/morgan.logger";
+import { env, validateEnv } from "./configs/env.config";
 
 dotenv.config();
 validateEnv();
+
+import morganLogger from "./loggers/morgan.logger";
+import { createProxyMiddleware } from "http-proxy-middleware";
+import verifyToken from "./middleware/verify-token.middleware";
+import { initRedisClient } from "./configs/redis.config";
+
 
 const app = express();
 

@@ -25,7 +25,9 @@
       "@routes/*": ["./src/routes/*"],
       "@models/*": ["./src/models/*"],
       "@dtos": ["./src/dtos/index"],
-      "@loggers/*": ["./src/loggers/*"]
+      "@entities": ["./src/entities/index"],
+      "@loggers/*": ["./src/loggers/*"],
+      "@producers": ["./src/kafka/producers/index"]
     }
   },
   "include": ["src/**/*"]

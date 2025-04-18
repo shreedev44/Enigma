@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose'
 import { ProblemType, TestCaseType } from '@types'
-import { IProblemSchema } from '../entities/IProblem'
+import { IProblemSchema } from '@entities'
 
 const TestCaseSchema = new Schema<TestCaseType>({
     input: [

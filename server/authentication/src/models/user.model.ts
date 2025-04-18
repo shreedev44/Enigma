@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose'
 import { UserType } from '@types'
-import { IUserSchema } from '../entities/IUser'
+import { IUserSchema } from '@entities'
 
 const UserSchema: Schema = new Schema<IUserSchema>(
     {

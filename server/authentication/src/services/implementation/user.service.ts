@@ -18,6 +18,7 @@ import { IUserRepository } from '@repositories/interface'
 import { IStudentRepository } from '@repositories/interface'
 import { IRecruiterRepository } from '@repositories/interface'
 import { UserDTO } from '@dtos'
+import { sendUserRegistrationEvent } from '@producers'
 
 export class UserService implements IUserService {
     constructor(
@@ -86,7 +87,12 @@ export class UserService implements IUserService {
                 lastName: userData.lastName,
                 userId: user._id as ObjectId,
             }
-            await this._studentRepository.create(profileObject)
+            const profile = await this._studentRepository.create(profileObject)
+            await sendUserRegistrationEvent({
+                userId: String(user._id),
+                fullName: profile.firstName + ' ' + profile.lastName,
+                profilePicture: profile.profilePicture || '',
+            })
         } else if (user.role === 'recruiter') {
             const profileObject: Partial<RecruiterProfileType> = {
                 companyName: userData.companyName,
@@ -229,6 +235,11 @@ export class UserService implements IUserService {
                     profilePicture: user.profilePicture,
                 }
                 profile = await this._studentRepository.create(profileObject)
+                await sendUserRegistrationEvent({
+                    userId: String(userData._id),
+                    fullName: profile.firstName + ' ' + profile.lastName,
+                    profilePicture: profile.profilePicture || '',
+                })
             } else {
                 const profileObject: Partial<RecruiterProfileType> = {
                     companyName: user.companyName as string,
@@ -323,6 +334,11 @@ export class UserService implements IUserService {
         }
 
         const profile = await this._studentRepository.create(profileObject)
+        await sendUserRegistrationEvent({
+            userId: String(user._id),
+            fullName: profile.firstName + ' ' + profile.lastName,
+            profilePicture: profile.profilePicture || '',
+        })
 
         const accessToken = generateAccessToken(String(userData._id), 'student')
         const refreshToken = generateRefreshToken(String(userData._id), 'student')
