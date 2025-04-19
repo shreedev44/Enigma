@@ -7,6 +7,8 @@ import { GetProblems } from './problems/get-problems.dto'
 import { ProblemInfo } from './problems/problem-info.dto'
 import { Compile } from './problems/compile.dto'
 
+import { LeaderboardInfo } from './leaderboard/leaderboard-info.dto'
+
 export const AttemptDTO = {
     AttemptInfo,
     GetAttempts,
@@ -18,4 +20,8 @@ export const ProblemDTO = {
     GetProblems,
     ProblemInfo,
     Compile,
+}
+
+export const LeaderboardDTO = {
+    LeaderboardInfo,
 }

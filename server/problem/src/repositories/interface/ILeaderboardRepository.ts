@@ -6,4 +6,6 @@ export interface ILeaderboardRepository extends IBaseRepository<LeaderboardType>
     problemSolved(userId: string, difficulty: string): Promise<void>
     getCount(): Promise<number>
     updateRanks(): Promise<void>
+    getLeaderboard(): Promise<LeaderboardType[]>
+    getRankByUserId(userId: string): Promise<LeaderboardType | null>
 }

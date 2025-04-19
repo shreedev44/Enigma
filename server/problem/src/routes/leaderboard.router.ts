@@ -8,6 +8,7 @@ const leaderboardRouter = Router()
 const leaderboardService = new LeaderboardService(LeaderboardRepository)
 const leaderboardController = new LeaderboardController(leaderboardService)
 
+leaderboardRouter.get('/', leaderboardController.getLeaderboard.bind(leaderboardController))
 leaderboardRouter.get('/update-ranks', leaderboardController.updateRanks.bind(leaderboardController))
 
 export default leaderboardRouter

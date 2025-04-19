@@ -1,6 +1,7 @@
 import { ILeaderboardRepository } from '@repositories/interface'
 import { BaseRepository } from '@shreedev44/enigma-shared'
 import Leaderboard, { LeaderboardDocument } from '@models/leaderboard.model'
+import { LeaderboardType } from '@types'
 
 class LeaderboardRepository extends BaseRepository<LeaderboardDocument> implements ILeaderboardRepository {
     constructor() {
@@ -90,6 +91,25 @@ class LeaderboardRepository extends BaseRepository<LeaderboardDocument> implemen
         } catch (err) {
             console.log(err)
             throw new Error('Error updating ranks in leaderboard')
+        }
+    }
+
+    async getLeaderboard(): Promise<LeaderboardType[]> {
+        try {
+            return await this.model.find().sort({ rank: 1 })
+        } catch (err) {
+            console.log(err)
+            throw new Error('Error getting leaderboard')
+        }
+    }
+
+    async getRankByUserId(userId: string): Promise<LeaderboardType | null> {
+        try {
+            const user = await this.model.findOne({ userId })
+            return user
+        } catch (err) {
+            console.log(err)
+            throw new Error('Error getting rank of a user')
         }
     }
 }
