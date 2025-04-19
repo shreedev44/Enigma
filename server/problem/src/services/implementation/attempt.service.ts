@@ -57,8 +57,8 @@ export class AttemptService implements IAttemptService {
                 attempt.status = 'Accepted'
                 attempt.testCasePassed = problem.testCases.length
                 const solved = await this._attemptRepository.isSolved(userId, problemNo)
-                if (solved) {
-                    await this._leaderboardRepository.problemSolved(userId, problem.difficulty)
+                if (!solved) {
+                    await this._leaderboardRepository.problemSolved(userId, problem.difficulty.toLowerCase())
                 }
             } else {
                 attempt.status = 'Rejected'

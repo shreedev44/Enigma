@@ -5,7 +5,7 @@ import { LeaderboardType } from '@types'
 const LeaderboardSchema: Schema = new Schema<ILeaderboardSchema>(
     {
         userId: {
-            type: String,
+            type: Schema.Types.ObjectId,
             required: true,
             unique: true,
         },

@@ -1,8 +1,9 @@
 import { IBaseRepository } from '@shreedev44/enigma-shared'
-import { DifficultyType, LeaderboardType } from '@types'
+import { LeaderboardType } from '@types'
 
 export interface ILeaderboardRepository extends IBaseRepository<LeaderboardType> {
     create(user: Partial<LeaderboardType>): Promise<LeaderboardType>
-    problemSolved(userId: string, difficulty: DifficultyType): Promise<void>
+    problemSolved(userId: string, difficulty: string): Promise<void>
     getCount(): Promise<number>
+    updateRanks(): Promise<void>
 }

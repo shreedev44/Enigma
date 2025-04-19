@@ -1,7 +1,6 @@
 import { ILeaderboardRepository } from '@repositories/interface'
 import { BaseRepository } from '@shreedev44/enigma-shared'
 import Leaderboard, { LeaderboardDocument } from '@models/leaderboard.model'
-import { DifficultyType } from '@types'
 
 class LeaderboardRepository extends BaseRepository<LeaderboardDocument> implements ILeaderboardRepository {
     constructor() {
@@ -18,7 +17,7 @@ class LeaderboardRepository extends BaseRepository<LeaderboardDocument> implemen
         }
     }
 
-    async problemSolved(userId: string, difficulty: DifficultyType): Promise<void> {
+    async problemSolved(userId: string, difficulty: string): Promise<void> {
         try {
             await this.model.updateOne({ userId }, { $inc: { [`solved.${difficulty}`]: 1 } })
         } catch (err) {
@@ -33,6 +32,64 @@ class LeaderboardRepository extends BaseRepository<LeaderboardDocument> implemen
         } catch (err) {
             console.log(err)
             throw new Error('Error getting count of the documents in leaderboard')
+        }
+    }
+
+    async updateRanks(): Promise<void> {
+        try {
+            const rankedUsers = await Leaderboard.aggregate([
+                {
+                    $addFields: {
+                        totalPoints: {
+                            $add: [
+                                { $multiply: ['$solved.beginner', 1] },
+                                { $multiply: ['$solved.intermediate', 2] },
+                                { $multiply: ['$solved.advanced', 4] },
+                            ],
+                        },
+                    },
+                },
+                { $sort: { totalPoints: -1 } },
+                {
+                    $group: {
+                        _id: null,
+                        users: {
+                            $push: {
+                                userId: '$userId',
+                                totalPoints: '$totalPoints',
+                            },
+                        },
+                    },
+                },
+                {
+                    $unwind: { path: '$users', includeArrayIndex: 'rank' },
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        userId: '$users.userId',
+                        totalPoints: '$users.totalPoints',
+                        rank: { $add: ['$rank', 1] },
+                    },
+                },
+            ])
+
+            const bulkOps = rankedUsers.map((user) => ({
+                updateOne: {
+                    filter: { userId: user.userId },
+                    update: { $set: { rank: user.rank } },
+                },
+            }))
+
+            if (bulkOps.length > 0) {
+                const result = await Leaderboard.bulkWrite(bulkOps)
+                console.log(`Successfully updated ranks for ${result.modifiedCount} users out of ${rankedUsers.length}`)
+            } else {
+                console.log('No ranks changes')
+            }
+        } catch (err) {
+            console.log(err)
+            throw new Error('Error updating ranks in leaderboard')
         }
     }
 }

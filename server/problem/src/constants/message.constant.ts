@@ -28,4 +28,5 @@ export const Messages = {
     ATTEMPT_NOT_FOUND: 'Attempt not found',
     STATS_NOT_RETRIEVED: 'Problem stats cannot be retrieved at the moment',
     ATTENDANCE_NOT_RETRIEVED: 'Attempt attendance cannot be retrieved',
+    RANKS_UPDATED: 'Ranks updated successfully',
 }

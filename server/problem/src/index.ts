@@ -14,6 +14,8 @@ import morganLogger from '@loggers/morgan.logger'
 //* Importing routers
 import problemRouter from '@routes/problem.router'
 import attemptRouter from '@routes/attempt.router'
+import leaderboardRouter from '@routes/leaderboard.router'
+
 import { runConsumer } from '@consumers'
 
 class App {
@@ -40,6 +42,7 @@ class App {
     private initializeRoutes(): void {
         this.app.use('/', problemRouter)
         this.app.use('/attempt', attemptRouter)
+        this.app.use('/leaderboard', leaderboardRouter)
         this.app.use(notFoundHandler)
         this.app.use(errorHandler)
     }
