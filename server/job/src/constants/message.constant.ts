@@ -1,0 +1,15 @@
+export const Messages = {
+    SERVER_ERROR: 'Internel server error',
+    INCOMPLETE_FORM: 'Please complete the form',
+    NO_ACCESS: 'Unauthorized Access',
+    NO_PROFILE: 'Profile not found',
+    INVALID_REQUEST: 'Invalid request',
+    INVALID_GITHUB: 'Please provide a valid github profile link',
+    INVALID_LINKEDIN: 'Please provide a valid linked profile link',
+    INVALID_FILE_TYPE: 'Only jpeg, jpg, webp and png files allowed',
+    FILE_SIZE_EXCEEDED: 'file size cannot exceed 5MB',
+    FAILED_TO_UPLOAD: 'Failed to upload file',
+    INVALID_SORT_OPTION: 'Invalid sort option',
+    INVALID_SORT_VALUE: 'Invalid sort value',
+    INVALID_PAGE: 'Invalid page selected',
+}

@@ -27,6 +27,8 @@ services:
     ports:
       - "2375"
     restart: always
+    logging:
+      driver: none
 
   problem-service:
     build: 
@@ -44,6 +46,18 @@ services:
       - enigma-network
     depends_on:
       - dind
+
+  job-service:
+    build:
+      context: ./job/
+      dockerfile: Dockerfile
+    container_name: enigma-job
+    volumes:
+      - ./job:/app
+      - /app/node_modules
+    command: sh -c "npm install && npm run dev"
+    networks:
+      - enigma-network
 
   api-gateway:
     build: 
@@ -77,6 +91,8 @@ services:
       - "2181:2181"
     networks:
       - enigma-network
+    logging:
+      driver: none
 
   kafka:
     image: confluentinc/cp-kafka:latest
@@ -93,6 +109,8 @@ services:
       GF_LOG_LEVELd: error
     networks:
       - enigma-network
+    logging:
+      driver: none
 
   loki:
     image: grafana/loki:latest
@@ -108,6 +126,8 @@ services:
       interval: 5s
       timeout: 3s
       retries: 3
+    logging:
+      driver: none
 
   grafana:
     image: grafana/grafana:latest
@@ -119,6 +139,8 @@ services:
       - grafana-storage:/var/lib/grafana
     networks:
       - enigma-network
+    logging:
+      driver: none
 
 volumes:
   redis-data:
