@@ -12,4 +12,6 @@ export const Messages = {
     INVALID_SORT_OPTION: 'Invalid sort option',
     INVALID_SORT_VALUE: 'Invalid sort value',
     INVALID_PAGE: 'Invalid page selected',
+    JOB_NOT_FOUND: 'Job not found',
+    JOB_DELETED: 'Job deleted successfully',
 }

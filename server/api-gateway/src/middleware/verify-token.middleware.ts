@@ -18,7 +18,7 @@ export default async function verifyToken(
 				return next();
 			}
 			return res
-			.status(401)
+			.status(403)
 			.json({ error: "Access denied, No token provided" });
 		}
 		
@@ -29,7 +29,7 @@ export default async function verifyToken(
 				return next();
 			}
 			return res
-				.status(401)
+				.status(403)
 				.json({ error: "Access denied, No token provided" });
 		}
 
@@ -67,7 +67,7 @@ export default async function verifyToken(
 		if (err.name === "TokenExpiredError") {
 			return res.status(403).json({ error: "Token has expired" });
 		} else {
-			return res.status(401).json({ error: "Invalid token" });
+			return res.status(403).json({ error: "Invalid token" });
 		}
 	}
 }

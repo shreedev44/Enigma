@@ -11,7 +11,8 @@ import { validateEnv } from '@utils'
 import { connectDB, env, initRedisClient } from '@configs'
 import { errorHandler, notFoundHandler } from '@middlewares'
 
-
+//* Importing routers
+import jobRouter from '@routes/job.router'
 
 class App {
     public app: Application
@@ -33,6 +34,7 @@ class App {
     }
 
     private initializeRoutes(): void {
+        this.app.use('/', jobRouter)
         this.app.use(notFoundHandler)
         this.app.use(errorHandler)
     }

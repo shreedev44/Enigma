@@ -108,8 +108,7 @@ Api.interceptors.response.use(
 		} else if (
 			error.response &&
 			error.response.status === 401 &&
-			(error.response.data.error === "Access denied, No token provided" ||
-				error.response.data.error === "Your are blocked from Enigma")
+			error.response.data.error === "Your are blocked from Enigma"
 		) {
 			const userLevel =
 				originalRequest.headers["x-user-level"] || "student";

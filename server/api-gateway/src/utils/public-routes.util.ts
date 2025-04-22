@@ -16,6 +16,7 @@ const PUBLIC_ROUTES: { method: string; path: string }[] = [
 	{ method: "POST", path: "/problem/compile" },
 	{ method: "GET", path: "/problem/leaderboard/update-ranks" },
 	{ method: "GET", path: "/problem/leaderboard" },
+	{ method: "GET", path: "/job" },
 ];
 
 export function isPublic(req: Request): boolean {
