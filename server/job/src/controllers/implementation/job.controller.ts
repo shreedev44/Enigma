@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import { _HttpStatus, Messages } from '@constants'
 import { IJobService } from '@services/interface'
 import { IJobController } from '@controllers/interface'
+import { Types } from 'mongoose'
 
 export class JobController implements IJobController {
     constructor(private _jobService: IJobService) {}
@@ -38,6 +39,11 @@ export class JobController implements IJobController {
                 return
             }
 
+            if (!Types.ObjectId.isValid(jobId)) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ message: Messages.INVALID_ID })
+                return
+            }
+
             const updatedJob = await this._jobService.updateJob(userId, jobId, jobData)
 
             if (!updatedJob) {
@@ -62,6 +68,11 @@ export class JobController implements IJobController {
                 res.status(_HttpStatus.BAD_REQUEST).json({
                     message: Messages.INCOMPLETE_FORM,
                 })
+                return
+            }
+
+            if (!Types.ObjectId.isValid(jobId)) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ message: Messages.INVALID_ID })
                 return
             }
 
