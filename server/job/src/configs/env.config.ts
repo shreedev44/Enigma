@@ -11,4 +11,7 @@ export const env = {
     get REDIS_URL() {
         return process.env.REDIS_URL!
     },
+    get GEMINI_API_KEY() {
+        return process.env.GEMINI_API_KEY!
+    },
 }

@@ -1,5 +1,6 @@
 export const Messages = {
     SERVER_ERROR: 'Internal server error',
+    UNAUTHORIZED: 'Unauthorized access',
     INCOMPLETE_FORM: 'Complete the form',
     NO_ACCESS: 'Unauthorized',
     NO_PROFILE: 'Profile missing',
@@ -17,4 +18,9 @@ export const Messages = {
     INVALID_RESPONSIBILITIES: 'At least 3 responsibilities needed',
     INVALID_LAST_DATE: 'Date must be YYYY-MM-DD',
     INVALID_ID: 'Invalid id',
+
+    APPLICATION_NOT_FOUND: 'Application not found',
+    INVALID_FILE_TYPE: 'Only pdf files allowed',
+    APPLICATION_DELETED: 'Application deleted',
+    APPLICATION_EXISTS: 'You have already applied for this job',
 }

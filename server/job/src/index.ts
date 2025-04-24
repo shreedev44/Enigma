@@ -13,6 +13,7 @@ import { errorHandler, notFoundHandler } from '@middlewares'
 
 //* Importing routers
 import jobRouter from '@routes/job.router'
+import applicationRouter from '@routes/application.router'
 
 class App {
     public app: Application
@@ -35,6 +36,7 @@ class App {
 
     private initializeRoutes(): void {
         this.app.use('/', jobRouter)
+        this.app.use('/application', applicationRouter)
         this.app.use(notFoundHandler)
         this.app.use(errorHandler)
     }

@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { JobController } from '@controllers/implementation'
 import { JobService } from '@services/implementation'
 import JobRepository from '@repositories/implementation/job.repository'
-import { validateData } from '@middlewares'
+import { validateData, validateRole } from '@middlewares'
 import { validationSchemas } from '@constants'
 
 const jobService = new JobService(JobRepository)
@@ -13,15 +13,17 @@ const jobRouter = Router()
 jobRouter.get('/', jobController.getAllJobs.bind(jobController))
 jobRouter.post(
     '/create',
+    validateRole('recruiter'),
     validateData(validationSchemas.jobCreationValidationSchema),
     jobController.createJob.bind(jobController)
 )
 jobRouter.patch(
     '/update/:jobId',
+    validateRole('recruiter'),
     validateData(validationSchemas.jobUpdateValidationSchema),
     jobController.updateJob.bind(jobController)
 )
-jobRouter.delete('/delete/:jobId', jobController.deleteJob.bind(jobController))
+jobRouter.delete('/delete/:jobId', validateRole('recruiter'), jobController.deleteJob.bind(jobController))
 jobRouter.get('/recruiter-jobs', jobController.getJobsByUserId.bind(jobController))
 
 export default jobRouter

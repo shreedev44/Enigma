@@ -2,8 +2,7 @@ import { Router } from 'express'
 import { RecruiterController } from '@controllers/implementation'
 import { RecruiterService } from '@services/implementation'
 import RecruiterRepository from '@repositories/implementation/recruiter.repository'
-import { upload } from '@configs'
-import { validateData } from '@middlewares'
+import { validateData, upload } from '@middlewares'
 import { validationSchemas } from '@utils'
 
 const recruiterService = new RecruiterService(RecruiterRepository)

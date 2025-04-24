@@ -2,8 +2,7 @@ import { Router } from 'express'
 import { StudentController } from '@controllers/implementation'
 import { StudentService } from '@services/implementation'
 import StudentRepository from '@repositories/implementation/student.repository'
-import { upload } from '@configs'
-import { validateData } from '@middlewares'
+import { validateData, upload } from '@middlewares'
 import { validationSchemas } from '@utils'
 
 const studentService = new StudentService(StudentRepository)
