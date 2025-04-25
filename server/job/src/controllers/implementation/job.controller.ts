@@ -96,6 +96,12 @@ export class JobController implements IJobController {
     async getJobsByUserId(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { id: userId } = JSON.parse(req.headers['x-user-payload'] as string)
+            const { page = 1 } = req.query
+
+            if (isNaN(Number(page))) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_PAGE })
+                return
+            }
 
             if (!userId) {
                 res.status(_HttpStatus.BAD_REQUEST).json({
@@ -104,18 +110,37 @@ export class JobController implements IJobController {
                 return
             }
 
-            const jobs = await this._jobService.getJobsByUserId(userId)
+            const { jobs, totalPages } = await this._jobService.getJobsByUserId(userId, Number(page))
 
-            res.status(_HttpStatus.OK).json({ jobs })
+            res.status(_HttpStatus.OK).json({ jobs, totalPages })
         } catch (err) {
             next(err)
         }
     }
 
-    async getAllJobs(_req: Request, res: Response, next: NextFunction): Promise<void> {
+    async getAllJobs(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const jobs = await this._jobService.getAllJobs()
-            res.status(_HttpStatus.OK).json({ jobs })
+            const { page = 1, sortBy = 'updatedAt', sortOrder = 1, filter = '' } = req.query
+            if (isNaN(Number(page))) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_PAGE })
+                return
+            }
+            const sortOptions = ['companyName', 'updatedAt', 'title']
+            if (!sortOptions.includes(String(sortBy))) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_SORT_OPTION })
+                return
+            }
+            if (Number(sortOrder) !== 1 && Number(sortOrder) !== -1) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_SORT_ORDER })
+                return
+            }
+            const { jobs, totalPages } = await this._jobService.getAllJobs(
+                Number(page),
+                String(sortBy),
+                Number(sortOrder),
+                String(filter)
+            )
+            res.status(_HttpStatus.OK).json({ jobs, totalPages })
         } catch (err) {
             next(err)
         }

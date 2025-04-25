@@ -41,20 +41,36 @@ class JobRepository extends BaseRepository<IJobSchema> implements IJobRepository
         }
     }
 
-    async findJobsByUserId(userId: Types.ObjectId): Promise<IJobSchema[]> {
+    async findJobsByUserId(
+        userId: Types.ObjectId,
+        skip: number,
+        limit: number
+    ): Promise<{ jobs: IJobSchema[]; totalPages: number }> {
         try {
-            const jobs = await this.model.find({ userId })
-            return jobs
+            const documents = await this.model.countDocuments()
+            const jobs = await this.model.find({ userId }).skip(skip).limit(limit)
+            return { jobs, totalPages: Math.ceil(documents / limit) }
         } catch (err) {
             console.error(err)
             throw new Error('Error finding jobs by user ID')
         }
     }
 
-    async findAllJobs(): Promise<IJobSchema[]> {
+    async findAllJobs(skip: number, limit: number, query: object): Promise<{ jobs: IJobSchema[]; totalPages: number }> {
         try {
-            const jobs = await this.model.find({ listed: true })
-            return jobs
+            const documents = await this.model.countDocuments()
+            const jobs = await this.model.aggregate([
+                {
+                    $match: query,
+                },
+                {
+                    $skip: skip,
+                },
+                {
+                    $limit: limit,
+                },
+            ])
+            return { jobs, totalPages: Math.ceil(documents / limit) }
         } catch (err) {
             console.error(err)
             throw new Error('Error finding jobs')

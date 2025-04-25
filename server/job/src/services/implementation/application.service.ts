@@ -2,7 +2,7 @@ import pdf from 'pdf-parse'
 import { IApplicationService } from '@services/interface'
 import { IApplicationSchema } from '@entities'
 import { IApplicationRepository } from '@repositories/interface'
-import { createHttpError } from '@utils'
+import { createHttpError, generateUID, uploadResume } from '@utils'
 import { _HttpStatus, Messages, parsePrompt } from '@constants'
 import { Types } from 'mongoose'
 import { geminiModel } from '@configs'
@@ -25,10 +25,16 @@ export class ApplicationService implements IApplicationService {
             parsePrompt.replace('resume_text_here', String(resumeData.text))
         )
         const result = JSON.parse(response.text().replace(/```json\n|\n```/g, ''))
+        const filename = result.name + '-' + (await generateUID())
+        const key = await uploadResume(file, filename)
+        if (!key) {
+            throw createHttpError(_HttpStatus.INTERNAL_SERVER_ERROR, Messages.FAILED_TO_UPLOAD)
+        }
         const application = await this._applicationRepository.create({
             ...result,
             userId: new Types.ObjectId(userId),
             jobId: new Types.ObjectId(jobId),
+            resume: key,
         })
         return application
     }
@@ -42,14 +48,33 @@ export class ApplicationService implements IApplicationService {
         return isDeleted
     }
 
-    async getApplicationsByUserId(userId: string): Promise<IApplicationSchema[]> {
-        const applications = await this._applicationRepository.findApplicationsByUserId(new Types.ObjectId(userId))
+    async getApplicationsByUserId(
+        userId: string,
+        page: number
+    ): Promise<{ applications: IApplicationSchema[]; totalPages: number }> {
+        const dataPerPage = 1
+        const skip = dataPerPage * page - 1
+        const result = await this._applicationRepository.findApplicationsByUserId(
+            new Types.ObjectId(userId),
+            skip,
+            dataPerPage
+        )
 
-        return applications
+        return result
     }
 
-    async getApplicationsByJobId(jobId: string): Promise<IApplicationSchema[]> {
-        const applications = await this._applicationRepository.findApplicationsByJobId(new Types.ObjectId(jobId))
-        return applications
+    async getApplicationsByJobId(
+        jobId: string,
+        page: number
+    ): Promise<{ applications: IApplicationSchema[]; totalPages: number }> {
+        const dataPerPage = 1
+        const skip = dataPerPage * page - 1
+        const result = await this._applicationRepository.findApplicationsByJobId(
+            new Types.ObjectId(jobId),
+            skip,
+            dataPerPage
+        )
+
+        return result
     }
 }

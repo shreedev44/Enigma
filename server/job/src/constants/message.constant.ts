@@ -7,6 +7,13 @@ export const Messages = {
     INVALID_REQUEST: 'Invalid request',
     JOB_NOT_FOUND: 'Job missing',
     JOB_DELETED: 'Job deleted',
+    INVALID_COMPANY_NAME: 'Invalid company name',
+    INVALID_PROFILE_PICTURE: 'Invalid profile picture url',
+    FAILED_TO_UPLOAD: 'Failed to upload file',
+
+    INVALID_PAGE: 'Invalid page number',
+    INVALID_SORT_OPTION: 'Invalid sort parameter',
+    INVALID_SORT_ORDER: 'Invalid sort order',
 
     INVALID_ROLE: 'Role must be 3-50 chars, letters & spaces only',
     INVALID_WORK_TIME: 'Work time must be "Full-Time" or "Part-Time"',

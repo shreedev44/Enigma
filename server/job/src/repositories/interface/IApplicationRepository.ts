@@ -5,7 +5,15 @@ import { Types } from 'mongoose'
 export interface IApplicationRepository extends IBaseRepository<IApplicationSchema> {
     create(application: Partial<IApplicationSchema>): Promise<IApplicationSchema>
     deleteById(userId: Types.ObjectId, applicationId: string): Promise<boolean>
-    findApplicationsByUserId(userId: Types.ObjectId): Promise<IApplicationSchema[]>
-    findApplicationsByJobId(jobId: Types.ObjectId): Promise<IApplicationSchema[]>
+    findApplicationsByUserId(
+        userId: Types.ObjectId,
+        skip: number,
+        limit: number
+    ): Promise<{ applications: IApplicationSchema[]; totalPages: number }>
+    findApplicationsByJobId(
+        jobId: Types.ObjectId,
+        skip: number,
+        limit: number
+    ): Promise<{ applications: IApplicationSchema[]; totalPages: number }>
     findApplication(userId: Types.ObjectId, jobId: Types.ObjectId): Promise<IApplicationSchema | null>
 }

@@ -6,6 +6,10 @@ export interface IJobRepository extends IBaseRepository<IJobSchema> {
     create(job: Partial<IJobSchema>): Promise<IJobSchema>
     updateById(userId: Types.ObjectId, jobId: string, data: Partial<IJobSchema>): Promise<IJobSchema | null>
     deleteById(userId: Types.ObjectId, jobId: string): Promise<boolean>
-    findJobsByUserId(userId: Types.ObjectId): Promise<IJobSchema[]>
-    findAllJobs(): Promise<IJobSchema[]>
+    findJobsByUserId(
+        userId: Types.ObjectId,
+        skip: number,
+        limit: number
+    ): Promise<{ jobs: IJobSchema[]; totalPages: number }>
+    findAllJobs(skip: number, limit: number, query: object): Promise<{ jobs: IJobSchema[]; totalPages: number }>
 }

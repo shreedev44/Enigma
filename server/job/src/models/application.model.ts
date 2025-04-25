@@ -79,6 +79,16 @@ const ApplicationSchema = new Schema<IApplicationSchema>(
             type: Number,
             required: true,
         },
+        status: {
+            type: String,
+            required: true,
+            enum: ['received', 'shortlisted'],
+            default: 'received',
+        },
+        resume: {
+            type: String,
+            required: true,
+        },
     },
     {
         timestamps: true,

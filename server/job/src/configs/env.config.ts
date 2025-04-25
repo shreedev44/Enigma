@@ -14,4 +14,16 @@ export const env = {
     get GEMINI_API_KEY() {
         return process.env.GEMINI_API_KEY!
     },
+    get AWS_ACCESS_KEY_ID() {
+        return process.env.AWS_ACCESS_KEY_ID!
+    },
+    get AWS_SECRET_ACCESS_KEY() {
+        return process.env.AWS_SECRET_ACCESS_KEY!
+    },
+    get AWS_REGION() {
+        return process.env.AWS_REGION!
+    },
+    get S3_BUCKET_NAME() {
+        return process.env.S3_BUCKET_NAME!
+    },
 }

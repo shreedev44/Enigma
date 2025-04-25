@@ -7,6 +7,15 @@ const JobSchema = new Schema<IJobSchema>(
             type: Schema.Types.ObjectId,
             required: true,
         },
+        companyName: {
+            type: String,
+            required: true,
+        },
+        profilePicture: {
+            type: String,
+            required: true,
+            default: '',
+        },
         role: {
             type: String,
             required: true,

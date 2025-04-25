@@ -29,20 +29,30 @@ class ApplicationRepository extends BaseRepository<IApplicationSchema> implement
         }
     }
 
-    async findApplicationsByUserId(userId: Types.ObjectId): Promise<IApplicationSchema[]> {
+    async findApplicationsByUserId(
+        userId: Types.ObjectId,
+        skip: number,
+        limit: number
+    ): Promise<{ applications: IApplicationSchema[]; totalPages: number }> {
         try {
-            const applications = await this.model.find({ userId })
-            return applications
+            const documents = await this.model.countDocuments()
+            const applications = await this.model.find({ userId }).skip(skip).limit(limit)
+            return { applications, totalPages: Math.ceil(documents / limit) }
         } catch (err) {
             console.error(err)
             throw new Error('Error finding applications by user ID')
         }
     }
 
-    async findApplicationsByJobId(jobId: Types.ObjectId): Promise<IApplicationSchema[]> {
+    async findApplicationsByJobId(
+        jobId: Types.ObjectId,
+        skip: number,
+        limit: number
+    ): Promise<{ applications: IApplicationSchema[]; totalPages: number }> {
         try {
-            const applications = await this.model.find({ jobId })
-            return applications
+            const documents = await this.model.countDocuments()
+            const applications = await this.model.find({ jobId }).skip(skip).limit(limit)
+            return { applications, totalPages: Math.ceil(documents / limit) }
         } catch (err) {
             console.error(err)
             throw new Error('Error finding all applications')

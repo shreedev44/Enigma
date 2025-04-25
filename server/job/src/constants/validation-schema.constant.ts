@@ -1,6 +1,14 @@
 import { Regex, Messages } from '@constants'
 
 const jobCreationValidationSchema = {
+    companyName: {
+        rules: [Regex.NAME],
+        messages: [Messages.INVALID_COMPANY_NAME],
+    },
+    profilePicture: {
+        rules: [Regex.PROFILE_PIC],
+        messages: [Messages.INVALID_PROFILE_PICTURE],
+    },
     role: {
         rules: [Regex.ROLE],
         messages: [Messages.INVALID_ROLE],

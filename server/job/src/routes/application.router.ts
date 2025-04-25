@@ -28,7 +28,7 @@ applicationRouter.get(
 applicationRouter.get(
     '/job-applications/:jobId',
     validateRole('recruiter'),
-    applicationController.getApplicationByJob.bind(applicationController)
+    applicationController.getApplicationsByJob.bind(applicationController)
 )
 
 export default applicationRouter

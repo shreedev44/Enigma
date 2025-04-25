@@ -32,7 +32,7 @@ export class ApplicationController implements IApplicationController {
             const { id: userId } = JSON.parse(req.headers['x-user-payload'] as string)
             const { applicationId } = req.params
 
-            if (!userId || !applicationId) {
+            if (!applicationId) {
                 res.status(_HttpStatus.BAD_REQUEST).json({
                     message: Messages.INCOMPLETE_FORM,
                 })
@@ -64,25 +64,33 @@ export class ApplicationController implements IApplicationController {
     async getMyApplications(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { id: userId } = JSON.parse(req.headers['x-user-payload'] as string)
+            const { page = 1 } = req.query
 
-            if (!userId) {
-                res.status(_HttpStatus.BAD_REQUEST).json({
-                    message: Messages.INCOMPLETE_FORM,
-                })
+            if (isNaN(Number(page))) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_PAGE })
                 return
             }
 
-            const applications = await this._applicationService.getApplicationsByUserId(userId)
+            const { applications, totalPages } = await this._applicationService.getApplicationsByUserId(
+                userId,
+                Number(page)
+            )
 
-            res.status(_HttpStatus.OK).json({ applications })
+            res.status(_HttpStatus.OK).json({ applications, totalPages })
         } catch (err) {
             next(err)
         }
     }
 
-    async getApplicationByJob(req: Request, res: Response, next: NextFunction): Promise<void> {
+    async getApplicationsByJob(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { jobId } = req.params
+            const { page = 1 } = req.query
+
+            if (isNaN(Number(page))) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_PAGE })
+                return
+            }
 
             if (!jobId) {
                 res.status(_HttpStatus.BAD_REQUEST).json({
@@ -96,9 +104,12 @@ export class ApplicationController implements IApplicationController {
                 return
             }
 
-            const applications = await this._applicationService.getApplicationsByJobId(jobId)
+            const { applications, totalPages } = await this._applicationService.getApplicationsByJobId(
+                jobId,
+                Number(page)
+            )
 
-            res.status(_HttpStatus.OK).json({ applications })
+            res.status(_HttpStatus.OK).json({ applications, totalPages })
         } catch (err) {
             next(err)
         }

@@ -26,6 +26,8 @@ export interface IApplicationSchema extends Document {
     skills: string[]
     experience: Experience[]
     yearOfExperience: number
+    status: 'received' | 'shortlisted'
+    resume: string
     createdAt: Date
     updatedAt: Date
 }

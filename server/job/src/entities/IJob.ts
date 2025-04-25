@@ -2,6 +2,8 @@ import { Document, Types } from 'mongoose'
 
 export interface IJobSchema extends Document {
     userId: Types.ObjectId
+    companyName: string
+    profilePicture: string
     role: string
     workTime: 'Full-Time' | 'Part-Time'
     workMode: 'On-Site' | 'Remote' | 'Hybrid'

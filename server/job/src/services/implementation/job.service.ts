@@ -34,14 +34,38 @@ export class JobService implements IJobService {
         return isDeleted
     }
 
-    async getJobsByUserId(userId: string): Promise<IJobSchema[]> {
-        const jobs = await this._jobRepository.findJobsByUserId(new Types.ObjectId(userId))
+    async getJobsByUserId(userId: string, page: number): Promise<{ jobs: IJobSchema[]; totalPages: number }> {
+        const dataPerPage = 1
+        const skip = page * dataPerPage - 1
+        const result = await this._jobRepository.findJobsByUserId(new Types.ObjectId(userId), skip, dataPerPage)
 
-        return jobs
+        return result
     }
 
-    async getAllJobs(): Promise<IJobSchema[]> {
-        const jobs = await this._jobRepository.findAllJobs()
-        return jobs
+    async getAllJobs(
+        page: number,
+        sortBy: string,
+        sortOrder: number,
+        filter: string
+    ): Promise<{ jobs: IJobSchema[]; totalPages: number }> {
+        const dataPerPage = 1
+        const skip = page * dataPerPage - 1
+
+        let query: object = { listed: true }
+        if (filter) {
+            query = {
+                $and: [
+                    {
+                        $or: [
+                            { title: { $regex: filter, $options: 'i' } },
+                            { companyName: { $regex: filter, $options: 'i' } },
+                        ],
+                    },
+                    { listed: true },
+                ],
+            }
+        }
+        const result = await this._jobRepository.findAllJobs(skip, dataPerPage, query)
+        return result
     }
 }
