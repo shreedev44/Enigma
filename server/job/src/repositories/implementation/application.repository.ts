@@ -144,6 +144,16 @@ class ApplicationRepository extends BaseRepository<IApplicationSchema> implement
             throw new Error('Error finding application')
         }
     }
+
+    async findResumeKey(applicationId: Types.ObjectId): Promise<string | null> {
+        try {
+            const application = await this.model.findById(applicationId)
+            return application?.resume || null
+        } catch (err) {
+            console.error(err)
+            throw new Error('Error finding resume key')
+        }
+    }
 }
 
 export default new ApplicationRepository()

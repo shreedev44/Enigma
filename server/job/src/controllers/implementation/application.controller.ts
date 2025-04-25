@@ -198,4 +198,28 @@ export class ApplicationController implements IApplicationController {
             next(err)
         }
     }
+
+    async getResumeUrl(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const { jobId, applicationId } = req.params
+            const { id: userId } = JSON.parse(req.headers['x-user-payload'] as string)
+
+            if (!jobId || !applicationId) {
+                res.status(_HttpStatus.BAD_REQUEST).json({
+                    message: Messages.INCOMPLETE_FORM,
+                })
+                return
+            }
+
+            if (!Types.ObjectId.isValid(jobId) || !Types.ObjectId.isValid(applicationId)) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ message: Messages.INVALID_ID })
+                return
+            }
+
+            const url = await this._applicationService.getResumeUrl(applicationId, jobId, userId)
+            res.status(_HttpStatus.OK).json({ url })
+        } catch (err) {
+            next(err)
+        }
+    }
 }

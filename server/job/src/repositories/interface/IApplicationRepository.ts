@@ -24,4 +24,5 @@ export interface IApplicationRepository extends IBaseRepository<IApplicationSche
         limit: number
     ): Promise<{ applications: IApplicationSchema[]; totalPages: number }>
     findApplicationById(applicationId: Types.ObjectId): Promise<IApplicationSchema | null>
+    findResumeKey(applicationId: Types.ObjectId): Promise<string | null>
 }

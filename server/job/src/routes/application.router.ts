@@ -46,5 +46,10 @@ applicationRouter.get(
     validateRole('recruiter'),
     applicationController.getShortlist.bind(applicationController)
 )
+applicationRouter.get(
+    '/download-resume/:jobId/:applicationId',
+    validateRole('recruiter'),
+    applicationController.getResumeUrl.bind(applicationController)
+)
 
 export default applicationRouter

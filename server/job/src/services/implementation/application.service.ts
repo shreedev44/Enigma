@@ -2,7 +2,7 @@ import pdf from 'pdf-parse'
 import { IApplicationService } from '@services/interface'
 import { IApplicationSchema } from '@entities'
 import { IApplicationRepository, IJobRepository } from '@repositories/interface'
-import { createHttpError, generateUID, uploadResume, validateApplication } from '@utils'
+import { createHttpError, generatePresignedUrl, generateUID, uploadResume, validateApplication } from '@utils'
 import { _HttpStatus, Messages, parsePrompt } from '@constants'
 import { Types } from 'mongoose'
 import { geminiModel } from '@configs'
@@ -149,5 +149,24 @@ export class ApplicationService implements IApplicationService {
             throw createHttpError(_HttpStatus.NOT_FOUND, Messages.APPLICATION_NOT_FOUND)
         }
         return application
+    }
+
+    async getResumeUrl(applicationId: string, jobId: string, userId: string): Promise<string> {
+        const job = await this._jobRepository.findByJobIdAndUserId(
+            new Types.ObjectId(jobId),
+            new Types.ObjectId(userId)
+        )
+
+        if (!job) {
+            throw createHttpError(_HttpStatus.NOT_FOUND, Messages.JOB_NOT_FOUND)
+        }
+
+        const resumeKey = await this._applicationRepository.findResumeKey(new Types.ObjectId(applicationId))
+        if (!resumeKey) {
+            throw createHttpError(_HttpStatus.NOT_FOUND, Messages.APPLICATION_NOT_FOUND)
+        }
+
+        const url = generatePresignedUrl(resumeKey)
+        return url
     }
 }
