@@ -76,6 +76,16 @@ class JobRepository extends BaseRepository<IJobSchema> implements IJobRepository
             throw new Error('Error finding jobs')
         }
     }
+
+    async findByJobIdAndUserId(jobId: Types.ObjectId, userId: Types.ObjectId): Promise<IJobSchema | null> {
+        try {
+            console.log(jobId, userId)
+            return await this.model.findOne({ _id: jobId, userId })
+        } catch (err) {
+            console.error(err)
+            throw new Error('Error finding job')
+        }
+    }
 }
 
 export default new JobRepository()

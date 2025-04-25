@@ -13,7 +13,14 @@ export interface IApplicationRepository extends IBaseRepository<IApplicationSche
     findApplicationsByJobId(
         jobId: Types.ObjectId,
         skip: number,
-        limit: number
+        limit: number,
+        tags: string[]
     ): Promise<{ applications: IApplicationSchema[]; totalPages: number }>
     findApplication(userId: Types.ObjectId, jobId: Types.ObjectId): Promise<IApplicationSchema | null>
+    shortlistApplications(jobId: Types.ObjectId, tags: string[]): Promise<{ shortlisted: number }>
+    getShortlist(
+        jobId: Types.ObjectId,
+        skip: number,
+        limit: number
+    ): Promise<{ applications: IApplicationSchema[]; totalPages: number }>
 }

@@ -15,10 +15,6 @@ const ApplicationSchema = new Schema<IApplicationSchema>(
             type: String,
             required: true,
         },
-        location: {
-            type: String,
-            required: true,
-        },
         phone: {
             type: String,
             required: true,

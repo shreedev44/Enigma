@@ -86,6 +86,9 @@ export class ApplicationController implements IApplicationController {
         try {
             const { jobId } = req.params
             const { page = 1 } = req.query
+            const { tags = [] } = req.body
+
+            const { id: userId } = JSON.parse(req.headers['x-user-payload'] as string)
 
             if (isNaN(Number(page))) {
                 res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_PAGE })
@@ -106,10 +109,67 @@ export class ApplicationController implements IApplicationController {
 
             const { applications, totalPages } = await this._applicationService.getApplicationsByJobId(
                 jobId,
-                Number(page)
+                userId,
+                Number(page),
+                tags
             )
 
             res.status(_HttpStatus.OK).json({ applications, totalPages })
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    async shortlistApplications(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const { jobId } = req.params
+            const { id: userId } = JSON.parse(req.headers['x-user-payload'] as string)
+            const { tags = [] } = req.body
+
+            if (!jobId) {
+                res.status(_HttpStatus.BAD_REQUEST).json({
+                    message: Messages.INCOMPLETE_FORM,
+                })
+                return
+            }
+
+            if (!Types.ObjectId.isValid(jobId)) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ message: Messages.INVALID_ID })
+                return
+            }
+
+            const { shortlisted } = await this._applicationService.shortlistApplications(jobId, userId, tags)
+            res.status(_HttpStatus.OK).json({ message: Messages.SHORTLISTED(shortlisted) })
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    async getShortlist(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const { jobId } = req.params
+            const { id: userId } = JSON.parse(req.headers['x-user-payload'] as string)
+            const { page = 1 } = req.query
+
+            if (isNaN(Number(page))) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_PAGE })
+                return
+            }
+
+            if (!jobId) {
+                res.status(_HttpStatus.BAD_REQUEST).json({
+                    message: Messages.INCOMPLETE_FORM,
+                })
+                return
+            }
+
+            if (!Types.ObjectId.isValid(jobId)) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ message: Messages.INVALID_ID })
+                return
+            }
+
+            const result = await this._applicationService.getShortlist(jobId, userId, Number(page))
+            res.status(_HttpStatus.OK).json(result)
         } catch (err) {
             next(err)
         }

@@ -26,3 +26,12 @@ export function generatePresignedUrl(key: string) {
 
     return s3.getSignedUrl('getObject', params)
 }
+
+export function deleteResume(key: string) {
+    const params = {
+        Bucket: env.S3_BUCKET_NAME,
+        Key: key,
+    }
+
+    return s3.deleteObject(params).promise()
+}

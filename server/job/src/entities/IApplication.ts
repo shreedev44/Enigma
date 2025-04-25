@@ -18,7 +18,6 @@ export interface IApplicationSchema extends Document {
     userId: Types.ObjectId
     jobId: Types.ObjectId
     name: string
-    location: string
     phone: string
     email: string
     summary: string

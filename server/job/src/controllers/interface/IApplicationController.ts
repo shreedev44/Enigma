@@ -5,4 +5,6 @@ export interface IApplicationController {
     deleteApplication(req: Request, res: Response, next: NextFunction): Promise<void>
     getMyApplications(req: Request, res: Response, next: NextFunction): Promise<void>
     getApplicationsByJob(req: Request, res: Response, next: NextFunction): Promise<void>
+    shortlistApplications(req: Request, res: Response, next: NextFunction): Promise<void>
+    getShortlist(req: Request, res: Response, next: NextFunction): Promise<void>
 }

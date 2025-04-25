@@ -1,14 +1,17 @@
 import pdf from 'pdf-parse'
 import { IApplicationService } from '@services/interface'
 import { IApplicationSchema } from '@entities'
-import { IApplicationRepository } from '@repositories/interface'
-import { createHttpError, generateUID, uploadResume } from '@utils'
+import { IApplicationRepository, IJobRepository } from '@repositories/interface'
+import { createHttpError, generateUID, uploadResume, validateApplication } from '@utils'
 import { _HttpStatus, Messages, parsePrompt } from '@constants'
 import { Types } from 'mongoose'
 import { geminiModel } from '@configs'
 
 export class ApplicationService implements IApplicationService {
-    constructor(private _applicationRepository: IApplicationRepository) {}
+    constructor(
+        private _applicationRepository: IApplicationRepository,
+        private _jobRepository: IJobRepository
+    ) {}
 
     async createApplication(userId: string, jobId: string, file: Express.Multer.File): Promise<IApplicationSchema> {
         const applicationExist = await this._applicationRepository.findApplication(
@@ -25,6 +28,12 @@ export class ApplicationService implements IApplicationService {
             parsePrompt.replace('resume_text_here', String(resumeData.text))
         )
         const result = JSON.parse(response.text().replace(/```json\n|\n```/g, ''))
+
+        const valid = validateApplication(result)
+        if (valid) {
+            throw createHttpError(_HttpStatus.BAD_REQUEST, Messages.FAILED_TO_PARSE(valid.field))
+        }
+
         const filename = result.name + '-' + (await generateUID())
         const key = await uploadResume(file, filename)
         if (!key) {
@@ -65,15 +74,59 @@ export class ApplicationService implements IApplicationService {
 
     async getApplicationsByJobId(
         jobId: string,
-        page: number
+        userId: string,
+        page: number,
+        tags: string[]
     ): Promise<{ applications: IApplicationSchema[]; totalPages: number }> {
+        const job = await this._jobRepository.findByJobIdAndUserId(
+            new Types.ObjectId(jobId),
+            new Types.ObjectId(userId)
+        )
+        if (!job) {
+            throw createHttpError(_HttpStatus.NOT_FOUND, Messages.JOB_NOT_FOUND)
+        }
         const dataPerPage = 1
         const skip = dataPerPage * page - 1
         const result = await this._applicationRepository.findApplicationsByJobId(
             new Types.ObjectId(jobId),
             skip,
-            dataPerPage
+            dataPerPage,
+            tags
         )
+
+        return result
+    }
+
+    async shortlistApplications(jobId: string, userId: string, tags: string[]): Promise<{ shortlisted: number }> {
+        const job = await this._jobRepository.findByJobIdAndUserId(
+            new Types.ObjectId(jobId),
+            new Types.ObjectId(userId)
+        )
+        if (!job) {
+            throw createHttpError(_HttpStatus.NOT_FOUND, Messages.JOB_NOT_FOUND)
+        }
+
+        const result = await this._applicationRepository.shortlistApplications(new Types.ObjectId(jobId), tags)
+        return result
+    }
+
+    async getShortlist(
+        jobId: string,
+        userId: string,
+        page: number
+    ): Promise<{ applications: IApplicationSchema[]; totalPages: number }> {
+        const job = await this._jobRepository.findByJobIdAndUserId(
+            new Types.ObjectId(jobId),
+            new Types.ObjectId(userId)
+        )
+
+        if (!job) {
+            throw createHttpError(_HttpStatus.NOT_FOUND, Messages.JOB_NOT_FOUND)
+        }
+
+        const dataPerPage = 1
+        const skip = page * dataPerPage - 1
+        const result = await this._applicationRepository.getShortlist(new Types.ObjectId(jobId), skip, dataPerPage)
 
         return result
     }

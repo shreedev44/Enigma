@@ -106,7 +106,35 @@ const jobUpdateValidationSchema = {
     },
 }
 
+const applicationValidationSchema = {
+    name: {
+        rules: [Regex.NAME],
+    },
+    phone: {
+        rules: [Regex.PHONE],
+    },
+    email: {
+        rules: [Regex.EMAIL],
+    },
+    summary: {
+        rules: [Regex.SUMMARY],
+    },
+    education: {
+        rules: [Regex.EDUCATION],
+    },
+    skills: {
+        rules: [Regex.SKILLS],
+    },
+    experience: {
+        rules: [Regex.EXPERIENCE],
+    },
+    yearOfExperience: {
+        rules: [Regex.MINIMUM_EXPERIENCE],
+    },
+}
+
 export const validationSchemas = {
     jobCreationValidationSchema,
     jobUpdateValidationSchema,
+    applicationValidationSchema,
 }

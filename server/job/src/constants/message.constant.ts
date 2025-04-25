@@ -30,4 +30,6 @@ export const Messages = {
     INVALID_FILE_TYPE: 'Only pdf files allowed',
     APPLICATION_DELETED: 'Application deleted',
     APPLICATION_EXISTS: 'You have already applied for this job',
+    FAILED_TO_PARSE: (field: string) => `Failed to parse ${field}, Use an ATS friendly resume`,
+    SHORTLISTED: (count: number) => `${count} Application${count > 1 ? 's' : ''} was shortlisted`,
 }

@@ -9,6 +9,14 @@ export interface IApplicationService {
     ): Promise<{ applications: IApplicationSchema[]; totalPages: number }>
     getApplicationsByJobId(
         jobId: string,
+        userId: string,
+        page: number,
+        tags: string[]
+    ): Promise<{ applications: IApplicationSchema[]; totalPages: number }>
+    shortlistApplications(jobId: string, userId: string, tags: string[]): Promise<{ shortlisted: number }>
+    getShortlist(
+        jobId: string,
+        userId: string,
         page: number
     ): Promise<{ applications: IApplicationSchema[]; totalPages: number }>
 }
