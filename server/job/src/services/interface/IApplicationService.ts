@@ -19,4 +19,5 @@ export interface IApplicationService {
         userId: string,
         page: number
     ): Promise<{ applications: IApplicationSchema[]; totalPages: number }>
+    getApplicationDetails(applicationId: string, jobId: string, userId: string): Promise<IApplicationSchema>
 }

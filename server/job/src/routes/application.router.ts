@@ -10,6 +10,11 @@ const applicationController = new ApplicationController(applicationService)
 
 const applicationRouter = Router()
 
+applicationRouter.get(
+    '/:jobId/:applicationId',
+    validateRole('recruiter'),
+    applicationController.getApplicationDetails.bind(applicationController)
+)
 applicationRouter.post(
     '/apply/:jobId',
     validateRole('student'),

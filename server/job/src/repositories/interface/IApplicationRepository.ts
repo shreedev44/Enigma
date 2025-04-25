@@ -4,7 +4,7 @@ import { Types } from 'mongoose'
 
 export interface IApplicationRepository extends IBaseRepository<IApplicationSchema> {
     create(application: Partial<IApplicationSchema>): Promise<IApplicationSchema>
-    deleteById(userId: Types.ObjectId, applicationId: string): Promise<boolean>
+    deleteById(userId: Types.ObjectId, applicationId: Types.ObjectId): Promise<boolean>
     findApplicationsByUserId(
         userId: Types.ObjectId,
         skip: number,
@@ -23,4 +23,5 @@ export interface IApplicationRepository extends IBaseRepository<IApplicationSche
         skip: number,
         limit: number
     ): Promise<{ applications: IApplicationSchema[]; totalPages: number }>
+    findApplicationById(applicationId: Types.ObjectId): Promise<IApplicationSchema | null>
 }

@@ -49,7 +49,10 @@ export class ApplicationService implements IApplicationService {
     }
 
     async deleteApplication(userId: string, applicationId: string): Promise<boolean> {
-        const isDeleted = await this._applicationRepository.deleteById(new Types.ObjectId(userId), applicationId)
+        const isDeleted = await this._applicationRepository.deleteById(
+            new Types.ObjectId(userId),
+            new Types.ObjectId(applicationId)
+        )
 
         if (!isDeleted) {
             throw createHttpError(_HttpStatus.NOT_FOUND, Messages.APPLICATION_NOT_FOUND)
@@ -129,5 +132,22 @@ export class ApplicationService implements IApplicationService {
         const result = await this._applicationRepository.getShortlist(new Types.ObjectId(jobId), skip, dataPerPage)
 
         return result
+    }
+
+    async getApplicationDetails(applicationId: string, jobId: string, userId: string): Promise<IApplicationSchema> {
+        const job = await this._jobRepository.findByJobIdAndUserId(
+            new Types.ObjectId(jobId),
+            new Types.ObjectId(userId)
+        )
+
+        if (!job) {
+            throw createHttpError(_HttpStatus.NOT_FOUND, Messages.JOB_NOT_FOUND)
+        }
+
+        const application = await this._applicationRepository.findApplicationById(new Types.ObjectId(applicationId))
+        if (!application) {
+            throw createHttpError(_HttpStatus.NOT_FOUND, Messages.APPLICATION_NOT_FOUND)
+        }
+        return application
     }
 }

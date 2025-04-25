@@ -19,7 +19,7 @@ class ApplicationRepository extends BaseRepository<IApplicationSchema> implement
         }
     }
 
-    async deleteById(userId: Types.ObjectId, applicationId: string): Promise<boolean> {
+    async deleteById(userId: Types.ObjectId, applicationId: Types.ObjectId): Promise<boolean> {
         try {
             const result = await this.model.deleteOne({ _id: applicationId, userId })
             return result.deletedCount > 0
@@ -133,6 +133,15 @@ class ApplicationRepository extends BaseRepository<IApplicationSchema> implement
         } catch (err) {
             console.error(err)
             throw new Error('Error finding shortlisted applications')
+        }
+    }
+
+    async findApplicationById(applicationId: Types.ObjectId): Promise<IApplicationSchema | null> {
+        try {
+            return await this.model.findById(applicationId)
+        } catch (err) {
+            console.error(err)
+            throw new Error('Error finding application')
         }
     }
 }

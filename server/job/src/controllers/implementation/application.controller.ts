@@ -174,4 +174,28 @@ export class ApplicationController implements IApplicationController {
             next(err)
         }
     }
+
+    async getApplicationDetails(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const { jobId, applicationId } = req.params
+            const { id: userId } = JSON.parse(req.headers['x-user-payload'] as string)
+
+            if (!jobId || !applicationId) {
+                res.status(_HttpStatus.BAD_REQUEST).json({
+                    message: Messages.INCOMPLETE_FORM,
+                })
+                return
+            }
+
+            if (!Types.ObjectId.isValid(jobId) || !Types.ObjectId.isValid(applicationId)) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ message: Messages.INVALID_ID })
+                return
+            }
+
+            const application = await this._applicationService.getApplicationDetails(applicationId, jobId, userId)
+            res.status(_HttpStatus.OK).json(application)
+        } catch (err) {
+            next(err)
+        }
+    }
 }
