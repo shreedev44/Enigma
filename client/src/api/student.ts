@@ -225,3 +225,17 @@ export const getAttemptAttendance = async () => {
 		return { success: false, error: message };
 	}
 };
+
+export const getJobs = async (query = "") => {
+	try {
+		const { data } = await Api.get(
+			`${studentEndpoints.GET_JOBS}?${query}`,
+			{ headers }
+		);
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};

@@ -29,7 +29,7 @@ import { ArrowUpDown, Check, ChevronDown, Menu } from "lucide-react";
 import { truncate } from "@/utils/utilityFunctions";
 import { useState } from "react";
 import { ProblemPagePropType } from "@/types/propsTypes";
-import { DynamicPagination } from "./ProblemPagination";
+import { DynamicPagination } from "./Pagination";
 import { useNavigate } from "react-router-dom";
 import { studentRoutes } from "@/constants/routeUrl";
 import ClassicSpinner from "./loaders/ClassicSpinner";
