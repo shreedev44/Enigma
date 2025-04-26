@@ -56,7 +56,13 @@ class JobRepository extends BaseRepository<IJobSchema> implements IJobRepository
         }
     }
 
-    async findAllJobs(skip: number, limit: number, query: object): Promise<{ jobs: IJobSchema[]; totalPages: number }> {
+    async findAllJobs(
+        skip: number,
+        limit: number,
+        query: object,
+        sortBy: string,
+        sortOrder: 1 | -1
+    ): Promise<{ jobs: IJobSchema[]; totalPages: number }> {
         try {
             const documents = await this.model.countDocuments()
             const jobs = await this.model.aggregate([
@@ -69,6 +75,9 @@ class JobRepository extends BaseRepository<IJobSchema> implements IJobRepository
                 {
                     $limit: limit,
                 },
+                {
+                    $sort: { [sortBy]: sortOrder },
+                },
             ])
             return { jobs, totalPages: Math.ceil(documents / limit) }
         } catch (err) {
@@ -79,7 +88,6 @@ class JobRepository extends BaseRepository<IJobSchema> implements IJobRepository
 
     async findByJobIdAndUserId(jobId: Types.ObjectId, userId: Types.ObjectId): Promise<IJobSchema | null> {
         try {
-            console.log(jobId, userId)
             return await this.model.findOne({ _id: jobId, userId })
         } catch (err) {
             console.error(err)

@@ -11,6 +11,12 @@ export interface IJobRepository extends IBaseRepository<IJobSchema> {
         skip: number,
         limit: number
     ): Promise<{ jobs: IJobSchema[]; totalPages: number }>
-    findAllJobs(skip: number, limit: number, query: object): Promise<{ jobs: IJobSchema[]; totalPages: number }>
+    findAllJobs(
+        skip: number,
+        limit: number,
+        query: object,
+        sortBy: string,
+        sortOrder: 1 | -1
+    ): Promise<{ jobs: IJobSchema[]; totalPages: number }>
     findByJobIdAndUserId(jobId: Types.ObjectId, userId: Types.ObjectId): Promise<IJobSchema | null>
 }
