@@ -69,7 +69,7 @@ export class ApplicationService implements IApplicationService {
         page: number
     ): Promise<InstanceType<typeof ApplicationDTO.Applications>> {
         const dataPerPage = 1
-        const skip = dataPerPage * page - 1
+        const skip = dataPerPage * (page - 1)
         const result = await this._applicationRepository.findApplicationsByUserId(
             new Types.ObjectId(userId),
             skip,
@@ -93,7 +93,7 @@ export class ApplicationService implements IApplicationService {
             throw createHttpError(_HttpStatus.NOT_FOUND, Messages.JOB_NOT_FOUND)
         }
         const dataPerPage = 1
-        const skip = dataPerPage * page - 1
+        const skip = dataPerPage * (page - 1)
         const result = await this._applicationRepository.findApplicationsByJobId(
             new Types.ObjectId(jobId),
             skip,
@@ -132,7 +132,7 @@ export class ApplicationService implements IApplicationService {
         }
 
         const dataPerPage = 1
-        const skip = page * dataPerPage - 1
+        const skip = dataPerPage * (page - 1)
         const result = await this._applicationRepository.getShortlist(new Types.ObjectId(jobId), skip, dataPerPage)
 
         return new ApplicationDTO.Applications(result)

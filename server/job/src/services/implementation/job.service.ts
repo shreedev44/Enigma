@@ -41,7 +41,7 @@ export class JobService implements IJobService {
 
     async getJobsByUserId(userId: string, page: number): Promise<InstanceType<typeof JobDTO.Jobs>> {
         const dataPerPage = 1
-        const skip = page * dataPerPage - 1
+        const skip = dataPerPage * (page - 1)
         const result = await this._jobRepository.findJobsByUserId(new Types.ObjectId(userId), skip, dataPerPage)
 
         return new JobDTO.Jobs(result)
@@ -54,7 +54,7 @@ export class JobService implements IJobService {
         filter: string
     ): Promise<InstanceType<typeof JobDTO.Jobs>> {
         const dataPerPage = 3
-        const skip = page * dataPerPage - 1
+        const skip = dataPerPage * (page - 1)
 
         let query: object = { listed: true }
         if (filter) {
