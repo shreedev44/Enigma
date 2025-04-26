@@ -70,13 +70,13 @@ class JobRepository extends BaseRepository<IJobSchema> implements IJobRepository
                     $match: query,
                 },
                 {
+                    $sort: { [sortBy]: sortOrder },
+                },
+                {
                     $skip: skip,
                 },
                 {
                     $limit: limit,
-                },
-                {
-                    $sort: { [sortBy]: sortOrder },
                 },
             ])
             return { jobs, totalPages: Math.ceil(documents / limit) }

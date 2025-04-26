@@ -53,7 +53,7 @@ export class JobService implements IJobService {
         sortOrder: 1 | -1,
         filter: string
     ): Promise<InstanceType<typeof JobDTO.Jobs>> {
-        const dataPerPage = 1
+        const dataPerPage = 3
         const skip = page * dataPerPage - 1
 
         let query: object = { listed: true }
