@@ -137,7 +137,7 @@ export class JobController implements IJobController {
             const { jobs, totalPages } = await this._jobService.getAllJobs(
                 Number(page),
                 String(sortBy),
-                Number(sortOrder),
+                Number(sortOrder) as 1 | -1,
                 String(filter)
             )
             res.status(_HttpStatus.OK).json({ jobs, totalPages })

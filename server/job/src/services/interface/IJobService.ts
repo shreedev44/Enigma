@@ -1,14 +1,15 @@
+import { JobDTO } from '@dtos'
 import { IJobSchema } from '@entities'
 
 export interface IJobService {
-    createJob(userId: string, jobData: Partial<IJobSchema>): Promise<IJobSchema>
-    updateJob(userId: string, jobId: string, jobData: Partial<IJobSchema>): Promise<IJobSchema | null>
+    createJob(userId: string, jobData: Partial<IJobSchema>): Promise<InstanceType<typeof JobDTO.JobInfo>>
+    updateJob(userId: string, jobId: string, jobData: Partial<IJobSchema>): Promise<InstanceType<typeof JobDTO.JobInfo>>
     deleteJob(userId: string, jobId: string): Promise<boolean>
-    getJobsByUserId(userId: string, page: number): Promise<{ jobs: IJobSchema[]; totalPages: number }>
+    getJobsByUserId(userId: string, page: number): Promise<InstanceType<typeof JobDTO.Jobs>>
     getAllJobs(
         page: number,
         sortBy: string,
-        sortOrder: number,
+        sortOrder: 1 | -1,
         filter: string
-    ): Promise<{ jobs: IJobSchema[]; totalPages: number }>
+    ): Promise<InstanceType<typeof JobDTO.Jobs>>
 }

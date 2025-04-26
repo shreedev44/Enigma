@@ -6,6 +6,7 @@ import { createHttpError, generatePresignedUrl, generateUID, uploadResume, valid
 import { _HttpStatus, Messages, parsePrompt } from '@constants'
 import { Types } from 'mongoose'
 import { geminiModel } from '@configs'
+import { ApplicationDTO } from '@dtos'
 
 export class ApplicationService implements IApplicationService {
     constructor(
@@ -13,7 +14,7 @@ export class ApplicationService implements IApplicationService {
         private _jobRepository: IJobRepository
     ) {}
 
-    async createApplication(userId: string, jobId: string, file: Express.Multer.File): Promise<IApplicationSchema> {
+    async createApplication(userId: string, jobId: string, file: Express.Multer.File): Promise<void> {
         const applicationExist = await this._applicationRepository.findApplication(
             new Types.ObjectId(userId),
             new Types.ObjectId(jobId)
@@ -45,7 +46,10 @@ export class ApplicationService implements IApplicationService {
             jobId: new Types.ObjectId(jobId),
             resume: key,
         })
-        return application
+
+        if (!application) {
+            throw createHttpError(_HttpStatus.INTERNAL_SERVER_ERROR, Messages.SERVER_ERROR)
+        }
     }
 
     async deleteApplication(userId: string, applicationId: string): Promise<boolean> {
@@ -63,7 +67,7 @@ export class ApplicationService implements IApplicationService {
     async getApplicationsByUserId(
         userId: string,
         page: number
-    ): Promise<{ applications: IApplicationSchema[]; totalPages: number }> {
+    ): Promise<InstanceType<typeof ApplicationDTO.Applications>> {
         const dataPerPage = 1
         const skip = dataPerPage * page - 1
         const result = await this._applicationRepository.findApplicationsByUserId(
@@ -72,7 +76,7 @@ export class ApplicationService implements IApplicationService {
             dataPerPage
         )
 
-        return result
+        return new ApplicationDTO.Applications(result)
     }
 
     async getApplicationsByJobId(
@@ -80,7 +84,7 @@ export class ApplicationService implements IApplicationService {
         userId: string,
         page: number,
         tags: string[]
-    ): Promise<{ applications: IApplicationSchema[]; totalPages: number }> {
+    ): Promise<InstanceType<typeof ApplicationDTO.Applications>> {
         const job = await this._jobRepository.findByJobIdAndUserId(
             new Types.ObjectId(jobId),
             new Types.ObjectId(userId)
@@ -97,7 +101,7 @@ export class ApplicationService implements IApplicationService {
             tags
         )
 
-        return result
+        return new ApplicationDTO.Applications(result)
     }
 
     async shortlistApplications(jobId: string, userId: string, tags: string[]): Promise<{ shortlisted: number }> {
@@ -117,7 +121,7 @@ export class ApplicationService implements IApplicationService {
         jobId: string,
         userId: string,
         page: number
-    ): Promise<{ applications: IApplicationSchema[]; totalPages: number }> {
+    ): Promise<InstanceType<typeof ApplicationDTO.Applications>> {
         const job = await this._jobRepository.findByJobIdAndUserId(
             new Types.ObjectId(jobId),
             new Types.ObjectId(userId)
@@ -131,10 +135,14 @@ export class ApplicationService implements IApplicationService {
         const skip = page * dataPerPage - 1
         const result = await this._applicationRepository.getShortlist(new Types.ObjectId(jobId), skip, dataPerPage)
 
-        return result
+        return new ApplicationDTO.Applications(result)
     }
 
-    async getApplicationDetails(applicationId: string, jobId: string, userId: string): Promise<IApplicationSchema> {
+    async getApplicationDetails(
+        applicationId: string,
+        jobId: string,
+        userId: string
+    ): Promise<InstanceType<typeof ApplicationDTO.ApplicationInfo>> {
         const job = await this._jobRepository.findByJobIdAndUserId(
             new Types.ObjectId(jobId),
             new Types.ObjectId(userId)
@@ -148,7 +156,7 @@ export class ApplicationService implements IApplicationService {
         if (!application) {
             throw createHttpError(_HttpStatus.NOT_FOUND, Messages.APPLICATION_NOT_FOUND)
         }
-        return application
+        return new ApplicationDTO.ApplicationInfo(application)
     }
 
     async getResumeUrl(applicationId: string, jobId: string, userId: string): Promise<string> {

@@ -4,25 +4,30 @@ import { IJobRepository } from '@repositories/interface'
 import { createHttpError } from '@utils'
 import { _HttpStatus, Messages } from '@constants'
 import { Types } from 'mongoose'
+import { JobDTO } from '@dtos'
 
 export class JobService implements IJobService {
     constructor(private _jobRepository: IJobRepository) {}
 
-    async createJob(userId: string, jobData: Partial<IJobSchema>): Promise<IJobSchema> {
+    async createJob(userId: string, jobData: Partial<IJobSchema>): Promise<InstanceType<typeof JobDTO.JobInfo>> {
         const job = await this._jobRepository.create({
             ...jobData,
             userId: new Types.ObjectId(userId),
         })
-        return job
+        return new JobDTO.JobInfo(job)
     }
 
-    async updateJob(userId: string, jobId: string, jobData: Partial<IJobSchema>): Promise<IJobSchema | null> {
+    async updateJob(
+        userId: string,
+        jobId: string,
+        jobData: Partial<IJobSchema>
+    ): Promise<InstanceType<typeof JobDTO.JobInfo>> {
         const updatedJob = await this._jobRepository.updateById(new Types.ObjectId(userId), jobId, jobData)
 
         if (!updatedJob) {
             throw createHttpError(_HttpStatus.NOT_FOUND, Messages.JOB_NOT_FOUND)
         }
-        return updatedJob
+        return new JobDTO.JobInfo(updatedJob)
     }
 
     async deleteJob(userId: string, jobId: string): Promise<boolean> {
@@ -34,20 +39,20 @@ export class JobService implements IJobService {
         return isDeleted
     }
 
-    async getJobsByUserId(userId: string, page: number): Promise<{ jobs: IJobSchema[]; totalPages: number }> {
+    async getJobsByUserId(userId: string, page: number): Promise<InstanceType<typeof JobDTO.Jobs>> {
         const dataPerPage = 1
         const skip = page * dataPerPage - 1
         const result = await this._jobRepository.findJobsByUserId(new Types.ObjectId(userId), skip, dataPerPage)
 
-        return result
+        return new JobDTO.Jobs(result)
     }
 
     async getAllJobs(
         page: number,
         sortBy: string,
-        sortOrder: number,
+        sortOrder: 1 | -1,
         filter: string
-    ): Promise<{ jobs: IJobSchema[]; totalPages: number }> {
+    ): Promise<InstanceType<typeof JobDTO.Jobs>> {
         const dataPerPage = 1
         const skip = page * dataPerPage - 1
 
@@ -65,7 +70,7 @@ export class JobService implements IJobService {
                 ],
             }
         }
-        const result = await this._jobRepository.findAllJobs(skip, dataPerPage, query)
-        return result
+        const result = await this._jobRepository.findAllJobs(skip, dataPerPage, query, sortBy, sortOrder)
+        return new JobDTO.Jobs(result)
     }
 }

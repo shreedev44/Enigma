@@ -1,24 +1,21 @@
-import { IApplicationSchema } from '@entities'
+import { ApplicationDTO } from '@dtos'
 
 export interface IApplicationService {
-    createApplication(userId: string, jobId: string, file: Express.Multer.File): Promise<IApplicationSchema>
+    createApplication(userId: string, jobId: string, file: Express.Multer.File): Promise<void>
     deleteApplication(userId: string, applicationId: string): Promise<boolean>
-    getApplicationsByUserId(
-        userId: string,
-        page: number
-    ): Promise<{ applications: IApplicationSchema[]; totalPages: number }>
+    getApplicationsByUserId(userId: string, page: number): Promise<InstanceType<typeof ApplicationDTO.Applications>>
     getApplicationsByJobId(
         jobId: string,
         userId: string,
         page: number,
         tags: string[]
-    ): Promise<{ applications: IApplicationSchema[]; totalPages: number }>
+    ): Promise<InstanceType<typeof ApplicationDTO.Applications>>
     shortlistApplications(jobId: string, userId: string, tags: string[]): Promise<{ shortlisted: number }>
-    getShortlist(
+    getShortlist(jobId: string, userId: string, page: number): Promise<InstanceType<typeof ApplicationDTO.Applications>>
+    getApplicationDetails(
+        applicationId: string,
         jobId: string,
-        userId: string,
-        page: number
-    ): Promise<{ applications: IApplicationSchema[]; totalPages: number }>
-    getApplicationDetails(applicationId: string, jobId: string, userId: string): Promise<IApplicationSchema>
+        userId: string
+    ): Promise<InstanceType<typeof ApplicationDTO.ApplicationInfo>>
     getResumeUrl(applicationId: string, jobId: string, userId: string): Promise<string>
 }

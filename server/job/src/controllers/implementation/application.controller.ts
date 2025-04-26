@@ -20,8 +20,8 @@ export class ApplicationController implements IApplicationController {
                 return
             }
 
-            const application = await this._applicationService.createApplication(userId, jobId, file)
-            res.status(_HttpStatus.CREATED).json({ application })
+            await this._applicationService.createApplication(userId, jobId, file)
+            res.status(_HttpStatus.CREATED).json({ message: Messages.APPLICATION_SUCCESS })
         } catch (err) {
             next(err)
         }
