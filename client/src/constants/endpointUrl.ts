@@ -12,7 +12,8 @@ export const studentEndpoints = {
 	GET_ATTEMPTS: "/problem/attempt/get-attempts",
 	FIND_ATTEMPT: "/problem/attempt/find-attempt",
 	PROBLEM_STATS: "/problem/attempt/problem-stats",
-	ATTEMPT_ATTENDANCE: "/problem/attempt/attempts-per-day"
+	ATTEMPT_ATTENDANCE: "/problem/attempt/attempts-per-day",
+	GET_JOBS: "/job",
 };
 
 export const recruiterEndpoints = {
