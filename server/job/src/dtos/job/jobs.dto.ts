@@ -3,7 +3,7 @@
 import { Types } from 'mongoose'
 
 interface Job {
-    userId: Types.ObjectId
+    _id: Types.ObjectId
     companyName: string
     profilePicture: string
     role: string
@@ -23,7 +23,7 @@ export class Jobs {
     constructor(returnObj: any) {
         this.jobs = returnObj.jobs.map((job: any) => {
             const obj: Job = {
-                userId: job.userId,
+                _id: job.userId,
                 companyName: job.companyName,
                 profilePicture: job.profilePicture,
                 role: job.role,

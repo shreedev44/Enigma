@@ -3,7 +3,7 @@
 import { Types } from 'mongoose'
 
 export class JobInfo {
-    userId: Types.ObjectId
+    _id: Types.ObjectId
     companyName: string
     profilePicture: string
     role: string
@@ -19,7 +19,7 @@ export class JobInfo {
     createdAt: Date
 
     constructor(returnObj: any) {
-        this.userId = returnObj.userId
+        this._id = returnObj.userId
         this.companyName = returnObj.companyName
         this.profilePicture = returnObj.profilePicture
         this.role = returnObj.role
