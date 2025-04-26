@@ -8,10 +8,12 @@ import JobSearch from "@/components/studentComponents/JobSearch";
 import { studentRoutes } from "@/constants/routeUrl";
 import { useToast } from "@/hooks/use-toast";
 import { JobCardProps } from "@/types/propsTypes";
-import { useEffect, useState } from "react";
+import debounce from "debounce";
+import { useCallback, useEffect, useState } from "react";
 
 const Jobs = () => {
 	const [search, setSearch] = useState("");
+	const [query, setQuery] = useState("");
 	const [sort, setSort] = useState<"Newest" | "Oldest">("Newest");
 	const [popoverOpen, setPopoverOpen] = useState(false);
 	const [recruiterSearch, setRecruiterSearch] = useState("");
@@ -23,6 +25,7 @@ const Jobs = () => {
 		filter: "",
 	});
 	const [jobs, setJobs] = useState<JobCardProps[]>([]);
+	const [filtered, setFiltered] = useState<JobCardProps[]>([]);
 
 	const { toast } = useToast();
 
@@ -39,16 +42,20 @@ const Jobs = () => {
 		}).toString();
 	};
 
-  
 	const [pageData, setPageData] = useState({
-    page: 1,
+		page: 1,
 		totalPages: 1,
 	});
-  
-  const setPage = (page: number) => {
-    setUrlQuery({ ...urlQuery, page: String(page) });
-    setPageData({ ...pageData, page });
-  };
+
+	const setPage = (page: number) => {
+		setUrlQuery({ ...urlQuery, page: String(page) });
+		setPageData({ ...pageData, page });
+	};
+
+	const debouncedSetQuery = useCallback(
+		debounce((val) => setQuery(val), 1500),
+		[]
+	);
 
 	const recruiters = ["Apple", "Google", "Facebook", "Netflix", "Amazon"];
 	const jobSearchProps = {
@@ -150,6 +157,7 @@ const Jobs = () => {
 			);
 			if (response.success) {
 				setJobs(response.data.jobs);
+        setFiltered(response.data.jobs)
 				setLoading({ ...loading, jobs: false });
 				setPageData({
 					...pageData,
@@ -172,6 +180,27 @@ const Jobs = () => {
 		}));
 	}, [sort]);
 
+	useEffect(() => {
+		debouncedSetQuery(search);
+	}, [search]);
+
+	useEffect(() => {
+		setLoading({ ...loading, jobs: true });
+		const filteredJobs = jobs.filter((job) => {
+			return (
+				job.role.toLowerCase().startsWith(search.toLowerCase()) ||
+				job.companyName.toLowerCase().startsWith(search.toLowerCase())
+			);
+		});
+
+		if (filteredJobs.length) {
+			setFiltered(filteredJobs);
+			setLoading({ ...loading, jobs: false });
+		} else {
+			setUrlQuery({ ...urlQuery, filter: query });
+		}
+	}, [query]);
+
 	return (
 		<div className="pt-24">
 			<Breadcrumbs
@@ -191,8 +220,8 @@ const Jobs = () => {
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 items-start p-4 md:p-8">
 					{loading.jobs ? (
 						[...Array(6)].map((_, i) => <JobCardSkeleton key={i} />)
-					) : jobs.length ? (
-						jobs.map((job: JobCardProps) => {
+					) : filtered.length ? (
+						filtered.map((job: JobCardProps) => {
 							return <JobCard key={job.userId} {...job} />;
 						})
 					) : (
@@ -204,7 +233,11 @@ const Jobs = () => {
 					)}
 				</div>
 			</div>
-			<DynamicPagination {...pageData} setPage={setPage} />
+			{filtered.length && !loading.jobs ? (
+				<DynamicPagination {...pageData} setPage={setPage} />
+			) : (
+				<></>
+			)}
 		</div>
 	);
 };
