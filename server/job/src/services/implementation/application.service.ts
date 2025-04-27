@@ -1,6 +1,5 @@
 import pdf from 'pdf-parse'
 import { IApplicationService } from '@services/interface'
-import { IApplicationSchema } from '@entities'
 import { IApplicationRepository, IJobRepository } from '@repositories/interface'
 import { createHttpError, generatePresignedUrl, generateUID, uploadResume, validateApplication } from '@utils'
 import { _HttpStatus, Messages, parsePrompt } from '@constants'

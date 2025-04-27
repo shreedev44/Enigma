@@ -14,6 +14,7 @@ export const studentRoutes = {
 	PROBLEM: "/problem",
 	COMPILER: "/online-compiler",
 	JOBS: "/jobs",
+	JOB_DETAILS: '/jobs/details'
 };
 
 export const recruiterRoutes = {

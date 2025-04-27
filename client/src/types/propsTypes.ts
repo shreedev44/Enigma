@@ -78,16 +78,18 @@ export type JobSearchProps = {
 	setSearch: (value: string) => void;
 	sort: "Newest" | "Oldest";
 	setSort: (value: "Newest" | "Oldest") => void;
-	popoverOpen: boolean;
-	setPopoverOpen: (value: boolean) => void;
-	recruiterSearch: string;
-	setRecruiterSearch: (value: string) => void;
-	recruiters: string[];
+	// popoverOpen: boolean;
+	// setPopoverOpen: (value: boolean) => void;
+	// recruiterSearch: string;
+	// setRecruiterSearch: (value: string) => void;
+	// recruiterQuery: { companyName: string; userId: string };
+	// setRecruiterQuery: (value: { companyName: string; userId: string }) => void;
+	// recruiters: { companyName: string; userId: string }[];
 	loading: boolean;
 };
 
 export type JobCardProps = {
-	userId: string;
+	_id: string;
 	companyName: string;
 	profilePicture: string;
 	role: string;

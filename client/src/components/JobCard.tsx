@@ -1,7 +1,10 @@
+import { studentRoutes } from "@/constants/routeUrl";
 import { JobCardProps } from "@/types/propsTypes";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const JobCard: React.FC<JobCardProps> = ({
+	_id,
 	companyName,
 	profilePicture,
 	role,
@@ -14,9 +17,10 @@ const JobCard: React.FC<JobCardProps> = ({
 	lastDate,
 	createdAt,
 }) => {
+	const navigate = useNavigate()
 	return (
 		<>
-            <div className="bg-slate-400 dark:bg-slate-700 rounded-2xl p-6 md:w-96 w-80 shadow-2xl shadow-gray-500/50 dark:shadow-gray-800/50 relative">
+            <div className="bg-slate-400 dark:bg-bluegrey rounded-2xl p-6 md:w-96 w-80 shadow-2xl shadow-gray-500/50 dark:shadow-gray-800/50 relative text-black">
                 <div className="flex items-center space-x-4 mb-4">
                     <img
                         src={profilePicture}
@@ -84,7 +88,10 @@ const JobCard: React.FC<JobCardProps> = ({
 				</div>
 
 				<div className="flex justify-center items-center mt-6">
-					<button className="px-10 py-2 border border-white rounded-full hover:bg-white hover:text-black transition font-medium">
+					<button 
+						className="px-10 py-2 border border-white rounded-full hover:bg-white hover:text-black transition font-medium"
+						onClick={() => navigate(studentRoutes.JOB_DETAILS, {state: {jobId: _id}})}
+					>
 						View
 					</button>
 				</div>

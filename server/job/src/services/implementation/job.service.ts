@@ -51,22 +51,27 @@ export class JobService implements IJobService {
         page: number,
         sortBy: string,
         sortOrder: 1 | -1,
-        filter: string
+        filter: string,
+        userId: string
     ): Promise<InstanceType<typeof JobDTO.Jobs>> {
-        const dataPerPage = 3
+        const dataPerPage = 2
         const skip = dataPerPage * (page - 1)
 
         let query: object = { listed: true }
-        if (filter) {
+        if (filter || userId) {
             query = {
                 $and: [
                     {
                         $or: [
-                            { title: { $regex: filter, $options: 'i' } },
+                            { role: { $regex: filter, $options: 'i' } },
                             { companyName: { $regex: filter, $options: 'i' } },
+                            { workTime: { $regex: filter, $options: 'i' } },
+                            { workMode: { $regex: filter, $options: 'i' } },
+                            { jobLocation: { $regex: filter, $options: 'i' } },
                         ],
                     },
                     { listed: true },
+                    ...(userId ? [{ userId: new Types.ObjectId(userId) }] : []),
                 ],
             }
         }

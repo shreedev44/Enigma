@@ -10,4 +10,5 @@ export interface IUserController {
     changePassword(req: Request, res: Response, next: NextFunction): Promise<void>
     resetPassword(req: Request, res: Response, next: NextFunction): Promise<void>
     refreshToken(req: Request, res: Response, next: NextFunction): Promise<void>
+    getRecruiters(req: Request, res: Response, next: NextFunction): Promise<void>
 }

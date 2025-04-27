@@ -14,6 +14,7 @@ export const studentEndpoints = {
 	PROBLEM_STATS: "/problem/attempt/problem-stats",
 	ATTEMPT_ATTENDANCE: "/problem/attempt/attempts-per-day",
 	GET_JOBS: "/job",
+	GET_RECRUITERS: "/auth/get-recruiters"
 };
 
 export const recruiterEndpoints = {

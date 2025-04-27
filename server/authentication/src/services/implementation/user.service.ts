@@ -413,4 +413,27 @@ export class UserService implements IUserService {
 
         return accessToken
     }
+
+    async getRecruiters(filter: string): Promise<{ companyName: string; userId: string }[]> {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        let query: any = { role: 'recruiter' }
+        if (filter) {
+            query = {
+                $and: [
+                    {
+                        $or: [{ companyName: { $regex: filter, $options: 'i' } }],
+                    },
+                    { role: 'recruiter' },
+                ],
+            }
+        }
+        const recruiters = await this._userRepository.getRecruiterWithProfile({ companyName: 1 }, query)
+
+        return recruiters.slice(0, 5).map((recruiter) => {
+            return {
+                userId: String(recruiter._id),
+                companyName: recruiter.companyName,
+            }
+        })
+    }
 }

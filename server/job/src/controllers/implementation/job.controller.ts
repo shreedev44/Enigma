@@ -120,7 +120,7 @@ export class JobController implements IJobController {
 
     async getAllJobs(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const { page = 1, sortBy = 'updatedAt', sortOrder = 1, filter = '' } = req.query
+            const { page = 1, sortBy = 'updatedAt', sortOrder = -1, filter = '', userId = '' } = req.query
             if (isNaN(Number(page))) {
                 res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_PAGE })
                 return
@@ -134,11 +134,16 @@ export class JobController implements IJobController {
                 res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_SORT_ORDER })
                 return
             }
+            if (userId && !Types.ObjectId.isValid(String(userId))) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_ID })
+                return
+            }
             const { jobs, totalPages } = await this._jobService.getAllJobs(
                 Number(page),
                 String(sortBy),
                 Number(sortOrder) as 1 | -1,
-                String(filter)
+                String(filter),
+                String(userId)
             )
             res.status(_HttpStatus.OK).json({ jobs, totalPages })
         } catch (err) {

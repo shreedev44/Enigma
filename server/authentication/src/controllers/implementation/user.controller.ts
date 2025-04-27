@@ -174,4 +174,15 @@ export class UserController implements IUserController {
             next(err)
         }
     }
+
+    async getRecruiters(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const { filter = '' } = req.query
+
+            const result = await this._userService.getRecruiters(String(filter))
+            res.status(_HttpStatus.OK).json({ recruiters: result })
+        } catch (err) {
+            next(err)
+        }
+    }
 }

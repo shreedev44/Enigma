@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const JobCardSkeleton = () => {
   return (
-    <div className="bg-slate-400 dark:bg-slate-700 rounded-2xl p-6 md:w-96 w-80 shadow-2xl shadow-gray-500/50 dark:shadow-gray-800/50 relative">
+    <div className="bg-slate-400 dark:bg-bluegrey rounded-2xl p-6 md:w-96 w-80 shadow-2xl shadow-gray-500/50 dark:shadow-gray-800/50 relative">
       
       <div className="flex items-center space-x-4 mb-4">
         <Skeleton className="h-12 w-12 rounded-full" />

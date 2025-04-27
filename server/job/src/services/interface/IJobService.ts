@@ -10,6 +10,7 @@ export interface IJobService {
         page: number,
         sortBy: string,
         sortOrder: 1 | -1,
-        filter: string
+        filter: string,
+        userId: string
     ): Promise<InstanceType<typeof JobDTO.Jobs>>
 }

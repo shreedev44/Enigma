@@ -10,35 +10,37 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { JobSearchProps } from "@/types/propsTypes";
-import { Check, ChevronsUpDown } from "lucide-react";
+// import { Check, ChevronsUpDown } from "lucide-react";
 
-import { cn } from "@/lib/utils";
-import {
-	Command,
-	CommandEmpty,
-	CommandGroup,
-	CommandInput,
-	CommandItem,
-	CommandList,
-} from "@/components/ui/command";
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from "@/components/ui/popover";
-import { Skeleton } from "../ui/skeleton";
+// import { cn } from "@/lib/utils";
+// import {
+// 	Command,
+// 	CommandEmpty,
+// 	CommandGroup,
+// 	CommandInput,
+// 	CommandItem,
+// 	CommandList,
+// } from "@/components/ui/command";
+// import {
+// 	Popover,
+// 	PopoverContent,
+// 	PopoverTrigger,
+// } from "@/components/ui/popover";
+// import { Skeleton } from "../ui/skeleton";
 
 const JobSearch: React.FC<JobSearchProps> = ({
 	search,
 	setSearch,
 	sort,
 	setSort,
-	popoverOpen,
-	setPopoverOpen,
-	recruiterSearch,
-	setRecruiterSearch,
-	recruiters,
-	loading,
+	// popoverOpen,
+	// setPopoverOpen,
+	// recruiterSearch,
+	// setRecruiterSearch,
+	// recruiterQuery,
+	// setRecruiterQuery,
+	// recruiters,
+	// loading,
 }) => {
 	return (
 		<div>
@@ -53,7 +55,7 @@ const JobSearch: React.FC<JobSearchProps> = ({
 					required
 				/>
 				<div className="flex gap-5">
-					<Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+					{/* <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
 						<PopoverTrigger asChild>
 							<Button
 								variant="outline"
@@ -61,21 +63,30 @@ const JobSearch: React.FC<JobSearchProps> = ({
 								aria-expanded={popoverOpen}
 								className="w-[200px] justify-between"
 							>
-								{recruiterSearch
+								{recruiterQuery
 									? recruiters.find(
 											(recruiter) =>
-												recruiter === recruiterSearch
-									  )
+												recruiter.companyName ===
+												recruiterQuery.companyName
+									  )?.companyName
 									: "Select recruiter..."}
 								<ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 							</Button>
 						</PopoverTrigger>
 						<PopoverContent className="w-[200px] p-0">
 							<Command>
-								<CommandInput placeholder="Search framework..." />
+								<CommandInput
+									placeholder="Search framework..."
+									value={recruiterSearch}
+									onChangeCapture={(e) =>
+										setRecruiterSearch(
+											(e.target as HTMLInputElement).value
+										)
+									}
+								/>
 								<CommandList>
 									<CommandEmpty>
-										{loading ? "No recruiters found." : ""}
+										{!loading ? "No recruiters found." : ""}
 									</CommandEmpty>
 									<CommandGroup>
 										{loading &&
@@ -93,37 +104,44 @@ const JobSearch: React.FC<JobSearchProps> = ({
 										{!loading &&
 											recruiters.map((recruiter) => (
 												<CommandItem
-													key={recruiter}
-													value={recruiter}
+													key={recruiter.userId}
+													value={
+														recruiter.companyName
+													}
 													onSelect={(
 														currentValue
 													) => {
-														setRecruiterSearch(
-															currentValue ===
-																recruiterSearch
+														setRecruiterQuery({
+															companyName:
+																currentValue ===
+																recruiterQuery.companyName
+																	? ""
+																	: currentValue,
+															userId: currentValue ===
+															recruiterQuery.companyName
 																? ""
-																: currentValue
-														);
+																: currentValue,
+														});
 														setPopoverOpen(false);
 													}}
 												>
 													<Check
 														className={cn(
 															"mr-2 h-4 w-4",
-															recruiterSearch ===
-																recruiter
+															recruiterQuery.companyName ===
+																recruiter.companyName
 																? "opacity-100"
 																: "opacity-0"
 														)}
 													/>
-													{recruiter}
+													{recruiter.companyName}
 												</CommandItem>
 											))}
 									</CommandGroup>
 								</CommandList>
 							</Command>
 						</PopoverContent>
-					</Popover>
+					</Popover> */}
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<Button variant="outline">
@@ -137,7 +155,9 @@ const JobSearch: React.FC<JobSearchProps> = ({
 							<DropdownMenuSeparator />
 							<DropdownMenuRadioGroup
 								value={sort}
-								onValueChange={(value) => setSort(value as "Newest" | "Oldest")}
+								onValueChange={(value) =>
+									setSort(value as "Newest" | "Oldest")
+								}
 							>
 								<DropdownMenuRadioItem value="Newest">
 									Newest
