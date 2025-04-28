@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose'
+import { Schema, Types } from 'mongoose'
 
 export interface JobType extends Document {
     userId: Schema.Types.ObjectId
@@ -14,4 +14,11 @@ export interface JobType extends Document {
     lastDate: Date
     createdAt: Date
     updatedAt: Date
+}
+
+export type ApplicationWithJob = {
+    _id: Types.ObjectId
+    companyName: string
+    role: string
+    createdAt: Date
 }

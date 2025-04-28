@@ -284,3 +284,33 @@ export const applyForJob = async (jobId: string, formData: FormData) => {
 		return { success: false, error: message };
 	}
 };
+
+export const myApplications = async (query = "") => {
+	try {
+		const { data } = await Api.get(
+			`${studentEndpoints.MY_APPLICATIONS}?${query}`,
+			{
+				headers,
+			}
+		);
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
+
+export const deleteApplication = async (applicationId: string) => {
+	try {
+		const { data } = await Api.delete(
+			`${studentEndpoints.DELETE_APPLICATION}/${applicationId}`,
+			{ headers }
+		);
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};

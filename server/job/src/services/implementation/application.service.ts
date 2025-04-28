@@ -66,7 +66,7 @@ export class ApplicationService implements IApplicationService {
     async getApplicationsByUserId(
         userId: string,
         page: number
-    ): Promise<InstanceType<typeof ApplicationDTO.Applications>> {
+    ): Promise<InstanceType<typeof ApplicationDTO.MyApplications>> {
         const dataPerPage = 1
         const skip = dataPerPage * (page - 1)
         const result = await this._applicationRepository.findApplicationsByUserId(
@@ -75,7 +75,7 @@ export class ApplicationService implements IApplicationService {
             dataPerPage
         )
 
-        return new ApplicationDTO.Applications(result)
+        return new ApplicationDTO.MyApplications(result)
     }
 
     async getApplicationsByJobId(

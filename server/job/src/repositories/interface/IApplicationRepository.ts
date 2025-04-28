@@ -1,5 +1,6 @@
 import { IApplicationSchema } from '@entities'
 import { IBaseRepository } from '@shreedev44/enigma-shared'
+import { ApplicationWithJob } from '@types'
 import { Types } from 'mongoose'
 
 export interface IApplicationRepository extends IBaseRepository<IApplicationSchema> {
@@ -9,7 +10,7 @@ export interface IApplicationRepository extends IBaseRepository<IApplicationSche
         userId: Types.ObjectId,
         skip: number,
         limit: number
-    ): Promise<{ applications: IApplicationSchema[]; totalPages: number }>
+    ): Promise<{ applications: ApplicationWithJob[]; totalPages: number }>
     findApplicationsByJobId(
         jobId: Types.ObjectId,
         skip: number,

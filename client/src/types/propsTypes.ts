@@ -1,5 +1,5 @@
 import { RecruiterData, StudentData } from "./formTypes";
-import { ProblemListType } from "./types";
+import { ApplicationWithJob, ProblemListType } from "./types";
 
 export interface BreadcrumbPropType {
 	components: { component: string; path?: string }[];
@@ -101,4 +101,11 @@ export type JobCardProps = {
 	minimumExperience: number;
 	lastDate: Date;
 	createdAt: Date;
+};
+
+export type AppliationDrawerProps = {
+	applications: ApplicationWithJob[];
+	setApplications: (applications: ApplicationWithJob[]) => void;
+	pageData: { page: number; totalPages: number };
+	setPage: (page: number) => void;
 };

@@ -87,3 +87,10 @@ export type Job = {
 	lastDate: Date;
 	createdAt: Date;
 };
+
+export type ApplicationWithJob = {
+	_id: string;
+	companyName: string;
+	role: string;
+	createdAt: Date;
+};

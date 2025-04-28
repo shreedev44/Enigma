@@ -16,6 +16,8 @@ export const studentEndpoints = {
 	GET_JOBS: "/job",
 	GET_RECRUITER: "/auth/get-recruiter",
 	APPLY_FOR_JOB: "/job/application/apply",
+	MY_APPLICATIONS: "/job/application/my-applications",
+	DELETE_APPLICATION: "/job/application/delete",
 };
 
 export const recruiterEndpoints = {

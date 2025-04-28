@@ -3,6 +3,7 @@ import { IApplicationRepository } from '../interface/IApplicationRepository'
 import { BaseRepository } from '@shreedev44/enigma-shared'
 import Application from '@models/application.model'
 import { Types } from 'mongoose'
+import { ApplicationWithJob } from '@types'
 
 class ApplicationRepository extends BaseRepository<IApplicationSchema> implements IApplicationRepository {
     constructor() {
@@ -29,21 +30,6 @@ class ApplicationRepository extends BaseRepository<IApplicationSchema> implement
         }
     }
 
-    async findApplicationsByUserId(
-        userId: Types.ObjectId,
-        skip: number,
-        limit: number
-    ): Promise<{ applications: IApplicationSchema[]; totalPages: number }> {
-        try {
-            const documents = await this.model.countDocuments()
-            const applications = await this.model.find({ userId }).skip(skip).limit(limit)
-            return { applications, totalPages: Math.ceil(documents / limit) }
-        } catch (err) {
-            console.error(err)
-            throw new Error('Error finding applications by user ID')
-        }
-    }
-
     async findApplicationsByJobId(
         jobId: Types.ObjectId,
         skip: number,
@@ -51,8 +37,21 @@ class ApplicationRepository extends BaseRepository<IApplicationSchema> implement
         tags: string[]
     ): Promise<{ applications: IApplicationSchema[]; totalPages: number }> {
         try {
-            const documents = await this.model.countDocuments()
             const tagPattern = tags.length > 0 ? new RegExp(`\\b(${tags.join('|')})\\b`, 'i') : /^$/
+            const documents = await this.model.countDocuments({
+                jobId: jobId,
+                status: 'received',
+                $or: [
+                    { skills: { $in: tags.map((tag) => new RegExp(`\\b${tag}\\b`, 'i')) } },
+
+                    { 'education.university': { $regex: tagPattern } },
+                    { 'education.degree': { $regex: tagPattern } },
+                    { 'experience.company': { $regex: tagPattern } },
+                    { 'experience.title': { $regex: tagPattern } },
+
+                    { summary: { $regex: tagPattern } },
+                ],
+            })
 
             const applications = await this.model
                 .find({
@@ -122,7 +121,7 @@ class ApplicationRepository extends BaseRepository<IApplicationSchema> implement
         limit: number
     ): Promise<{ applications: IApplicationSchema[]; totalPages: number }> {
         try {
-            const documents = await this.model.countDocuments({ status: 'shortlisted' })
+            const documents = await this.model.countDocuments({ status: 'shortlisted', jobId })
             const applications = await this.model
                 .find({ jobId, status: 'shortlisted' })
                 .sort({ createdAt: -1 })
@@ -152,6 +151,54 @@ class ApplicationRepository extends BaseRepository<IApplicationSchema> implement
         } catch (err) {
             console.error(err)
             throw new Error('Error finding resume key')
+        }
+    }
+
+    async findApplicationsByUserId(
+        userId: Types.ObjectId,
+        skip: number,
+        limit: number
+    ): Promise<{ applications: ApplicationWithJob[]; totalPages: number }> {
+        try {
+            const documents = await this.model.countDocuments({ userId })
+            const applications = await this.model.aggregate([
+                {
+                    $match: { userId },
+                },
+                {
+                    $lookup: {
+                        from: 'Jobs',
+                        as: 'job',
+                        foreignField: '_id',
+                        localField: 'jobId',
+                    },
+                },
+                {
+                    $unwind: '$job',
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        companyName: '$job.companyName',
+                        role: '$job.role',
+                        createdAt: 1,
+                    },
+                },
+                {
+                    $sort: { createdAt: -1 },
+                },
+                {
+                    $skip: skip,
+                },
+                {
+                    $limit: limit,
+                },
+            ])
+
+            return { applications, totalPages: Math.ceil(documents / limit) }
+        } catch (err) {
+            console.error(err)
+            throw new Error('Error getting applications with job')
         }
     }
 }

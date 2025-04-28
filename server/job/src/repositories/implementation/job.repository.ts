@@ -47,7 +47,7 @@ class JobRepository extends BaseRepository<IJobSchema> implements IJobRepository
         limit: number
     ): Promise<{ jobs: IJobSchema[]; totalPages: number }> {
         try {
-            const documents = await this.model.countDocuments()
+            const documents = await this.model.countDocuments({ userId })
             const jobs = await this.model.find({ userId }).skip(skip).limit(limit)
             return { jobs, totalPages: Math.ceil(documents / limit) }
         } catch (err) {
@@ -64,7 +64,7 @@ class JobRepository extends BaseRepository<IJobSchema> implements IJobRepository
         sortOrder: 1 | -1
     ): Promise<{ jobs: IJobSchema[]; totalPages: number }> {
         try {
-            const documents = await this.model.countDocuments()
+            const documents = await this.model.countDocuments(query)
             const jobs = await this.model.aggregate([
                 {
                     $match: query,

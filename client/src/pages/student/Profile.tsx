@@ -11,6 +11,7 @@ import {
 	getAttemptAttendance,
 	getProblemStats,
 	getProfile,
+	myApplications,
 } from "@/api/student";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
@@ -26,6 +27,9 @@ import HeatMap from "@/components/charts/HeatMap";
 import DifficultyRadial from "@/components/charts/DifficultyRadial";
 import ProblemRadial from "@/components/charts/ProblemRadial";
 import { AcceptanceRadial } from "@/components/charts/AcceptanceRadial";
+import { Drawer, DrawerTrigger } from "@/components/ui/drawer";
+import ApplicationDrawer from "@/components/studentComponents/ApplicationsDrawer";
+import { ApplicationWithJob } from "@/types/types";
 
 const Profile = () => {
 	const { toast } = useToast();
@@ -56,6 +60,12 @@ const Profile = () => {
 	const [attemptAttendance, setAttemptAttendance] = useState<
 		{ date: string; count: number }[]
 	>([]);
+	const [applications, setApplications] = useState<ApplicationWithJob[]>([]);
+	const [pageData, setPageData] = useState({ page: 1, totalPages: 1 });
+
+	const setPage = (page: number) => {
+		setPageData((prev) => ({ ...prev, page }));
+	};
 
 	useEffect(() => {
 		(async () => {
@@ -69,6 +79,15 @@ const Profile = () => {
 				setLinkedinProfile(profile.linkedinProfile);
 				setProfilePic(profile.profilePicture || defaultPic);
 				setProfileLoading(false);
+
+				const applicationResp = await myApplications();
+				if (applicationResp.success) {
+					setApplications(applicationResp.data.applications);
+					setPageData((prev) => ({
+						...prev,
+						totalPages: applicationResp.data.totalPages,
+					}));
+				}
 			} else {
 				toast({
 					description: response.error,
@@ -108,7 +127,7 @@ const Profile = () => {
 			const response = await getAttemptAttendance();
 
 			if (response.success) {
-				setAttemptAttendance(response.data.attemptsPerDay)
+				setAttemptAttendance(response.data.attemptsPerDay);
 			} else {
 				toast({
 					description: response.error,
@@ -117,6 +136,25 @@ const Profile = () => {
 			}
 		})();
 	}, []);
+
+	useEffect(() => {
+		(async () => {
+			const response = await myApplications(`page=${pageData.page}`);
+
+			if (response.success) {
+				setApplications(response.data.applications);
+				setPageData((prev) => ({
+					...prev,
+					totalPages: response.data.totalPages,
+				}));
+			} else {
+				toast({
+					description: response.error,
+					variant: "destructive",
+				});
+			}
+		})();
+	}, [pageData.page]);
 
 	const changePassword = async () => {
 		const response = await forgotPassword(studentData.email, "student");
@@ -274,12 +312,20 @@ const Profile = () => {
 						</p>
 					</div>
 					<div className="flex flex-col my-6 px-7 md:px-10">
-						<div className="flex justify-center">
-							<p className="mb-3">Applied for 12 roles</p>
-						</div>
-						<Button className="bg-fleace font-bold">
-							My applications
-						</Button>
+						<Drawer>
+							<DrawerTrigger asChild>
+								<Button className="bg-fleace font-bold">
+									My applications
+								</Button>
+							</DrawerTrigger>
+							<ApplicationDrawer
+								applications={applications}
+								setApplications={setApplications}
+								pageData={pageData}
+								setPage={setPage}
+								key={234}
+							/>
+						</Drawer>
 					</div>
 				</div>
 				<div className="row-span-3 md:col-span-4 bg-zinc-300 dark:bg-zinc-800 rounded-xl p-5">

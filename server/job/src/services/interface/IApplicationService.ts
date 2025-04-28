@@ -3,7 +3,7 @@ import { ApplicationDTO } from '@dtos'
 export interface IApplicationService {
     createApplication(userId: string, jobId: string, file: Express.Multer.File): Promise<void>
     deleteApplication(userId: string, applicationId: string): Promise<boolean>
-    getApplicationsByUserId(userId: string, page: number): Promise<InstanceType<typeof ApplicationDTO.Applications>>
+    getApplicationsByUserId(userId: string, page: number): Promise<InstanceType<typeof ApplicationDTO.MyApplications>>
     getApplicationsByJobId(
         jobId: string,
         userId: string,
