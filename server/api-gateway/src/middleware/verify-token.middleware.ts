@@ -18,7 +18,7 @@ export default async function verifyToken(
 				return next();
 			}
 			return res
-			.status(403)
+			.status(401)
 			.json({ error: "Access denied, No token provided" });
 		}
 		
@@ -29,7 +29,7 @@ export default async function verifyToken(
 				return next();
 			}
 			return res
-				.status(403)
+				.status(401)
 				.json({ error: "Access denied, No token provided" });
 		}
 

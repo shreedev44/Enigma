@@ -65,3 +65,16 @@ export const addProblem = async (problem: ProblemType) => {
     return { success: false, error: message };
   }
 };
+
+// export const logout = async () => {
+// 	try {
+// 		const { data } = await Api.get(commonEndpoints.LOGOUT, {
+// 			headers,
+// 		});
+// 		return { success: true, data };
+// 	} catch (err) {
+// 		const error = err as any;
+// 		const message = error.response?.data?.error || "An error occured";
+// 		return { success: false, error: message };
+// 	}
+// };

@@ -196,4 +196,17 @@ export class UserController implements IUserController {
             next(err)
         }
     }
+
+    async logout(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            res.clearCookie('refreshToken', {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'strict',
+            })
+            res.status(_HttpStatus.OK).json({ message: Messages.LOGOUT })
+        } catch (err) {
+            next(err)
+        }
+    }
 }

@@ -1,4 +1,4 @@
-const ROLE = /^[a-zA-Z ]{3,50}$/
+const ROLE = /^[a-zA-Z\- ]{3,50}$/
 const NAME = /^[a-zA-Z]+(?: [a-zA-Z]+)*$/
 const WORK_TIME = /^(Full-Time|Part-Time)$/
 const WORK_MODE = /^(On-Site|Remote|Hybrid)$/

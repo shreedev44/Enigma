@@ -10,9 +10,11 @@ import interviewImage from "../../assets/interview.png";
 import { Button } from "@/components/ui/button";
 import { MoveRight } from "lucide-react";
 import { useTheme } from "@/context/ThemeContext";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const { theme } = useTheme();
+  const navigate = useNavigate()
   return (
     <div className="pt-24">
       <Breadcrumbs
@@ -44,6 +46,7 @@ const Home = () => {
             <Button
               className="bg-bluegrey rounded-full font-bold font-mono"
               variant={"outline"}
+              onClick={() => navigate(studentRoutes.JOBS)}
             >
               Explore Jobs <MoveRight />
             </Button>
@@ -59,6 +62,7 @@ const Home = () => {
             <Button
               className="bg-teal-50 rounded-full font-bold font-mono"
               variant={"outline"}
+              onClick={() => navigate(studentRoutes.PROBLEM_SET)}
             >
               Explore Problems <MoveRight />
             </Button>
@@ -145,6 +149,7 @@ const Home = () => {
             font-mono text-lg mt-5 md:mt-0 dark:hover:bg-black dark:hover:text-fleace dark:border 
             dark:border-fleace"
             size={"lg"}
+            onClick={() => navigate(studentRoutes.COMPILER)}
           >
             Try Compiler <MoveRight />
           </Button>
@@ -172,6 +177,7 @@ const Home = () => {
             <Button
               className="rounded-full bg-indigo-700 font-bold font-mono text-white dark:hover:text-black"
               size={"lg"}
+              onClick={() => navigate(studentRoutes.JOBS)}
             >
               View Job Posts <MoveRight />
             </Button>

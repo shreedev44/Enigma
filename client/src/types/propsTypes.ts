@@ -101,6 +101,7 @@ export type JobCardProps = {
 	minimumExperience: number;
 	lastDate: Date;
 	createdAt: Date;
+	url?: string
 };
 
 export type AppliationDrawerProps = {
@@ -108,4 +109,13 @@ export type AppliationDrawerProps = {
 	setApplications: (applications: ApplicationWithJob[]) => void;
 	pageData: { page: number; totalPages: number };
 	setPage: (page: number) => void;
+};
+
+export type SelectButtonProps = {
+	label: string;
+	width?: string;
+	placeholder: string;
+	values: { value: string; display: string }[];
+	state: string;
+	setState: (value: string) => void;
 };

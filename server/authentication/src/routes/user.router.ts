@@ -36,5 +36,6 @@ userRouter.post('/change-password', userController.changePassword.bind(userContr
 userRouter.patch('/reset-password', userController.resetPassword.bind(userController))
 userRouter.post('/refresh-token', userController.refreshToken.bind(userController))
 userRouter.get('/get-recruiter/:recruiterId', userController.getRecruiters.bind(userController))
+userRouter.get('/logout', userController.logout.bind(userController))
 
 export default userRouter

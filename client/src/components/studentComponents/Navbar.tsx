@@ -28,6 +28,7 @@ import defaultPic from "../../assets/default-avatar.jpg";
 import { useToast } from "@/hooks/use-toast";
 import Messages from "@/constants/Messages";
 import { Skeleton } from "../ui/skeleton";
+// import { logout } from "@/api/student";
 
 const Navbar = () => {
 	const { theme, toggleTheme } = useTheme();
@@ -44,6 +45,7 @@ const Navbar = () => {
 			description: Messages.LOGOUT_SUCCESS,
 		});
 		navigate(studentRoutes.HOME);
+		// logout()
 	};
 
 	return (

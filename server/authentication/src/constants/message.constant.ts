@@ -1,6 +1,7 @@
 export const Messages = {
     SERVER_ERROR: 'Internel server error',
     USER_EXIST: 'User already exist',
+    LOGOUT: 'Logout successfull',
     OTP_ERROR: 'Error while sending OTP, Try again later',
     OTP_RESENT: 'OTP has been resent successfully',
     INVALID_ID: 'Invalid ID',

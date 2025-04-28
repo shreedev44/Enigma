@@ -4,9 +4,13 @@ import { camelCaseRegex } from "./regex";
 export const validateForm = (
   vaildationSchema: Record<
     string,
-    { rules: RegExp[]; messages: string[]; optional?: boolean }
+    {
+      rules: (RegExp | unknown)[];
+      messages: string[];
+      optional?: boolean;
+    }
   >,
-  form: Record<string, string>
+  form: Record<string, unknown>
 ): { field: string; message: string } | null => {
   for (const field in vaildationSchema) {
     const value = form[field];
@@ -17,7 +21,11 @@ export const validateForm = (
     }
 
     for (const rule of rules) {
-      if (!rule.test(value)) {
+      const testFunction = rule as (value: unknown) => boolean
+      const isValid =
+        rule instanceof RegExp ? rule.test(value as string) : testFunction(value);
+
+      if (!isValid) {
         return { field, message: messages[rules.indexOf(rule)] };
       }
     }

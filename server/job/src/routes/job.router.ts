@@ -11,7 +11,6 @@ const jobController = new JobController(jobService)
 const jobRouter = Router()
 
 jobRouter.get('/', jobController.getAllJobs.bind(jobController))
-jobRouter.get('/:jobId', jobController.getJobDetails.bind(jobController))
 jobRouter.post(
     '/create',
     validateRole('recruiter'),
@@ -26,5 +25,6 @@ jobRouter.patch(
 )
 jobRouter.delete('/delete/:jobId', validateRole('recruiter'), jobController.deleteJob.bind(jobController))
 jobRouter.get('/recruiter-jobs', jobController.getJobsByUserId.bind(jobController))
+jobRouter.get('/:jobId', jobController.getJobDetails.bind(jobController))
 
 export default jobRouter

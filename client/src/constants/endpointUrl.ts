@@ -18,7 +18,7 @@ export const studentEndpoints = {
 	APPLY_FOR_JOB: "/job/application/apply",
 	MY_APPLICATIONS: "/job/application/my-applications",
 	DELETE_APPLICATION: "/job/application/delete",
-	LEADERBOARD_RANK: "/problem/leaderboard/rank"
+	LEADERBOARD_RANK: "/problem/leaderboard/rank",
 };
 
 export const recruiterEndpoints = {
@@ -26,6 +26,8 @@ export const recruiterEndpoints = {
 	GOOGLE_AUTH: "/auth/google-auth",
 	FETCH_PROFILE: "/auth/recruiter/get-profile",
 	UPDATE_PROFILE: "/auth/recruiter/update-profile",
+	POST_JOB: "/job/create",
+	MY_JOBS: "/job/recruiter-jobs",
 };
 
 export const adminEndpoints = {
@@ -42,4 +44,5 @@ export const commonEndpoints = {
 	FORGOT_PASSWORD: "/auth/change-password",
 	RESET_PASSWORD: "/auth/reset-password",
 	REFRESH_TOKEN: `${import.meta.env.VITE_BASE_URL}/auth/refresh-token`,
+	LOGOUT: "/auth/logout",
 };

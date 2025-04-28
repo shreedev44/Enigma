@@ -16,6 +16,7 @@ const JobCard: React.FC<JobCardProps> = ({
 	minimumExperience,
 	lastDate,
 	createdAt,
+	url
 }) => {
 	const navigate = useNavigate()
 	return (
@@ -90,7 +91,7 @@ const JobCard: React.FC<JobCardProps> = ({
 				<div className="flex justify-center items-center mt-6">
 					<button 
 						className="px-10 py-2 border border-white rounded-full hover:bg-white hover:text-black transition font-medium"
-						onClick={() => navigate(studentRoutes.JOB_DETAILS, {state: {jobId: _id}})}
+						onClick={() => navigate(url ?? studentRoutes.JOB_DETAILS, {state: {jobId: _id}})}
 					>
 						View
 					</button>

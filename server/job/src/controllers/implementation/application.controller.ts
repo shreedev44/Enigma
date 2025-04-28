@@ -206,13 +206,13 @@ export class ApplicationController implements IApplicationController {
 
             if (!jobId || !applicationId) {
                 res.status(_HttpStatus.BAD_REQUEST).json({
-                    message: Messages.INCOMPLETE_FORM,
+                    error: Messages.INCOMPLETE_FORM,
                 })
                 return
             }
 
             if (!Types.ObjectId.isValid(jobId) || !Types.ObjectId.isValid(applicationId)) {
-                res.status(_HttpStatus.BAD_REQUEST).json({ message: Messages.INVALID_ID })
+                res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_ID })
                 return
             }
 

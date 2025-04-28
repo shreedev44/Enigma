@@ -14,7 +14,7 @@ export const studentRoutes = {
 	PROBLEM: "/problem",
 	COMPILER: "/online-compiler",
 	JOBS: "/jobs",
-	JOB_DETAILS: '/jobs/details'
+	JOB_DETAILS: "/jobs/details",
 };
 
 export const recruiterRoutes = {
@@ -25,6 +25,9 @@ export const recruiterRoutes = {
 	FORGOT_PASSWORD: "/forgot-password",
 	RESET_PASSWORD: "/reset-password",
 	PROFILE: "/profile",
+	POST_JOB: "/post-job",
+	JOBS: "/my-jobs",
+	JOB_DETAILS: "/job-details",
 };
 
 export const adminRoutes = {

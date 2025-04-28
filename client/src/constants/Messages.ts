@@ -15,4 +15,14 @@ export default {
     INVALID_FACEBOOK: "Please provide a valid facebook profile link",
     INVALID_TWITTER: "Please provide a valid twitter profile link",
     INVALID_BASED_AT: "Please provide a valid location",
+
+    INVALID_ROLE: 'Role must be 3-50 chars, letters & spaces only',
+    INVALID_WORK_TIME: 'Work time must be "Full-Time" or "Part-Time"',
+    INVALID_WORK_MODE: 'Work mode must be "On-Site", "Remote", or "Hybrid"',
+    INVALID_JOB_LOCATION: 'Location must be 3-100 chars, letters, commas & spaces only',
+    INVALID_MINIMUM_EXPERIENCE: 'Experience must be 1-2 digits',
+    INVALID_SALARY: 'Salary must be 1-2 digits',
+    INVALID_REQUIREMENTS: 'At least 3 requirements needed',
+    INVALID_RESPONSIBILITIES: 'At least 3 responsibilities needed',
+    INVALID_LAST_DATE: 'Date must be YYYY-MM-DD',
 }
