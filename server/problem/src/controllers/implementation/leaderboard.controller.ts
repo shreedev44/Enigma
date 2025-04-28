@@ -2,6 +2,7 @@ import { _HttpStatus, Messages } from '@constants'
 import { ILeaderboardController } from '@controllers/interface'
 import { ILeaderboardService } from '@services/interface'
 import { Request, Response, NextFunction } from 'express'
+import { Types } from 'mongoose'
 
 export class LeaderboardController implements ILeaderboardController {
     constructor(private _leaderboardService: ILeaderboardService) {}
@@ -28,6 +29,21 @@ export class LeaderboardController implements ILeaderboardController {
                 return
             }
             const result = await this._leaderboardService.getLeaderboard(Number(page), userId)
+            res.status(_HttpStatus.OK).json(result)
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    async getUserRank(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const { userId } = req.params
+
+            if (!userId || !Types.ObjectId.isValid(userId)) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_ID })
+                return
+            }
+            const result = await this._leaderboardService.getRankByUserId(userId)
             res.status(_HttpStatus.OK).json(result)
         } catch (err) {
             next(err)

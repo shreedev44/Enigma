@@ -30,4 +30,5 @@ export const Messages = {
     ATTENDANCE_NOT_RETRIEVED: 'Attempt attendance cannot be retrieved',
     RANKS_UPDATED: 'Ranks updated successfully',
     USER_NOT_FOUND: 'User not found',
+    INVALID_ID: 'Invalid ID',
 }

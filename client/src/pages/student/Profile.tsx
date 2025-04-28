@@ -11,6 +11,7 @@ import {
 	getAttemptAttendance,
 	getProblemStats,
 	getProfile,
+	leaderboardRank,
 	myApplications,
 } from "@/api/student";
 import { useToast } from "@/hooks/use-toast";
@@ -62,6 +63,9 @@ const Profile = () => {
 	>([]);
 	const [applications, setApplications] = useState<ApplicationWithJob[]>([]);
 	const [pageData, setPageData] = useState({ page: 1, totalPages: 1 });
+	const [rank, setRank] = useState("");
+
+	const {_id} = useGetStudentData()
 
 	const setPage = (page: number) => {
 		setPageData((prev) => ({ ...prev, page }));
@@ -88,6 +92,19 @@ const Profile = () => {
 						totalPages: applicationResp.data.totalPages,
 					}));
 				}
+			} else {
+				toast({
+					description: response.error,
+					variant: "destructive",
+				});
+			}
+		})();
+
+		(async () => {
+			const response = await leaderboardRank(_id);
+
+			if (response.success) {
+				setRank(String(response.data.rank));
 			} else {
 				toast({
 					description: response.error,
@@ -214,7 +231,7 @@ const Profile = () => {
 									</Tooltip>
 								</TooltipProvider>
 							)}
-							<p>Leaderboard Rank: 10</p>
+							<p>Leaderboard Rank: {rank}</p>
 						</div>
 					</div>
 					<div className="flex justify-start mt-6 pl-7 md:pl-10">

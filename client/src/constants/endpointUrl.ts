@@ -18,6 +18,7 @@ export const studentEndpoints = {
 	APPLY_FOR_JOB: "/job/application/apply",
 	MY_APPLICATIONS: "/job/application/my-applications",
 	DELETE_APPLICATION: "/job/application/delete",
+	LEADERBOARD_RANK: "/problem/leaderboard/rank"
 };
 
 export const recruiterEndpoints = {

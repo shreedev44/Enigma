@@ -3,6 +3,7 @@ import { ILeaderboardService } from '@services/interface'
 import { LeaderboardDTO } from '@dtos'
 import { createHttpError } from '@utils'
 import { _HttpStatus, Messages } from '@constants'
+import { Types } from 'mongoose'
 
 export class LeaderboardService implements ILeaderboardService {
     constructor(private _leaderboardRepository: ILeaderboardRepository) {}
@@ -24,7 +25,7 @@ export class LeaderboardService implements ILeaderboardService {
         const endIndex = startIndex + dataPerPage
 
         if (userId) {
-            const rank = await this._leaderboardRepository.getRankByUserId(userId)
+            const rank = await this._leaderboardRepository.getRankByUserId(new Types.ObjectId(userId))
             if (!rank) {
                 throw createHttpError(_HttpStatus.NOT_FOUND, Messages.USER_NOT_FOUND)
             }
@@ -39,5 +40,15 @@ export class LeaderboardService implements ILeaderboardService {
             totalPages,
             leaderboard: leaderboardData.slice(startIndex, endIndex),
         })
+    }
+
+    async getRankByUserId(userId: string): Promise<{ rank: number }> {
+        const leaderboard = await this._leaderboardRepository.getRankByUserId(new Types.ObjectId(userId))
+
+        if (!leaderboard) {
+            throw createHttpError(_HttpStatus.NOT_FOUND, Messages.USER_NOT_FOUND)
+        }
+
+        return { rank: leaderboard.rank }
     }
 }

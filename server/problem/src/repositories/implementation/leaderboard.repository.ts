@@ -2,6 +2,7 @@ import { ILeaderboardRepository } from '@repositories/interface'
 import { BaseRepository } from '@shreedev44/enigma-shared'
 import Leaderboard, { LeaderboardDocument } from '@models/leaderboard.model'
 import { LeaderboardType } from '@types'
+import { Types } from 'mongoose'
 
 class LeaderboardRepository extends BaseRepository<LeaderboardDocument> implements ILeaderboardRepository {
     constructor() {
@@ -103,7 +104,7 @@ class LeaderboardRepository extends BaseRepository<LeaderboardDocument> implemen
         }
     }
 
-    async getRankByUserId(userId: string): Promise<LeaderboardType | null> {
+    async getRankByUserId(userId: Types.ObjectId): Promise<LeaderboardType | null> {
         try {
             const user = await this.model.findOne({ userId })
             return user
