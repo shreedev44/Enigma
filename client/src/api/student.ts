@@ -240,9 +240,43 @@ export const getJobs = async (query = "") => {
 	}
 };
 
-export const getRecruiters = async (query = "") => {
+export const getRecruiter = async (userId: string) => {
 	try {
-		const { data } = await Api.get(`${studentEndpoints.GET_RECRUITERS}?${query}`, { headers });
+		const { data } = await Api.get(
+			`${studentEndpoints.GET_RECRUITER}/${userId}`,
+			{ headers }
+		);
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
+
+export const getJobDetails = async (jobId: string) => {
+	try {
+		const { data } = await Api.get(
+			`${studentEndpoints.GET_JOBS}/${jobId}`,
+			{ headers }
+		);
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
+
+export const applyForJob = async (jobId: string, formData: FormData) => {
+	try {
+		const { data } = await Api.post(
+			`${studentEndpoints.APPLY_FOR_JOB}/${jobId}`,
+			formData,
+			{
+				headers: { ...headers, "Content-Type": "multipart/form-data" },
+			}
+		);
 		return { success: true, data };
 	} catch (err) {
 		const error = err as any;

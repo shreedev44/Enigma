@@ -23,7 +23,7 @@ export class Jobs {
     constructor(returnObj: any) {
         this.jobs = returnObj.jobs.map((job: any) => {
             const obj: Job = {
-                _id: job.userId,
+                _id: job._id,
                 companyName: job.companyName,
                 profilePicture: job.profilePicture,
                 role: job.role,

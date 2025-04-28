@@ -3,6 +3,7 @@ export const Messages = {
     USER_EXIST: 'User already exist',
     OTP_ERROR: 'Error while sending OTP, Try again later',
     OTP_RESENT: 'OTP has been resent successfully',
+    INVALID_ID: 'Invalid ID',
     INVALID_NAME: 'Please enter a valid name (A - Z)',
     INVALID_EMAIL: 'Please enter a valid email',
     PASSWORD_LENGTH: 'Your password must be at least 8 characters long',

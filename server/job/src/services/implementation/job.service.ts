@@ -78,4 +78,12 @@ export class JobService implements IJobService {
         const result = await this._jobRepository.findAllJobs(skip, dataPerPage, query, sortBy, sortOrder)
         return new JobDTO.Jobs(result)
     }
+
+    async getJobDetails(jobId: string): Promise<InstanceType<typeof JobDTO.JobInfo>> {
+        const jobDetails = await this._jobRepository.findByJobId(new Types.ObjectId(jobId))
+        if (!jobDetails) {
+            throw createHttpError(_HttpStatus.NOT_FOUND, Messages.JOB_NOT_FOUND)
+        }
+        return new JobDTO.JobInfo(jobDetails)
+    }
 }

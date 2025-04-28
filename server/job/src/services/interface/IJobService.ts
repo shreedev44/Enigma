@@ -13,4 +13,5 @@ export interface IJobService {
         filter: string,
         userId: string
     ): Promise<InstanceType<typeof JobDTO.Jobs>>
+    getJobDetails(jobId: string): Promise<InstanceType<typeof JobDTO.JobInfo>>
 }

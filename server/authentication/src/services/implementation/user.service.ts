@@ -414,26 +414,17 @@ export class UserService implements IUserService {
         return accessToken
     }
 
-    async getRecruiters(filter: string): Promise<{ companyName: string; userId: string }[]> {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        let query: any = { role: 'recruiter' }
-        if (filter) {
-            query = {
-                $and: [
-                    {
-                        $or: [{ companyName: { $regex: filter, $options: 'i' } }],
-                    },
-                    { role: 'recruiter' },
-                ],
-            }
-        }
-        const recruiters = await this._userRepository.getRecruiterWithProfile({ companyName: 1 }, query)
+    async getRecruiter(recruiterId: string): Promise<{ companyName: string; bio: string; profilePicture: string }> {
+        const recruiter = await this._recruiterRepository.findByUserId(recruiterId)
 
-        return recruiters.slice(0, 5).map((recruiter) => {
-            return {
-                userId: String(recruiter._id),
-                companyName: recruiter.companyName,
-            }
-        })
+        if (!recruiter) {
+            throw createHttpError(_HttpStatus.NOT_FOUND, Messages.USER_NOT_FOUND)
+        }
+
+        return {
+            companyName: recruiter.companyName as string,
+            bio: recruiter.bio as string,
+            profilePicture: recruiter.profilePicture as string,
+        }
     }
 }

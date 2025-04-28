@@ -35,6 +35,6 @@ userRouter.post('/github-auth', userController.githubAuth.bind(userController))
 userRouter.post('/change-password', userController.changePassword.bind(userController))
 userRouter.patch('/reset-password', userController.resetPassword.bind(userController))
 userRouter.post('/refresh-token', userController.refreshToken.bind(userController))
-userRouter.get('/get-recruiters', userController.getRecruiters.bind(userController))
+userRouter.get('/get-recruiter/:recruiterId', userController.getRecruiters.bind(userController))
 
 export default userRouter

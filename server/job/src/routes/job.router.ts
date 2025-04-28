@@ -11,6 +11,7 @@ const jobController = new JobController(jobService)
 const jobRouter = Router()
 
 jobRouter.get('/', jobController.getAllJobs.bind(jobController))
+jobRouter.get('/:jobId', jobController.getJobDetails.bind(jobController))
 jobRouter.post(
     '/create',
     validateRole('recruiter'),

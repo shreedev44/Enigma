@@ -50,7 +50,7 @@ export type ProblemListType = {
 	problemNo: number;
 	successRate?: number;
 	solved?: "solved" | "unsolved";
-	status?: "listed" | "unlisted"
+	status?: "listed" | "unlisted";
 };
 
 export type Language = "javascript" | "python" | "java" | "golang" | "cpp";
@@ -68,5 +68,22 @@ export type AttemptType = {
 		expected: string;
 		output: string;
 	};
+	createdAt: Date;
+};
+
+export type Job = {
+	userId: string;
+	companyName: string;
+	profilePicture: string;
+	role: string;
+	workTime: "Full-Time" | "Part-Time";
+	workMode: "On-Site" | "Remote" | "Hybrid";
+	jobLocation: string;
+	minimumExperience: number;
+	minSalary?: number;
+	maxSalary?: number;
+	requirements: string[];
+	responsibilities: string[];
+	lastDate: Date;
 	createdAt: Date;
 };

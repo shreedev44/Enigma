@@ -6,4 +6,5 @@ export interface IJobController {
     deleteJob(req: Request, res: Response, next: NextFunction): Promise<void>
     getJobsByUserId(req: Request, res: Response, next: NextFunction): Promise<void>
     getAllJobs(req: Request, res: Response, next: NextFunction): Promise<void>
+    getJobDetails(req: Request, res: Response, next: NextFunction): Promise<void>
 }

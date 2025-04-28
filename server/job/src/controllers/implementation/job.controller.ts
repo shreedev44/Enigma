@@ -150,4 +150,25 @@ export class JobController implements IJobController {
             next(err)
         }
     }
+
+    async getJobDetails(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const { jobId } = req.params
+
+            if (!jobId) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INCOMPLETE_FORM })
+                return
+            }
+
+            if (!Types.ObjectId.isValid(jobId)) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ message: Messages.INVALID_ID })
+                return
+            }
+
+            const result = await this._jobService.getJobDetails(jobId)
+            res.status(_HttpStatus.OK).json(result)
+        } catch (err) {
+            next(err)
+        }
+    }
 }

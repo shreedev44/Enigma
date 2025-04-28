@@ -3,6 +3,7 @@ import { IUserService } from '@services/interface'
 import { IUserController } from '@controllers/interface'
 import { _HttpStatus, Messages } from '@constants'
 import { GoogleAuthUserType, Role } from '@types'
+import { Types } from 'mongoose'
 
 export class UserController implements IUserController {
     constructor(private _userService: IUserService) {}
@@ -177,10 +178,20 @@ export class UserController implements IUserController {
 
     async getRecruiters(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const { filter = '' } = req.query
+            const { recruiterId } = req.params
 
-            const result = await this._userService.getRecruiters(String(filter))
-            res.status(_HttpStatus.OK).json({ recruiters: result })
+            if (!recruiterId) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INCOMPLETE_FORM })
+                return
+            }
+
+            if (!Types.ObjectId.isValid(recruiterId)) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ message: Messages.INVALID_ID })
+                return
+            }
+
+            const result = await this._userService.getRecruiter(recruiterId)
+            res.status(_HttpStatus.OK).json(result)
         } catch (err) {
             next(err)
         }

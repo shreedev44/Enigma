@@ -49,7 +49,7 @@ const JobSearch: React.FC<JobSearchProps> = ({
 					id="search"
 					className="md:w-1/3  mb-3 md:mb-0"
 					type="text"
-					placeholder="Search for job titles..."
+					placeholder="Search for jobs..."
 					value={search}
 					onChange={(e) => setSearch(e.target.value)}
 					required

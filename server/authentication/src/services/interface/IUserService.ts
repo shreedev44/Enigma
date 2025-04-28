@@ -10,5 +10,5 @@ export interface IUserService {
     changePassword(email: string): Promise<void>
     resetPassword(token: string, password: string): Promise<void>
     refreshToken(token: string): Promise<string>
-    getRecruiters(filter: string): Promise<{ companyName: string; userId: string }[]>
+    getRecruiter(recruiterId: string): Promise<{ companyName: string; bio: string; profilePicture: string }>
 }

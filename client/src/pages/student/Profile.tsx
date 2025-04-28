@@ -176,6 +176,7 @@ const Profile = () => {
 									</Tooltip>
 								</TooltipProvider>
 							)}
+							<p>Leaderboard Rank: 10</p>
 						</div>
 					</div>
 					<div className="flex justify-start mt-6 pl-7 md:pl-10">
@@ -268,21 +269,24 @@ const Profile = () => {
 					</div>
 					<hr className="border-t-2 border-fleace mb-5" />
 					<div className="flex justify-center">
-						<p className="ml-5 text-2xl font-bold font-mono">
-							Leaderboard
+						<p className="text-2xl font-bold font-mono">
+							Job Applications
 						</p>
 					</div>
-					<div className="flex justify-start my-6 pl-7 md:pl-10">
+					<div className="flex flex-col my-6 px-7 md:px-10">
 						<div className="flex justify-center">
-							<p className="">Leaderboard Rank: 12</p>
+							<p className="mb-3">Applied for 12 roles</p>
 						</div>
+						<Button className="bg-fleace font-bold">
+							My applications
+						</Button>
 					</div>
 				</div>
 				<div className="row-span-3 md:col-span-4 bg-zinc-300 dark:bg-zinc-800 rounded-xl p-5">
 					<span className="text-xl font-mono font-bold">
 						Problem stats
 					</span>
-					<div className="flex justify-around items-center my-5 bg-white dark:bg-zinc-900 rounded-xl">
+					<div className="md:flex justify-around items-center my-5 bg-white dark:bg-zinc-900 rounded-xl">
 						<DifficultyRadial {...solvedPerDifficulty} />
 						<ProblemRadial {...problemsSolved} />
 						<AcceptanceRadial {...acceptance} />
