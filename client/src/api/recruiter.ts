@@ -98,6 +98,39 @@ export const getMyJobs = async (query = "") => {
 	}
 };
 
+export const hideJob = async (jobId: string) => {
+	try {
+		const { data } = await Api.patch(
+			`${recruiterEndpoints.HIDE_JOB}/${jobId}`,
+			{},
+			{ headers }
+		);
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
+
+export const updateJob = async (
+	jobId: string,
+	form: Record<string, unknown>
+) => {
+	try {
+		const { data } = await Api.patch(
+			`${recruiterEndpoints.UPDATE_JOB}/${jobId}`,
+			form,
+			{ headers }
+		);
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
+
 // export const logout = async () => {
 // 	try {
 // 		const { data } = await Api.get(commonEndpoints.LOGOUT, {

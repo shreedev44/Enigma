@@ -23,6 +23,12 @@ export class ApplicationService implements IApplicationService {
             throw createHttpError(_HttpStatus.CONFLICT, Messages.APPLICATION_EXISTS)
         }
 
+        const job = await this._jobRepository.findByJobId(new Types.ObjectId(jobId))
+
+        if (!job?.listed) {
+            throw createHttpError(_HttpStatus.BAD_REQUEST, Messages.JOB_NOT_FOUND)
+        }
+
         const resumeData = await pdf(file.buffer)
         const { response } = await geminiModel.generateContent(
             parsePrompt.replace('resume_text_here', String(resumeData.text))

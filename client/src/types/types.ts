@@ -84,6 +84,7 @@ export type Job = {
 	maxSalary?: number;
 	requirements: string[];
 	responsibilities: string[];
+	listed?: true
 	lastDate: Date;
 	createdAt: Date;
 };

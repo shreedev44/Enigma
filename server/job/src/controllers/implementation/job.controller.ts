@@ -53,7 +53,7 @@ export class JobController implements IJobController {
                 return
             }
 
-            res.status(_HttpStatus.OK).json({ updatedJob })
+            res.status(_HttpStatus.OK).json({ message: Messages.JOB_UPDATED })
         } catch (err) {
             next(err)
         }

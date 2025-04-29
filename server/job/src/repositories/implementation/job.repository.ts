@@ -22,7 +22,7 @@ class JobRepository extends BaseRepository<IJobSchema> implements IJobRepository
 
     async updateById(userId: Types.ObjectId, jobId: string, data: Partial<IJobSchema>): Promise<IJobSchema | null> {
         try {
-            await this.model.updateOne({ _id: jobId, userId }, data)
+            await this.model.updateOne({ _id: jobId, userId, listed: true }, data)
             const updatedJob = await this.model.findById(jobId)
             return updatedJob
         } catch (err) {
@@ -33,8 +33,8 @@ class JobRepository extends BaseRepository<IJobSchema> implements IJobRepository
 
     async deleteById(userId: Types.ObjectId, jobId: string): Promise<boolean> {
         try {
-            const result = await this.model.deleteOne({ _id: jobId, userId })
-            return result.deletedCount > 0
+            const result = await this.model.updateOne({ userId, _id: jobId }, { listed: false })
+            return result.modifiedCount > 0
         } catch (err) {
             console.error(err)
             throw new Error('Error deleting job by ID')

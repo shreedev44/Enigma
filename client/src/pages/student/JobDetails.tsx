@@ -1,4 +1,5 @@
-import { applyForJob, getJobDetails, getRecruiter } from "@/api/student";
+import { getJobDetails } from "@/api/common";
+import { applyForJob, getRecruiter } from "@/api/student";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import ClassicSpinner from "@/components/loaders/ClassicSpinner";
 import JobDetailsSkeleton from "@/components/loaders/JobDetailsSkeleton";
@@ -58,7 +59,7 @@ const JobDetails = () => {
 
 		(async () => {
 			setLoading((prev) => ({ ...prev, recruiter: true, job: true }));
-			const response = await getJobDetails(jobId);
+			const response = await getJobDetails(jobId, 'student');
 
 			if (response.success) {
 				setJob(response.data);

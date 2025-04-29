@@ -254,20 +254,6 @@ export const getRecruiter = async (userId: string) => {
 	}
 };
 
-export const getJobDetails = async (jobId: string) => {
-	try {
-		const { data } = await Api.get(
-			`${studentEndpoints.GET_JOBS}/${jobId}`,
-			{ headers }
-		);
-		return { success: true, data };
-	} catch (err) {
-		const error = err as any;
-		const message = error.response?.data?.error || "An error occured";
-		return { success: false, error: message };
-	}
-};
-
 export const applyForJob = async (jobId: string, formData: FormData) => {
 	try {
 		const { data } = await Api.post(

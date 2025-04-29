@@ -12,6 +12,8 @@ import ResetPassword from "@/pages/ResetPassword";
 import Profile from "@/pages/recruiter/Profile";
 import PostJob from "@/pages/recruiter/PostJob";
 import MyJobs from "@/pages/recruiter/MyJobs";
+import JobDetails from "@/pages/recruiter/JobDetails";
+import EditPost from "@/pages/recruiter/EditPost";
 
 const RecruiterRoutes = () => {
 	const ProtectRoute = ({ children }: { children: JSX.Element }) => {
@@ -107,6 +109,22 @@ const RecruiterRoutes = () => {
 					element={
 						<ProtectRoute>
 							<MyJobs />
+						</ProtectRoute>
+					}
+				/>
+				<Route
+					path={recruiterRoutes.JOB_DETAILS}
+					element={
+						<ProtectRoute>
+							<JobDetails />
+						</ProtectRoute>
+					}
+				/>
+				<Route
+					path={recruiterRoutes.EDIT_POST}
+					element={
+						<ProtectRoute>
+							<EditPost />
 						</ProtectRoute>
 					}
 				/>

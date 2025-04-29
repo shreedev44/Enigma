@@ -15,6 +15,7 @@ export class JobInfo {
     maxSalary?: number
     requirements: string[]
     responsibilities: string[]
+    listed: boolean
     lastDate: Date
     createdAt: Date
 
@@ -33,6 +34,7 @@ export class JobInfo {
         }
         this.requirements = returnObj.requirements
         this.responsibilities = returnObj.responsibilities
+        this.listed = returnObj.listed
         this.lastDate = returnObj.lastDate
         this.createdAt = returnObj.createdAt
     }

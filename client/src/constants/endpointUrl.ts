@@ -28,6 +28,8 @@ export const recruiterEndpoints = {
 	UPDATE_PROFILE: "/auth/recruiter/update-profile",
 	POST_JOB: "/job/create",
 	MY_JOBS: "/job/recruiter-jobs",
+	HIDE_JOB: "/job/hide",
+	UPDATE_JOB: "/job/update",
 };
 
 export const adminEndpoints = {
@@ -45,4 +47,5 @@ export const commonEndpoints = {
 	RESET_PASSWORD: "/auth/reset-password",
 	REFRESH_TOKEN: `${import.meta.env.VITE_BASE_URL}/auth/refresh-token`,
 	LOGOUT: "/auth/logout",
+	GET_JOBS: "/job",
 };

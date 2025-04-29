@@ -26,6 +26,7 @@ const MyJobs = () => {
 
 			if (response.success) {
 				setJobs(response.data.jobs);
+				setPageData((prev) => ({...prev, totalPages: response.data.totalPages}))
 				setLoading(false);
 			} else {
 				toast({

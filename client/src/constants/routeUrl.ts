@@ -28,6 +28,7 @@ export const recruiterRoutes = {
 	POST_JOB: "/post-job",
 	JOBS: "/my-jobs",
 	JOB_DETAILS: "/job-details",
+	EDIT_POST: "/edit-job",
 };
 
 export const adminRoutes = {

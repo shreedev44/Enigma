@@ -177,3 +177,47 @@ export const jobCreationValidationSchema = {
 		messages: [Messages.INVALID_LAST_DATE],
 	},
 };
+
+
+export const jobUpdationValidationSchema = {
+	role: {
+		rules: [JobRegex.roleRegex],
+		messages: [Messages.INVALID_ROLE],
+		optional: true
+	},
+	workTime: {
+		rules: [JobRegex.workTimeRegex],
+		messages: [Messages.INVALID_WORK_TIME],
+		optional: true
+	},
+	workMode: {
+		rules: [JobRegex.workModeRegex],
+		messages: [Messages.INVALID_WORK_MODE],
+		optional: true
+	},
+	jobLocation: {
+		rules: [JobRegex.jobLocationRegex],
+		messages: [Messages.INVALID_JOB_LOCATION],
+		optional: true
+	},
+	minimumExperience: {
+		rules: [JobRegex.minExperienceRegex.type, JobRegex.minExperienceRegex.amount],
+		messages: [Messages.INVALID_MINIMUM_EXPERIENCE, Messages.INVALID_MINIMUM_EXPERIENCE],
+		optional: true
+	},
+	requirements: {
+		rules: [JobRegex.requirementRegex],
+		messages: [Messages.INVALID_REQUIREMENTS],
+		optional: true
+	},
+	responsibilities: {
+		rules: [JobRegex.responsibilityRegex],
+		messages: [Messages.INVALID_RESPONSIBILITIES],
+		optional: true
+	},
+	lastDate: {
+		rules: [JobRegex.lastDateRegex],
+		messages: [Messages.INVALID_LAST_DATE],
+		optional: true
+	},
+};
