@@ -84,9 +84,8 @@ export class ApplicationController implements IApplicationController {
 
     async getApplicationsByJob(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const { jobId } = req.params
             const { page = 1 } = req.query
-            const { tags = [] } = req.body
+            const { tags = [], jobId } = req.body
 
             const { id: userId } = JSON.parse(req.headers['x-user-payload'] as string)
 
@@ -107,14 +106,9 @@ export class ApplicationController implements IApplicationController {
                 return
             }
 
-            const { applications, totalPages } = await this._applicationService.getApplicationsByJobId(
-                jobId,
-                userId,
-                Number(page),
-                tags
-            )
+            const result = await this._applicationService.getApplicationsByJobId(jobId, userId, Number(page), tags)
 
-            res.status(_HttpStatus.OK).json({ applications, totalPages })
+            res.status(_HttpStatus.OK).json(result)
         } catch (err) {
             next(err)
         }
@@ -162,9 +156,10 @@ export class ApplicationController implements IApplicationController {
                 })
                 return
             }
+            console.log(jobId, '--------------------')
 
             if (!Types.ObjectId.isValid(jobId)) {
-                res.status(_HttpStatus.BAD_REQUEST).json({ message: Messages.INVALID_ID })
+                res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_ID })
                 return
             }
 
@@ -186,9 +181,8 @@ export class ApplicationController implements IApplicationController {
                 })
                 return
             }
-
             if (!Types.ObjectId.isValid(jobId) || !Types.ObjectId.isValid(applicationId)) {
-                res.status(_HttpStatus.BAD_REQUEST).json({ message: Messages.INVALID_ID })
+                res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_ID })
                 return
             }
 
@@ -218,6 +212,52 @@ export class ApplicationController implements IApplicationController {
 
             const url = await this._applicationService.getResumeUrl(applicationId, jobId, userId)
             res.status(_HttpStatus.OK).json({ url })
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    async shortlistSingleApplication(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const { jobId, applicationId } = req.params
+            const { id: userId } = JSON.parse(req.headers['x-user-payload'] as string)
+
+            if (!jobId || !applicationId) {
+                res.status(_HttpStatus.BAD_REQUEST).json({
+                    error: Messages.INCOMPLETE_FORM,
+                })
+                return
+            }
+
+            if (!Types.ObjectId.isValid(jobId) || !Types.ObjectId.isValid(applicationId)) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_ID })
+                return
+            }
+            await this._applicationService.shortlistSingleApplication(applicationId, jobId, userId)
+            res.status(_HttpStatus.OK).json({ message: Messages.APPLICATOIN_SHORTLISTED })
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    async removeApplicationFromShortlist(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const { jobId, applicationId } = req.params
+            const { id: userId } = JSON.parse(req.headers['x-user-payload'] as string)
+
+            if (!jobId || !applicationId) {
+                res.status(_HttpStatus.BAD_REQUEST).json({
+                    error: Messages.INCOMPLETE_FORM,
+                })
+                return
+            }
+
+            if (!Types.ObjectId.isValid(jobId) || !Types.ObjectId.isValid(applicationId)) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_ID })
+                return
+            }
+            await this._applicationService.removeFromShortlist(applicationId, jobId, userId)
+            res.status(_HttpStatus.OK).json({ message: Messages.REMOVED_FROM_SHORTLIST })
         } catch (err) {
             next(err)
         }

@@ -2,7 +2,7 @@ import { RecruiterData, StudentData } from "./formTypes";
 import { ApplicationWithJob, ProblemListType } from "./types";
 
 export interface BreadcrumbPropType {
-	components: { component: string; path?: string }[];
+	components: { component: string; path?: string | number }[];
 }
 
 export interface StdntEditProfilePropType {

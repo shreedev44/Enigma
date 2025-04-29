@@ -18,4 +18,6 @@ export interface IApplicationService {
         userId: string
     ): Promise<InstanceType<typeof ApplicationDTO.ApplicationInfo>>
     getResumeUrl(applicationId: string, jobId: string, userId: string): Promise<string>
+    shortlistSingleApplication(applicationId: string, jobId: string, userId: string): Promise<void>
+    removeFromShortlist(applicationId: string, jobId: string, userId: string): Promise<void>
 }

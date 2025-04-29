@@ -8,10 +8,21 @@ import { recruiterRoutes } from "@/constants/routeUrl";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const JobDetails = () => {
 	const location = useLocation();
-	const { jobId } = location.state || {};
+	const { state } = location || {};
 	const { toast } = useToast();
 	const navigate = useNavigate();
 
@@ -35,13 +46,13 @@ const JobDetails = () => {
 	const [loading, setLoading] = useState({ job: false, hide: false });
 
 	useEffect(() => {
-		if(!jobId) {
-			navigate(`/recruiter${recruiterRoutes.JOBS}`)
-			return
+		if (!state) {
+			navigate(`/recruiter${recruiterRoutes.JOBS}`);
+			return;
 		}
 		(async () => {
 			setLoading((prev) => ({ ...prev, job: true }));
-			const response = await getJobDetails(jobId, "recruiter");
+			const response = await getJobDetails(state.jobId, "recruiter");
 
 			if (response.success) {
 				setJob(response.data);
@@ -58,14 +69,14 @@ const JobDetails = () => {
 
 	const handleHide = async () => {
 		setLoading((prev) => ({ ...prev, hide: true }));
-		const response = await hideJob(jobId);
+		const response = await hideJob(state.jobId);
 
 		if (response.success) {
 			toast({
 				description: response.data.message,
 			});
 			setLoading((prev) => ({ ...prev, hide: false }));
-            setJob((prev) => ({...prev, listed: false}))
+			setJob((prev) => ({ ...prev, listed: false }));
 		} else {
 			toast({
 				description: response.error,
@@ -187,28 +198,72 @@ const JobDetails = () => {
 							</ul>
 						</div>
 					</section>
-					<div className="flex justify-around md:max-w-sm">
+					<div className="flex flex-col md:flex-row justify-around md:max-w-2xl">
 						<Button
 							className="bg-fleace font-bold font-mono mt-10 rounded-full px-10"
 							size={"lg"}
-                            disabled={!job.listed}
+							disabled={!job.listed}
 							onClick={() =>
 								navigate(
 									`/recruiter${recruiterRoutes.EDIT_POST}`,
-                                    {state: {job, jobId}}
+									{ state: { job, jobId: state.jobId } }
 								)
 							}
 						>
 							Edit Post
 						</Button>
+						<AlertDialog>
+							<AlertDialogTrigger asChild>
+								<Button
+									className="font-bold font-mono mt-10 rounded-full px-10"
+									size={"lg"}
+									variant={"destructive"}
+									disabled={!job.listed}
+								>
+									{loading.hide ? (
+										<ClassicSpinner />
+									) : (
+										"Hide Post"
+									)}
+								</Button>
+							</AlertDialogTrigger>
+							<AlertDialogContent>
+								<AlertDialogHeader>
+									<AlertDialogTitle>
+										Are you absolutely sure?
+									</AlertDialogTitle>
+									<AlertDialogDescription>
+										This action cannot be undone. This will
+										permanently hide your job post and
+										cannot be displayed to candidates again.
+									</AlertDialogDescription>
+								</AlertDialogHeader>
+								<AlertDialogFooter>
+									<AlertDialogCancel>
+										Cancel
+									</AlertDialogCancel>
+									<AlertDialogAction onClick={handleHide}>
+										Continue
+									</AlertDialogAction>
+								</AlertDialogFooter>
+							</AlertDialogContent>
+						</AlertDialog>
 						<Button
-							className="font-bold font-mono mt-10 rounded-full px-10"
+							className="font-bold font-mono mt-10 rounded-full px-10 bg-mildgreen"
 							size={"lg"}
-							variant={"destructive"}
 							disabled={!job.listed}
-							onClick={handleHide}
+							onClick={() =>
+								navigate(
+									`/recruiter${recruiterRoutes.APPLICATIONS}`,
+									{ state: { role: job.role, jobId: state.jobId } }
+								)
+							}
 						>
-							{loading.hide ? <ClassicSpinner /> : "Hide Post"}
+							{loading.hide ? (
+								<ClassicSpinner />
+							) : (
+								"View Applications"
+							)}
 						</Button>
 					</div>
 				</>

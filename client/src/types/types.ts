@@ -84,7 +84,7 @@ export type Job = {
 	maxSalary?: number;
 	requirements: string[];
 	responsibilities: string[];
-	listed?: true
+	listed?: true;
 	lastDate: Date;
 	createdAt: Date;
 };
@@ -94,4 +94,38 @@ export type ApplicationWithJob = {
 	companyName: string;
 	role: string;
 	createdAt: Date;
+};
+
+export type ApplicationShort = {
+	_id: string;
+	name: string;
+	email: string;
+	phone: string;
+	yearOfExperience: number;
+};
+
+export interface Education {
+	university: string;
+	degree: string;
+	graduationYear: number;
+	cgpa: number;
+}
+
+export interface Experience {
+	company: string;
+	title: string;
+	location: string;
+	dates: string;
+}
+
+export type Application = {
+	_id: string;
+	name: string;
+	email: string;
+	phone: string;
+	yearOfExperience: 0;
+	summary: string;
+	skills: string[];
+	education: Education[];
+	experience: Experience[];
 };

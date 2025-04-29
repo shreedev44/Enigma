@@ -10,11 +10,6 @@ const applicationController = new ApplicationController(applicationService)
 
 const applicationRouter = Router()
 
-applicationRouter.get(
-    '/:jobId/:applicationId',
-    validateRole('recruiter'),
-    applicationController.getApplicationDetails.bind(applicationController)
-)
 applicationRouter.post(
     '/apply/:jobId',
     validateRole('student'),
@@ -32,7 +27,7 @@ applicationRouter.get(
     applicationController.getMyApplications.bind(applicationController)
 )
 applicationRouter.post(
-    '/job-applications/:jobId',
+    '/job-applications',
     validateRole('recruiter'),
     applicationController.getApplicationsByJob.bind(applicationController)
 )
@@ -50,6 +45,21 @@ applicationRouter.get(
     '/download-resume/:jobId/:applicationId',
     validateRole('recruiter'),
     applicationController.getResumeUrl.bind(applicationController)
+)
+applicationRouter.get(
+    '/:jobId/:applicationId',
+    validateRole('recruiter'),
+    applicationController.getApplicationDetails.bind(applicationController)
+)
+applicationRouter.patch(
+    '/shortlist-application/:jobId/:applicationId',
+    validateRole('recruiter'),
+    applicationController.shortlistSingleApplication.bind(applicationController)
+)
+applicationRouter.patch(
+    '/remove-from-shortlist/:jobId/:applicationId',
+    validateRole('recruiter'),
+    applicationController.removeApplicationFromShortlist.bind(applicationController)
 )
 
 export default applicationRouter

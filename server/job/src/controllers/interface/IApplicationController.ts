@@ -9,4 +9,6 @@ export interface IApplicationController {
     getShortlist(req: Request, res: Response, next: NextFunction): Promise<void>
     getApplicationDetails(req: Request, res: Response, next: NextFunction): Promise<void>
     getResumeUrl(req: Request, res: Response, next: NextFunction): Promise<void>
+    shortlistSingleApplication(req: Request, res: Response, next: NextFunction): Promise<void>
+    removeApplicationFromShortlist(req: Request, res: Response, next: NextFunction): Promise<void>
 }

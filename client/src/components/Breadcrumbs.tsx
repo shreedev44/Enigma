@@ -22,12 +22,16 @@ const Breadcrumbs = ({ components }: BreadcrumbPropType) => {
                 {index === components.length - 1 ? (
                   <BreadcrumbPage>{value.component}</BreadcrumbPage>
                 ) : (
-                  <BreadcrumbLink
+                    <BreadcrumbLink
                     className="cursor-pointer"
-                    onClick={() => navigate(value.path || "")}
-                  >
+                    onClick={() =>
+                      typeof value.path === "number"
+                      ? navigate(value.path)
+                      : navigate(String(value.path || ""))
+                    }
+                    >
                     {value.component}
-                  </BreadcrumbLink>
+                    </BreadcrumbLink>
                 )}
               </BreadcrumbItem>
 

@@ -34,4 +34,6 @@ export const Messages = {
     FAILED_TO_PARSE: (field: string) => `Failed to parse ${field}, Use an ATS friendly resume`,
     SHORTLISTED: (count: number) => `${count} Application${count > 1 ? 's' : ''} was shortlisted`,
     APPLICATION_SUCCESS: 'Applied for job',
+    APPLICATOIN_SHORTLISTED: 'Application shortlisted',
+    REMOVED_FROM_SHORTLIST: 'Applicatoin removed from shortlist',
 }

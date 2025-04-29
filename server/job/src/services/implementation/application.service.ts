@@ -182,4 +182,30 @@ export class ApplicationService implements IApplicationService {
         const url = generatePresignedUrl(resumeKey)
         return url
     }
+
+    async shortlistSingleApplication(applicationId: string, jobId: string, userId: string): Promise<void> {
+        const job = await this._jobRepository.findByJobIdAndUserId(
+            new Types.ObjectId(jobId),
+            new Types.ObjectId(userId)
+        )
+
+        if (!job) {
+            throw createHttpError(_HttpStatus.NOT_FOUND, Messages.JOB_NOT_FOUND)
+        }
+
+        await this._applicationRepository.shortlistSingleApplication(new Types.ObjectId(applicationId))
+    }
+
+    async removeFromShortlist(applicationId: string, jobId: string, userId: string): Promise<void> {
+        const job = await this._jobRepository.findByJobIdAndUserId(
+            new Types.ObjectId(jobId),
+            new Types.ObjectId(userId)
+        )
+
+        if (!job) {
+            throw createHttpError(_HttpStatus.NOT_FOUND, Messages.JOB_NOT_FOUND)
+        }
+
+        await this._applicationRepository.removeFromShortlist(new Types.ObjectId(applicationId))
+    }
 }

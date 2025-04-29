@@ -16,14 +16,16 @@ export interface IApplicationRepository extends IBaseRepository<IApplicationSche
         skip: number,
         limit: number,
         tags: string[]
-    ): Promise<{ applications: IApplicationSchema[]; totalPages: number }>
+    ): Promise<{ applications: IApplicationSchema[]; totalPages: number; totalApplications: number }>
     findApplication(userId: Types.ObjectId, jobId: Types.ObjectId): Promise<IApplicationSchema | null>
     shortlistApplications(jobId: Types.ObjectId, tags: string[]): Promise<{ shortlisted: number }>
+    shortlistSingleApplication(applicationId: Types.ObjectId): Promise<void>
+    removeFromShortlist(applicationId: Types.ObjectId): Promise<void>
     getShortlist(
         jobId: Types.ObjectId,
         skip: number,
         limit: number
-    ): Promise<{ applications: IApplicationSchema[]; totalPages: number }>
+    ): Promise<{ applications: IApplicationSchema[]; totalPages: number; totalApplications: number }>
     findApplicationById(applicationId: Types.ObjectId): Promise<IApplicationSchema | null>
     findResumeKey(applicationId: Types.ObjectId): Promise<string | null>
 }

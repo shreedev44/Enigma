@@ -35,43 +35,31 @@ class ApplicationRepository extends BaseRepository<IApplicationSchema> implement
         skip: number,
         limit: number,
         tags: string[]
-    ): Promise<{ applications: IApplicationSchema[]; totalPages: number }> {
+    ): Promise<{ applications: IApplicationSchema[]; totalPages: number; totalApplications: number }> {
         try {
-            const tagPattern = tags.length > 0 ? new RegExp(`\\b(${tags.join('|')})\\b`, 'i') : /^$/
-            const documents = await this.model.countDocuments({
+            const tagPattern = tags.length > 0 ? new RegExp(`\\b(${tags.join('|')})\\b`, 'i') : null
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const query: any = {
                 jobId: jobId,
                 status: 'received',
-                $or: [
-                    { skills: { $in: tags.map((tag) => new RegExp(`\\b${tag}\\b`, 'i')) } },
+            }
 
+            if (tagPattern) {
+                query.$or = [
+                    { skills: { $in: tags.map((tag) => new RegExp(`\\b${tag}\\b`, 'i')) } },
                     { 'education.university': { $regex: tagPattern } },
                     { 'education.degree': { $regex: tagPattern } },
                     { 'experience.company': { $regex: tagPattern } },
                     { 'experience.title': { $regex: tagPattern } },
-
                     { summary: { $regex: tagPattern } },
-                ],
-            })
+                ]
+            }
 
-            const applications = await this.model
-                .find({
-                    jobId: jobId,
-                    status: 'received',
-                    $or: [
-                        { skills: { $in: tags.map((tag) => new RegExp(`\\b${tag}\\b`, 'i')) } },
+            const documents = await this.model.countDocuments(query)
 
-                        { 'education.university': { $regex: tagPattern } },
-                        { 'education.degree': { $regex: tagPattern } },
-                        { 'experience.company': { $regex: tagPattern } },
-                        { 'experience.title': { $regex: tagPattern } },
-
-                        { summary: { $regex: tagPattern } },
-                    ],
-                })
-                .sort({ createdAt: -1 })
-                .skip(skip)
-                .limit(limit)
-            return { applications, totalPages: Math.ceil(documents / limit) }
+            const totalApplications = await this.model.countDocuments({ jobId, status: 'received' })
+            const applications = await this.model.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit)
+            return { applications, totalPages: Math.ceil(documents / limit), totalApplications }
         } catch (err) {
             console.error(err)
             throw new Error('Error finding all applications')
@@ -90,24 +78,24 @@ class ApplicationRepository extends BaseRepository<IApplicationSchema> implement
 
     async shortlistApplications(jobId: Types.ObjectId, tags: string[]): Promise<{ shortlisted: number }> {
         try {
-            const tagPattern = tags.length > 0 ? new RegExp(`\\b(${tags.join('|')})\\b`, 'i') : /^$/
-            const result = await this.model.updateMany(
-                {
-                    jobId: jobId,
-                    status: 'received',
-                    $or: [
-                        { skills: { $in: tags.map((tag) => new RegExp(`\\b${tag}\\b`, 'i')) } },
+            const tagPattern = tags.length > 0 ? new RegExp(`\\b(${tags.join('|')})\\b`, 'i') : null
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const query: any = {
+                jobId: jobId,
+                status: 'received',
+            }
 
-                        { 'education.university': { $regex: tagPattern } },
-                        { 'education.degree': { $regex: tagPattern } },
-                        { 'experience.company': { $regex: tagPattern } },
-                        { 'experience.title': { $regex: tagPattern } },
-
-                        { summary: { $regex: tagPattern } },
-                    ],
-                },
-                { status: 'shortlisted' }
-            )
+            if (tagPattern) {
+                query.$or = [
+                    { skills: { $in: tags.map((tag) => new RegExp(`\\b${tag}\\b`, 'i')) } },
+                    { 'education.university': { $regex: tagPattern } },
+                    { 'education.degree': { $regex: tagPattern } },
+                    { 'experience.company': { $regex: tagPattern } },
+                    { 'experience.title': { $regex: tagPattern } },
+                    { summary: { $regex: tagPattern } },
+                ]
+            }
+            const result = await this.model.updateMany(query, { status: 'shortlisted' })
             return { shortlisted: result.modifiedCount }
         } catch (err) {
             console.error(err)
@@ -119,7 +107,7 @@ class ApplicationRepository extends BaseRepository<IApplicationSchema> implement
         jobId: Types.ObjectId,
         skip: number,
         limit: number
-    ): Promise<{ applications: IApplicationSchema[]; totalPages: number }> {
+    ): Promise<{ applications: IApplicationSchema[]; totalPages: number; totalApplications: number }> {
         try {
             const documents = await this.model.countDocuments({ status: 'shortlisted', jobId })
             const applications = await this.model
@@ -128,7 +116,7 @@ class ApplicationRepository extends BaseRepository<IApplicationSchema> implement
                 .skip(skip)
                 .limit(limit)
 
-            return { applications, totalPages: Math.ceil(documents / limit) }
+            return { applications, totalPages: Math.ceil(documents / limit), totalApplications: documents }
         } catch (err) {
             console.error(err)
             throw new Error('Error finding shortlisted applications')
@@ -199,6 +187,24 @@ class ApplicationRepository extends BaseRepository<IApplicationSchema> implement
         } catch (err) {
             console.error(err)
             throw new Error('Error getting applications with job')
+        }
+    }
+
+    async shortlistSingleApplication(applicationId: Types.ObjectId): Promise<void> {
+        try {
+            await this.model.updateOne({ _id: applicationId }, { status: 'shortlisted' })
+        } catch (err) {
+            console.error(err)
+            throw new Error('Error shortlisting single application')
+        }
+    }
+
+    async removeFromShortlist(applicationId: Types.ObjectId): Promise<void> {
+        try {
+            await this.model.updateOne({ _id: applicationId }, { status: 'received' })
+        } catch (err) {
+            console.error(err)
+            throw new Error('Error removing application from shortlist')
         }
     }
 }

@@ -30,6 +30,13 @@ export const recruiterEndpoints = {
 	MY_JOBS: "/job/recruiter-jobs",
 	HIDE_JOB: "/job/hide",
 	UPDATE_JOB: "/job/update",
+	APPLICATIONS: "/job/application/job-applications",
+	SHORTLIST_APPLICATIONS: "/job/application/shortlist-applications",
+	GET_SHORTLIST: "/job/application/shortlist",
+	DOWNLOAD_RESUME: "/job/application/download-resume",
+	APPLICATOIN_DETAILS: "/job/application",
+	SHORTLIST_SINGLE_APPLICATION: "/job/application/shortlist-application",
+	REMOVE_FROM_SHORTLIST: "/job/application/remove-from-shortlist"
 };
 
 export const adminEndpoints = {

@@ -88,9 +88,12 @@ const EditPost = () => {
 		);
 
 		if (differenceObj) {
-      const transformedDifferenceObj = Object.fromEntries(
-        Object.entries(differenceObj).map(([key, value]) => [key, value.new])
-      );
+			const transformedDifferenceObj = Object.fromEntries(
+				Object.entries(differenceObj).map(([key, value]) => [
+					key,
+					value.new,
+				])
+			);
 			const error = validateForm(
 				jobUpdationValidationSchema,
 				transformedDifferenceObj
@@ -116,8 +119,8 @@ const EditPost = () => {
 				setLoading(false);
 			}
 		} else {
-      navigate(-1)
-    }
+			navigate(-1);
+		}
 	};
 
 	useEffect(() => {
@@ -131,10 +134,14 @@ const EditPost = () => {
 			<Breadcrumbs
 				components={[
 					{
-						component: "My Jobs",
+						component: "My jobs",
 						path: `/recruiter${recruiterRoutes.JOBS}`,
 					},
-					{ component: `Edit ${job.role}` },
+					{
+						component: job.role,
+						path: -1,
+					},
+					{ component: `Edit Post` },
 				]}
 			/>
 			<div className="min-h-screen px-3 md:px-14 py-12 flex">
@@ -360,7 +367,7 @@ const EditPost = () => {
 							className="bg-mildgreen rounded-full px-10 font-bold font-mono"
 							size={"lg"}
 							onClick={handleSubmit}
-              disabled={loading}
+							disabled={loading}
 						>
 							{loading ? <ClassicSpinner /> : "Save"}
 						</Button>

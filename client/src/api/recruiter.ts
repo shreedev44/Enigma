@@ -131,6 +131,122 @@ export const updateJob = async (
 	}
 };
 
+export const getApplications = async (
+	query = "",
+	form: Record<string, unknown>
+) => {
+	try {
+		const { data } = await Api.post(
+			`${recruiterEndpoints.APPLICATIONS}?${query}`,
+			form,
+			{ headers }
+		);
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
+
+export const shortlistApplications = async (
+	jobId: string,
+	form: Record<string, unknown>
+) => {
+	try {
+		const { data } = await Api.post(
+			`${recruiterEndpoints.SHORTLIST_APPLICATIONS}/${jobId}`,
+			form,
+			{ headers }
+		);
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
+
+export const getShortlist = async (jobId: string) => {
+	try {
+		const { data } = await Api.get(
+			`${recruiterEndpoints.GET_SHORTLIST}/${jobId}`,
+			{ headers }
+		);
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
+
+export const getResumeUrl = async (jobId: string, applicationId: string) => {
+	try {
+		const { data } = await Api.get(
+			`${recruiterEndpoints.DOWNLOAD_RESUME}/${jobId}/${applicationId}`,
+			{ headers }
+		);
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
+
+export const getApplcationDetails = async (
+	jobId: string,
+	applicationId: string
+) => {
+	try {
+		const { data } = await Api.get(
+			`${recruiterEndpoints.APPLICATOIN_DETAILS}/${jobId}/${applicationId}`,
+			{ headers }
+		);
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
+
+export const shortlistSingleApplication = async (
+	jobId: string,
+	applicationId: string
+) => {
+	try {
+		const { data } = await Api.patch(
+			`${recruiterEndpoints.SHORTLIST_SINGLE_APPLICATION}/${jobId}/${applicationId}`,
+			{},
+			{ headers }
+		);
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
+
+export const removeFromShortlist = async (
+	jobId: string,
+	applicationId: string
+) => {
+	try {
+		const { data } = await Api.patch(
+			`${recruiterEndpoints.REMOVE_FROM_SHORTLIST}/${jobId}/${applicationId}`,
+			{},
+			{ headers }
+		);
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
 // export const logout = async () => {
 // 	try {
 // 		const { data } = await Api.get(commonEndpoints.LOGOUT, {
