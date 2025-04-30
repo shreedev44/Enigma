@@ -249,12 +249,12 @@ export const removeFromShortlist = async (
 };
 
 export const scheduleInterview = async (
-	meetindData: Record<string, unknown>
+	meetingData: Record<string, unknown>
 ) => {
 	try {
 		const { data } = await Api.post(
 			`${recruiterEndpoints.SCHEDULE_INTERVIEW}`,
-			meetindData,
+			meetingData,
 			{ headers }
 		);
 		return { success: true, data };

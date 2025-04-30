@@ -9,7 +9,7 @@ export class InterviewController implements IInterviewController {
     async schedule(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { id: userId } = JSON.parse(req.headers['x-user-payload'] as string)
-            const { meetingTime, candidateEmail = '' } = req.body
+            const { meetingTime, candidateEmail = '', jobId } = req.body
 
             if (!meetingTime) {
                 res.status(_HttpStatus.BAD_REQUEST).json({
@@ -18,7 +18,7 @@ export class InterviewController implements IInterviewController {
                 return
             }
 
-            const result = await this._interviewService.createInterview(userId, meetingTime, candidateEmail)
+            const result = await this._interviewService.createInterview(userId, meetingTime, candidateEmail, jobId)
             res.status(_HttpStatus.CREATED).json({ meetingId: result })
         } catch (err) {
             next(err)

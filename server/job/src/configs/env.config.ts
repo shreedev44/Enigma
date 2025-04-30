@@ -26,4 +26,7 @@ export const env = {
     get S3_BUCKET_NAME() {
         return process.env.S3_BUCKET_NAME!
     },
+    get FRONTEND_ORIGIN() {
+        return process.env.FRONTEND_ORIGIN!
+    },
 }

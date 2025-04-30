@@ -207,6 +207,15 @@ class ApplicationRepository extends BaseRepository<IApplicationSchema> implement
             throw new Error('Error removing application from shortlist')
         }
     }
+
+    async findByEmail(email: string): Promise<IApplicationSchema | null> {
+        try {
+            return await this.model.findOne({ email })
+        } catch (err) {
+            console.error(err)
+            throw new Error('Error finding application by email')
+        }
+    }
 }
 
 export default new ApplicationRepository()

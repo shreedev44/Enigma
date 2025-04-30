@@ -28,4 +28,7 @@ export function validateEnv() {
     if (!env.S3_BUCKET_NAME) {
         throw new Error('S3_BUCKET_NAME is not found in the env')
     }
+    if (!env.FRONTEND_ORIGIN) {
+        throw new Error('FRONTEND_ORIGIN is not found in the env')
+    }
 }

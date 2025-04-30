@@ -27,7 +27,7 @@
       "@dtos": ["./src/dtos/index"],
       "@entities": ["./src/entities/index"],
       "@loggers/*": ["./src/loggers/*"],
-      "@consumers": ["./src/kafka/consumers/index"]
+      "@producers": ["./src/kafka/producers/index"]
     }
   },
   "include": ["src/**/*"]

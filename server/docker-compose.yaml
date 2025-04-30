@@ -13,6 +13,18 @@ services:
     networks:
       - enigma-network
 
+  notification-service:
+    build:
+      context: ./notification/
+      dockerfile: Dockerfile
+    container_name: enigma-notification
+    volumes:
+      - ./notification:/app
+      - /app/node_modules
+    command: sh -c "npm install && npm run dev"
+    networks:
+      - enigma-network
+
   dind:
     image: docker:24-dind
     privileged: true

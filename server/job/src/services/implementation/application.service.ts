@@ -6,6 +6,7 @@ import { _HttpStatus, Messages, parsePrompt } from '@constants'
 import { Types } from 'mongoose'
 import { geminiModel } from '@configs'
 import { ApplicationDTO } from '@dtos'
+import { applicationReceivedEvent } from '@producers'
 
 export class ApplicationService implements IApplicationService {
     constructor(
@@ -55,6 +56,11 @@ export class ApplicationService implements IApplicationService {
         if (!application) {
             throw createHttpError(_HttpStatus.INTERNAL_SERVER_ERROR, Messages.SERVER_ERROR)
         }
+        await applicationReceivedEvent({
+            fullName: application.name,
+            email: application.email,
+            jobTitle: `${job.role} ${job.companyName}`,
+        })
     }
 
     async deleteApplication(userId: string, applicationId: string): Promise<boolean> {

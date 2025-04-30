@@ -92,6 +92,8 @@ export class UserService implements IUserService {
                 userId: String(user._id),
                 fullName: profile.firstName + ' ' + profile.lastName,
                 profilePicture: profile.profilePicture || '',
+                email: user.email,
+                role: user.role,
             })
         } else if (user.role === 'recruiter') {
             const profileObject: Partial<RecruiterProfileType> = {
@@ -239,6 +241,8 @@ export class UserService implements IUserService {
                     userId: String(userData._id),
                     fullName: profile.firstName + ' ' + profile.lastName,
                     profilePicture: profile.profilePicture || '',
+                    email: userData.email,
+                    role: userData.role,
                 })
             } else {
                 const profileObject: Partial<RecruiterProfileType> = {
@@ -338,6 +342,8 @@ export class UserService implements IUserService {
             userId: String(user._id),
             fullName: profile.firstName + ' ' + profile.lastName,
             profilePicture: profile.profilePicture || '',
+            email: userData.email,
+            role: userData.role,
         })
 
         const accessToken = generateAccessToken(String(userData._id), 'student')

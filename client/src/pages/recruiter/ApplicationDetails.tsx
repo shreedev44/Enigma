@@ -63,6 +63,7 @@ const ApplicationDetails = () => {
 		const response = await scheduleInterview({
 			meetingTime,
 			candidateEmail: application.email,
+			jobId: state.jobId,
 		});
 
 		if (response.success) {

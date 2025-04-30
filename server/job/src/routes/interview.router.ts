@@ -3,8 +3,10 @@ import { InterviewController } from '@controllers/implementation'
 import { InterviewService } from '@services/implementation'
 import InterviewRepository from '@repositories/implementation/interview.repository'
 import { validateRole } from '@middlewares'
+import ApplicationRepository from '@repositories/implementation/application.repository'
+import JobRepository from '@repositories/implementation/job.repository'
 
-const interviewService = new InterviewService(InterviewRepository)
+const interviewService = new InterviewService(InterviewRepository, ApplicationRepository, JobRepository)
 const interviewController = new InterviewController(interviewService)
 
 const interviewRouter = Router()
