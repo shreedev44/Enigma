@@ -2,35 +2,26 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import interviewImage1 from "@/assets/interview.jpg";
 import interviewImage2 from "@/assets/interview.png";
 import { Button } from "@/components/ui/button";
-import { Time } from "@internationalized/date";
-import { TimeInput } from "@heroui/date-input";
+import { fromDate } from "@internationalized/date";
+import { DatePicker } from "@heroui/date-picker";
 import { useState } from "react";
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from "@/components/ui/popover";
-import { CalendarIcon } from "lucide-react";
-import { format } from "date-fns";
-import { Calendar } from "@/components/ui/calendar";
-import { cn } from "@/lib/utils";
 import { scheduleInterview } from "@/api/recruiter";
 import { useNavigate } from "react-router-dom";
 import { recruiterRoutes } from "@/constants/routeUrl";
 import { useToast } from "@/hooks/use-toast";
+import ClassicSpinner from "@/components/loaders/ClassicSpinner";
 
 const Interview = () => {
-	const [date, setDate] = useState(new Date(Date.now()));
-	const [time, setTime] = useState(
-		new Time(date.getHours(), date.getMinutes())
-	);
+	const [date, setDate] = useState(fromDate(new Date(), "IST"));
 	const [error, setError] = useState("");
+	const [loading, setLoading] = useState(false);
 
 	const navigate = useNavigate();
 	const { toast } = useToast();
 
 	const handleInstantMeeting = async () => {
 		const meetingTime = new Date(Date.now());
+		setLoading(true);
 		const response = await scheduleInterview({ meetingTime });
 
 		if (response.success) {
@@ -44,23 +35,21 @@ const Interview = () => {
 				description: response.error,
 				variant: "destructive",
 			});
+			setLoading(false);
 		}
 	};
 
 	const handleSchedule = async () => {
-		const meetingTime = new Date(
-			date.getFullYear(),
-			date.getMonth(),
-			date.getDate(),
-			time.hour,
-			time.minute
-		);
+		const selectedDate = date.toDate();
+		const meetingTime = new Date(selectedDate);
 
 		if (meetingTime <= new Date()) {
 			setError("Please select a future date and time.");
 			return;
+		} else {
+			setError("");
 		}
-
+		setLoading(true);
 		const response = await scheduleInterview({ meetingTime });
 
 		if (response.success) {
@@ -78,11 +67,13 @@ const Interview = () => {
 						description: "Meet link copied to clipboard",
 					});
 				});
+			setLoading(false);
 		} else {
 			toast({
 				description: response.error,
 				variant: "destructive",
 			});
+			setLoading(false);
 		}
 	};
 
@@ -114,53 +105,28 @@ const Interview = () => {
 							<Button
 								className="bg-mildgreen w-full md:w-auto mt-3 md:mt-0 md:ml-2 font-bold font-mono"
 								onClick={handleInstantMeeting}
+								disabled={loading}
 							>
 								Start an instant meeting
 							</Button>
 							<Button
 								className="bg-mildgreen w-full md:w-auto mt-3 md:mt-0 md:ml-2 font-bold font-mono"
 								onClick={handleSchedule}
+								disabled={loading}
 							>
 								Schedule a meeting
 							</Button>
-							<div className="flex max-w-xs justify-around mt-5">
-								<TimeInput
-									value={time}
-									onChange={(value) => setTime(value as Time)}
-									label={null}
-									className="max-w-24"
+							<div className="flex max-w-xs justify-around items-center gap-4 mt-5 date-picker-div">
+								<DatePicker
+									className="max-w-[284px] md:ml-4"
+									value={date}
+									onChange={(value) =>
+										setDate(
+											value ?? fromDate(new Date(), "IST")
+										)
+									}
 								/>
-								<Popover>
-									<PopoverTrigger asChild>
-										<Button
-											variant={"outline"}
-											className={cn(
-												"w-[180px] justify-start text-left dark:text-white font-normal",
-												!date && "text-muted-foreground"
-											)}
-										>
-											<CalendarIcon />
-											{date ? (
-												format(date, "PPP")
-											) : (
-												<span>Pick a date</span>
-											)}
-										</Button>
-									</PopoverTrigger>
-									<PopoverContent
-										className="w-auto p-0"
-										align="start"
-									>
-										<Calendar
-											mode="single"
-											selected={date}
-											onSelect={(day) =>
-												day && setDate(day)
-											}
-											autoFocus
-										/>
-									</PopoverContent>
-								</Popover>
+								{loading && <ClassicSpinner />}
 							</div>
 							{error && (
 								<p className="text-red-500 text-sm mt-1 ml-3">

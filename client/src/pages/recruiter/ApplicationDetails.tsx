@@ -2,6 +2,7 @@ import {
 	getApplcationDetails,
 	getResumeUrl,
 	removeFromShortlist,
+	scheduleInterview,
 	shortlistSingleApplication,
 } from "@/api/recruiter";
 import Breadcrumbs from "@/components/Breadcrumbs";
@@ -12,6 +13,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { recruiterRoutes } from "@/constants/routeUrl";
 import { useToast } from "@/hooks/use-toast";
 import { Application } from "@/types/types";
+import { DatePicker } from "@heroui/date-picker";
+import { fromDate } from "@internationalized/date";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -38,11 +41,54 @@ const ApplicationDetails = () => {
 		state.shortlisted as boolean
 	);
 	const [loading, setLoading] = useState(false);
+	const [date, setDate] = useState(fromDate(new Date(), "IST"));
+	const [error, setError] = useState("");
 	useEffect(() => {
 		if (!state) {
 			navigate(-1);
 		}
 	}, []);
+
+	const handleSchedule = async () => {
+		const selectedDate = date.toDate();
+		const meetingTime = new Date(selectedDate);
+
+		if (meetingTime <= new Date()) {
+			setError("Please select a future date and time.");
+			return;
+		} else {
+			setError("");
+		}
+		setLoading(true);
+		const response = await scheduleInterview({
+			meetingTime,
+			candidateEmail: application.email,
+		});
+
+		if (response.success) {
+			navigator.clipboard
+				.writeText(
+					window.location.protocol +
+						"//" +
+						window.location.host +
+						recruiterRoutes.MEETING +
+						"?roomID=" +
+						response.data.meetingId
+				)
+				.then(() => {
+					toast({
+						description: "Meet link copied to clipboard",
+					});
+				});
+			setLoading(false);
+		} else {
+			toast({
+				description: response.error,
+				variant: "destructive",
+			});
+			setLoading(false);
+		}
+	};
 
 	useEffect(() => {
 		(async () => {
@@ -237,7 +283,7 @@ const ApplicationDetails = () => {
 							</div>
 						</div>
 
-						<div className="md:flex md:max-w-md justify-around">
+						<div className="md:flex md:max-w-3xl justify-around items-center">
 							<Button
 								className={`${
 									!shortlisted ? "bg-mildgreen" : ""
@@ -267,6 +313,28 @@ const ApplicationDetails = () => {
 									"Download Resume"
 								)}
 							</Button>
+							<Button
+								className="bg-mildgreen mt-4 md:mt-0 w-full md:w-auto"
+								disabled={loading}
+								onClick={handleSchedule}
+							>
+								{loading ? (
+									<ClassicSpinner />
+								) : (
+									"Shedule Interview"
+								)}
+							</Button>
+							<DatePicker
+								className="max-w-[284px] md:ml-4"
+								value={date}
+								onChange={(value) =>
+									setDate(
+										value ?? fromDate(new Date(), "IST")
+									)
+								}
+								onClick={handleSchedule}
+							/>
+							<p className="text-red-500 ml-3">{error}</p>
 						</div>
 					</CardContent>
 				</Card>
