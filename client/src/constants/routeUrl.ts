@@ -15,6 +15,8 @@ export const studentRoutes = {
 	COMPILER: "/online-compiler",
 	JOBS: "/jobs",
 	JOB_DETAILS: "/jobs/details",
+	INTERVIEW: "/interview",
+	MEETING: "/meet",
 };
 
 export const recruiterRoutes = {
@@ -31,6 +33,8 @@ export const recruiterRoutes = {
 	EDIT_POST: "/edit-job",
 	APPLICATIONS: "/applications",
 	APPLICATION_DETILAILS: "/application-details",
+	INTERVIEW: "/interview",
+	MEETING: "/meet",
 };
 
 export const adminRoutes = {

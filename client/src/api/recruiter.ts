@@ -247,6 +247,23 @@ export const removeFromShortlist = async (
 		return { success: false, error: message };
 	}
 };
+
+export const scheduleInterview = async (
+	meetindData: Record<string, unknown>
+) => {
+	try {
+		const { data } = await Api.post(
+			`${recruiterEndpoints.SCHEDULE_INTERVIEW}`,
+			meetindData,
+			{ headers }
+		);
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
 // export const logout = async () => {
 // 	try {
 // 		const { data } = await Api.get(commonEndpoints.LOGOUT, {

@@ -16,6 +16,7 @@ import JobDetails from "@/pages/recruiter/JobDetails";
 import EditPost from "@/pages/recruiter/EditPost";
 import Applications from "@/pages/recruiter/Applications";
 import ApplicationDetails from "@/pages/recruiter/ApplicationDetails";
+import Interview from "@/pages/recruiter/Interview";
 
 const RecruiterRoutes = () => {
 	const ProtectRoute = ({ children }: { children: JSX.Element }) => {
@@ -143,6 +144,14 @@ const RecruiterRoutes = () => {
 					element={
 						<ProtectRoute>
 							<ApplicationDetails />
+						</ProtectRoute>
+					}
+				/>
+				<Route
+					path={recruiterRoutes.INTERVIEW}
+					element={
+						<ProtectRoute>
+							<Interview />
 						</ProtectRoute>
 					}
 				/>

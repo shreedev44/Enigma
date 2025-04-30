@@ -16,6 +16,7 @@ import Problem from "@/pages/student/Problem";
 import Compiler from "@/pages/student/Compiler";
 import Jobs from "@/pages/student/Jobs";
 import JobDetails from "@/pages/student/JobDetails";
+import Interview from "@/pages/student/Interview";
 
 const StudentRoutes = () => {
 	const ProtectRoute = ({ children }: { children: JSX.Element }) => {
@@ -110,6 +111,14 @@ const StudentRoutes = () => {
 					element={
 						<ProtectRoute>
 							<JobDetails />
+						</ProtectRoute>
+					}
+				/>
+				<Route
+					path={studentRoutes.INTERVIEW}
+					element={
+						<ProtectRoute>
+							<Interview />
 						</ProtectRoute>
 					}
 				/>

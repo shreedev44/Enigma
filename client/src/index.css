@@ -184,3 +184,7 @@ body::-webkit-scrollbar,
 *::-webkit-scrollbar {
   display: none;
 }
+
+body{
+  min-height: 100vh;
+}

@@ -77,7 +77,7 @@ const Navbar = () => {
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent>
-						<DropdownMenuItem>Online Interview</DropdownMenuItem>
+						<DropdownMenuItem onClick={() => navigate(studentRoutes.INTERVIEW)}>Online Interview</DropdownMenuItem>
 						<DropdownMenuItem
 							onClick={() => navigate(studentRoutes.JOBS)}
 						>
@@ -157,12 +157,12 @@ const Navbar = () => {
 							</Button>
 						</SheetClose>
 						<SheetClose asChild>
-							<Button variant={"outline"}>
+							<Button variant={"outline"} onClick={() => navigate(studentRoutes.INTERVIEW)}>
 								Online Interview
 							</Button>
 						</SheetClose>
 						<SheetClose asChild>
-							<Button variant={"outline"}>Job Posts</Button>
+							<Button variant={"outline"} onClick={() => navigate(studentRoutes.JOBS)}>Job Posts</Button>
 						</SheetClose>
 						<SheetClose asChild>
 							<Button variant={"outline"} onClick={toggleTheme}>

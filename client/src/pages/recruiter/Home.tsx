@@ -41,7 +41,7 @@ const Home = () => {
                     />
                 </div>
             </section>
-            <section className="my-5 md:my-10">
+            <section className="my-5 md:my-10 px-5 md:px-0">
                 <div className="flex flex-col md:flex-row justify-center items-center md:gap-20">
                     <div className="bg-[#c3e9f8] rounded-3xl p-8 flex flex-col items-center w-full md:w-1/3">
                         <img src={postJobImage} alt="img" className="mb-4" />
@@ -53,7 +53,7 @@ const Home = () => {
                             Post a Job <MoveRight />
                         </Button>
                     </div>
-                    <div className="bg-[#d3f9fc] rounded-3xl p-8 flex flex-col items-center w-full md:w-1/3">
+                    <div className="bg-[#d3f9fc] rounded-3xl p-8 flex flex-col items-center w-full md:w-1/3 mt-3 md:mt-0">
                         <img src={interviewImage} alt="img" className="mb-4" />
                         <h2 className="text-center text-black text-lg font-semibold mb-4">
                             Streamline Your Technical Interviews and Select the

@@ -36,7 +36,8 @@ export const recruiterEndpoints = {
 	DOWNLOAD_RESUME: "/job/application/download-resume",
 	APPLICATOIN_DETAILS: "/job/application",
 	SHORTLIST_SINGLE_APPLICATION: "/job/application/shortlist-application",
-	REMOVE_FROM_SHORTLIST: "/job/application/remove-from-shortlist"
+	REMOVE_FROM_SHORTLIST: "/job/application/remove-from-shortlist",
+	SCHEDULE_INTERVIEW: "/job/interview/schedule",
 };
 
 export const adminEndpoints = {

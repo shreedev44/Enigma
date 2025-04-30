@@ -87,7 +87,7 @@ const Navbar = () => {
 						</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>
-				<Button className="bg-fleace text-fleace-foreground font-bold mr-3 hidden md:inline rounded-full">
+				<Button className="bg-fleace text-fleace-foreground font-bold mr-3 hidden md:inline rounded-full" onClick={() => navigate(`/recruiter${recruiterRoutes.INTERVIEW}`)}>
 					Interviews
 				</Button>
 			</div>
@@ -142,16 +142,16 @@ const Navbar = () => {
 					<SheetHeader>
 						<SheetTitle>Menu</SheetTitle>
 						<SheetClose asChild>
-							<Button variant={"outline"}>Home</Button>
+							<Button variant={"outline"} onClick={() => navigate(`/recruiter${recruiterRoutes.HOME}`)}>Home</Button>
 						</SheetClose>
 						<SheetClose asChild>
-							<Button variant={"outline"}>Post Job</Button>
+							<Button variant={"outline"} onClick={() => navigate(`/recruiter${recruiterRoutes.POST_JOB}`)}>Post Job</Button>
 						</SheetClose>
 						<SheetClose asChild>
-							<Button variant={"outline"}>My Jobs</Button>
+							<Button variant={"outline"} onClick={() => navigate(`/recruiter${recruiterRoutes.JOBS}`)}>My Jobs</Button>
 						</SheetClose>
 						<SheetClose asChild>
-							<Button variant={"outline"}>Interviews</Button>
+							<Button variant={"outline"} onClick={() => navigate(`/recruiter${recruiterRoutes.INTERVIEW}`)}>Interviews</Button>
 						</SheetClose>
 						<SheetClose asChild>
 							<Button variant={"outline"} onClick={toggleTheme}>
