@@ -2,7 +2,6 @@ import {
   Code2,
   LayoutDashboardIcon,
   User,
-  Users,
   Briefcase,
   ChevronUp,
   ChevronRight,
@@ -125,18 +124,6 @@ export function AppSidebar(props: {
                 <SidebarMenuButton
                   asChild
                   onClick={() => navigate(`/admin${adminRoutes.HOME}`)}
-                  className={location.pathname.split('/')[2] === 'community' ? "outline outline-1" : ''}
-                >
-                  <span>
-                    <Users />
-                    <span>{"Community"}</span>
-                  </span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  onClick={() => navigate(`/admin${adminRoutes.HOME}`)}
                   className={location.pathname.split('/')[2] === 'jobposts' ? "outline outline-1" : ''}
                 >
                   <span>
@@ -165,12 +152,6 @@ export function AppSidebar(props: {
           >
             <DropdownMenuItem onClick={() => props.toggleTheme()}>
               <span>{props.theme === "dark" ? "Light Mode" : "Dark Mode"}</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <span>Notificaion</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <span onClick={() => props.changePassword()}>Change Password</span>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={props.handleLogout}>
               <span>Logout</span>

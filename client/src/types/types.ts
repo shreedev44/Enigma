@@ -26,6 +26,7 @@ export type TestCaseType = {
 export type DifficultyType = "Beginner" | "Intermediate" | "Advanced";
 
 export type ProblemType = {
+	_id?: string
 	problemNo?: number;
 	title: string;
 	difficulty: DifficultyType;
@@ -51,6 +52,7 @@ export type ProblemListType = {
 	successRate?: number;
 	solved?: "solved" | "unsolved";
 	status?: "listed" | "unlisted";
+	createdAt?: Date
 };
 
 export type Language = "javascript" | "python" | "java" | "golang" | "cpp";

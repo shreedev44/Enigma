@@ -46,4 +46,5 @@ export const adminRoutes = {
 	RECRUITERS: "/users/recruiters",
 	PROBLEMS: "/problems",
 	ADD_PROBLEM: "/problems/add-problem",
+	PROBLEM_DETAILS: "/problem"
 };

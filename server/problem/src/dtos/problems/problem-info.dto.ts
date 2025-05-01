@@ -15,6 +15,7 @@ export class ProblemInfo {
     functionReturnNestedType?: Exclude<DataTypes, 'Array'>
     evalFunction: string
     testCases: TestCaseType[]
+    status: string
     createdAt: Date
     constraints: string[]
 
@@ -31,6 +32,7 @@ export class ProblemInfo {
         this.testCases = problem.testCases
         this.createdAt = problem.createdAt
         this.constraints = problem.constraints
+        this.status = problem.status
         if (problem.functionReturnElemType) {
             this.functionReturnElemType = problem.functionReturnElemType
         }

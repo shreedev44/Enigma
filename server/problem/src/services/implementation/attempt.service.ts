@@ -18,7 +18,7 @@ export class AttemptService implements IAttemptService {
         solution: string,
         language: Language
     ): Promise<InstanceType<typeof AttemptDTO.AttemptInfo>> {
-        const problem = await this._problemRepository.findProblemByNo(problemNo)
+        const problem = await this._problemRepository.findProblemByNo(problemNo, 'student')
 
         if (!problem) {
             throw createHttpError(_HttpStatus.NOT_FOUND, Messages.PROBLEM_NOT_FOUND)

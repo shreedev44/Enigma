@@ -3,6 +3,7 @@ import { IProblemService } from '@services/interface'
 import { IProblemController } from '@controllers/interface'
 import { ProblemType } from '@types'
 import { _HttpStatus, Messages } from '@constants'
+import { Types } from 'mongoose'
 
 export class ProblemController implements IProblemController {
     constructor(private _problemService: IProblemService) {}
@@ -21,7 +22,7 @@ export class ProblemController implements IProblemController {
     async getProblems(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { page = 1, sortBy = 'problemNo', sortOrder = 1, filter = '' } = req.query
-            const sortOptions = ['problemNo', 'solved', 'title', 'difficulty']
+            const sortOptions = ['problemNo', 'solved', 'title', 'difficulty', 'createdAt']
             if (isNaN(Number(page))) {
                 res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_PAGE })
                 return
@@ -35,16 +36,19 @@ export class ProblemController implements IProblemController {
                 return
             }
             let userId: string | null = null
+            let userRole: string | null = null
             if (req.headers['x-user-payload']) {
-                const { id } = JSON.parse(req.headers['x-user-payload'] as string)
+                const { id, role } = JSON.parse(req.headers['x-user-payload'] as string)
                 userId = id as string
+                userRole = role
             }
             const { problems, totalPages } = await this._problemService.getProblems(
                 Number(page),
                 String(sortBy),
                 Number(sortOrder) as 1 | -1,
                 filter ? String(filter) : null,
-                userId
+                userId,
+                userRole as string
             )
             res.status(_HttpStatus.OK).json({ problems: problems, totalPages })
         } catch (err) {
@@ -60,7 +64,13 @@ export class ProblemController implements IProblemController {
                 return
             }
 
-            const problem = await this._problemService.findProblem(Number(problemNo))
+            let userRole: string | null = null
+            if (req.headers['x-user-payload']) {
+                const { role } = JSON.parse(req.headers['x-user-payload'] as string)
+                userRole = role
+            }
+
+            const problem = await this._problemService.findProblem(Number(problemNo), userRole as string)
             res.status(_HttpStatus.OK).json({ problem })
         } catch (err) {
             next(err)
@@ -98,6 +108,70 @@ export class ProblemController implements IProblemController {
 
             const result = await this._problemService.runSolution(code, language, problemNo)
             res.status(_HttpStatus.OK).json({ result })
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    async updatedProblem(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const problem = req.body
+            const { problemId } = req.params
+
+            if (!problemId) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.ID_NOT_FOUND })
+                return
+            }
+
+            if (!Types.ObjectId.isValid(problemId)) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_ID })
+                return
+            }
+
+            await this._problemService.updateProblem(problemId, problem)
+            res.status(_HttpStatus.OK).json({ message: Messages.PROBLEM_UPDATED })
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    async listProblem(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const { problemId } = req.params
+
+            if (!problemId) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.ID_NOT_FOUND })
+                return
+            }
+
+            if (!Types.ObjectId.isValid(problemId)) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_ID })
+                return
+            }
+
+            await this._problemService.listProblem(problemId)
+            res.status(_HttpStatus.OK).json({ message: Messages.PROBLEM_LISTED })
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    async unlistProblem(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const { problemId } = req.params
+
+            if (!problemId) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.ID_NOT_FOUND })
+                return
+            }
+
+            if (!Types.ObjectId.isValid(problemId)) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_ID })
+                return
+            }
+
+            await this._problemService.unlistProblem(problemId)
+            res.status(_HttpStatus.OK).json({ message: Messages.PROBLEM_UNLISTED })
         } catch (err) {
             next(err)
         }

@@ -53,11 +53,15 @@ export class ProblemService implements IProblemService {
         sortBy: string,
         sortOrder: 1 | -1,
         filter: string | null,
-        userId: string | null
+        userId: string | null,
+        role: string
     ): Promise<InstanceType<typeof ProblemDTO.GetProblems>> {
         const sort = { [sortBy]: sortOrder }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        let query: any = { status: 'listed' }
+        let query: any = {}
+        if (role === 'student') {
+            query.status = 'listed'
+        }
         if (filter) {
             query = {
                 $and: [
@@ -68,7 +72,7 @@ export class ProblemService implements IProblemService {
                             { difficulty: { $regex: filter, $options: 'i' } },
                         ],
                     },
-                    { status: 'listed' },
+                    ...(role === 'student' ? [{ status: 'listed' }] : []),
                 ],
             }
         }
@@ -88,8 +92,8 @@ export class ProblemService implements IProblemService {
         return new ProblemDTO.GetProblems({ problems: problems.slice(startIndex, endIndex), totalPages })
     }
 
-    async findProblem(problemNo: number): Promise<InstanceType<typeof ProblemDTO.ProblemInfo>> {
-        const problem = await this._problemRepository.findProblemByNo(problemNo)
+    async findProblem(problemNo: number, role: string): Promise<InstanceType<typeof ProblemDTO.ProblemInfo>> {
+        const problem = await this._problemRepository.findProblemByNo(problemNo, role)
 
         if (!problem) {
             throw createHttpError(_HttpStatus.NOT_FOUND, Messages.PROBLEM_NOT_FOUND)
@@ -109,7 +113,7 @@ export class ProblemService implements IProblemService {
         language: Language,
         problemNo: number
     ): Promise<InstanceType<typeof ProblemDTO.Compile>> {
-        const problem = await this._problemRepository.findProblemByNo(problemNo)
+        const problem = await this._problemRepository.findProblemByNo(problemNo, 'student')
         if (!problem) {
             throw createHttpError(_HttpStatus.NOT_FOUND, Messages.PROBLEM_NOT_FOUND)
         }
@@ -128,5 +132,29 @@ export class ProblemService implements IProblemService {
             result.stdout = ''
         }
         return new ProblemDTO.Compile(result)
+    }
+
+    async updateProblem(problemId: string, problem: Partial<ProblemType>): Promise<void> {
+        const updatedProblem = await this._problemRepository.updateProblemById(problemId, problem)
+
+        if (!updatedProblem) {
+            throw createHttpError(_HttpStatus.NOT_FOUND, Messages.PROBLEM_NOT_FOUND)
+        }
+    }
+
+    async listProblem(problemId: string): Promise<void> {
+        const problem = await this._problemRepository.listProblemById(problemId)
+
+        if (!problem) {
+            throw createHttpError(_HttpStatus.NOT_FOUND, Messages.PROBLEM_NOT_FOUND)
+        }
+    }
+
+    async unlistProblem(problemId: string): Promise<void> {
+        const problem = await this._problemRepository.unlistProblemById(problemId)
+
+        if (!problem) {
+            throw createHttpError(_HttpStatus.NOT_FOUND, Messages.PROBLEM_NOT_FOUND)
+        }
     }
 }

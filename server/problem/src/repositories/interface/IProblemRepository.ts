@@ -12,5 +12,8 @@ export interface IProblemRepository extends IBaseRepository<ProblemType> {
         filter: Record<string, string>,
         userId: string
     ): Promise<ProblemListType[]>
-    findProblemByNo(problemNo: number): Promise<ProblemType | null>
+    findProblemByNo(problemNo: number, role: string): Promise<ProblemType | null>
+    updateProblemById(problemId: string, problem: Partial<ProblemType>): Promise<ProblemDocument | null>
+    unlistProblemById(problemId: string): Promise<ProblemDocument | null>
+    listProblemById(problemId: string): Promise<ProblemDocument | null>
 }

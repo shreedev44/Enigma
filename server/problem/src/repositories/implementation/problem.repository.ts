@@ -82,6 +82,7 @@ class ProblemRepository extends BaseRepository<ProblemDocument> implements IProb
                         difficulty: 1,
                         problemNo: 1,
                         successRate: 1,
+                        createdAt: 1,
                     },
                 },
                 { $sort: sort },
@@ -189,13 +190,45 @@ class ProblemRepository extends BaseRepository<ProblemDocument> implements IProb
         }
     }
 
-    async findProblemByNo(problemNo: number): Promise<ProblemDocument | null> {
+    async findProblemByNo(problemNo: number, role: string): Promise<ProblemDocument | null> {
         try {
-            const problem = await this.model.findOne({ problemNo })
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const query: Record<string, any> = { problemNo }
+            if (role === 'student') {
+                query.status = 'listed'
+            }
+            const problem = await this.model.findOne(query)
             return problem
         } catch (err) {
             console.log(err)
             throw new Error('Error finding problem')
+        }
+    }
+
+    async updateProblemById(problemId: string, problem: Partial<ProblemType>): Promise<ProblemDocument | null> {
+        try {
+            return await this.model.findByIdAndUpdate(problemId, problem)
+        } catch (err) {
+            console.log(err)
+            throw new Error('Error updating problem')
+        }
+    }
+
+    async unlistProblemById(problemId: string): Promise<ProblemDocument | null> {
+        try {
+            return await this.model.findByIdAndUpdate(problemId, { status: 'unlisted' })
+        } catch (err) {
+            console.log(err)
+            throw new Error('Error unlisting problem')
+        }
+    }
+
+    async listProblemById(problemId: string): Promise<ProblemDocument | null> {
+        try {
+            return await this.model.findByIdAndUpdate(problemId, { status: 'listed' })
+        } catch (err) {
+            console.log(err)
+            throw new Error('Error listing problem')
         }
     }
 }

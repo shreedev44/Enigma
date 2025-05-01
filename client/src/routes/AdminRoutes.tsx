@@ -10,6 +10,7 @@ import Sidebar from "@/components/adminComponents/Sidebar";
 import Users from "@/pages/admin/Users";
 import Problems from "@/pages/admin/Problems";
 import AddProblem from "@/pages/admin/AddProblem";
+import ProblemDetails from "@/pages/admin/ProblemDetails";
 
 const AdminRoutes = () => {
   const ProtectRoute = ({ children }: { children: JSX.Element }) => {
@@ -98,6 +99,14 @@ const AdminRoutes = () => {
             element={
               <ProtectRoute>
                 <AddProblem />
+              </ProtectRoute>
+            }
+          />
+          <Route 
+            path={adminRoutes.PROBLEM_DETAILS + "/:problemNo"}
+            element={
+              <ProtectRoute>
+                <ProblemDetails />
               </ProtectRoute>
             }
           />

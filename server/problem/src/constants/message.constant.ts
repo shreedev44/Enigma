@@ -31,4 +31,10 @@ export const Messages = {
     RANKS_UPDATED: 'Ranks updated successfully',
     USER_NOT_FOUND: 'User not found',
     INVALID_ID: 'Invalid ID',
+    ID_NOT_FOUND: 'ID not found',
+    UNAUTHORIZED: 'Unauthorized Access',
+    INCOMPLETE_FORM: 'Incomplete form',
+    PROBLEM_UPDATED: 'Problem updated',
+    PROBLEM_LISTED: 'Problem is now visible for users',
+    PROBLEM_UNLISTED: 'Problem is now hidden for users',
 }

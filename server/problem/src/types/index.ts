@@ -48,6 +48,7 @@ export type ProblemListType = {
     successRate?: number
     solved?: 'solved' | 'unsolved'
     status?: 'listed' | 'unlisted'
+    createdAt?: Date
 }
 
 export type Language = 'javascript' | 'python' | 'java' | 'golang' | 'cpp'

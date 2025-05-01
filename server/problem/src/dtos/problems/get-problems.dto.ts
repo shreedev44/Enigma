@@ -12,6 +12,7 @@ export class GetProblems {
                 _id: problem._id,
                 title: problem.title,
                 difficulty: problem.difficulty,
+                createdAt: problem.createdAt,
             }
             if (problem.problemNo) obj.problemNo = problem.problemNo
             if (problem.successRate) obj.successRate = problem.successRate

@@ -2,28 +2,31 @@ import { ProblemParameterType } from "@/types/types";
 import { camelCaseRegex } from "./regex";
 
 export const validateForm = (
-  vaildationSchema: Record<
+  validationSchema: Record<
     string,
     {
-      rules: (RegExp | unknown)[];
+      rules: (RegExp | ((value: unknown, form: Record<string, unknown>) => boolean))[];
       messages: string[];
       optional?: boolean;
     }
   >,
   form: Record<string, unknown>
 ): { field: string; message: string } | null => {
-  for (const field in vaildationSchema) {
+  for (const field in validationSchema) {
     const value = form[field];
-    const { rules, messages } = vaildationSchema[field];
+    const { rules, messages, optional } = validationSchema[field];
 
-    if (vaildationSchema[field].optional && !form[field]) {
+    if (optional && (value === undefined || value === null)) {
       continue;
     }
 
     for (const rule of rules) {
-      const testFunction = rule as (value: unknown) => boolean
       const isValid =
-        rule instanceof RegExp ? rule.test(value as string) : testFunction(value);
+        typeof rule === "function"
+          ? rule(value, form)
+          : rule instanceof RegExp
+          ? rule.test(value as string)
+          : true;
 
       if (!isValid) {
         return { field, message: messages[rules.indexOf(rule)] };

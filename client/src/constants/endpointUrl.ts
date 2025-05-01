@@ -45,6 +45,10 @@ export const adminEndpoints = {
 	FETCH_RECRUITERS: "/auth/admin/get-recruiters",
 	BLOCK_ACTION: "/auth/admin/block-or-unblock",
 	ADD_PROBLEM: "/problem/add-problem",
+	FIND_PROBLEM: "/problem/find-problem",
+	UPDATE_PROBLEM: "/problem/update-problem",
+	UNLIST_PROBLEM: "/problem/unlist-problem",
+	LIST_PROBLEM: "/problem/list-problem",
 };
 
 export const commonEndpoints = {

@@ -10,7 +10,8 @@ import {
 	optionalFacebookRegex,
 	optionalTwitterRegex,
 	optionalBasedAtRegex,
-  JobRegex,
+	JobRegex,
+	camelCaseRegex,
 } from "./regex";
 
 export const studentSignupValidationSchema = {
@@ -161,8 +162,14 @@ export const jobCreationValidationSchema = {
 		messages: [Messages.INVALID_JOB_LOCATION],
 	},
 	minimumExperience: {
-		rules: [JobRegex.minExperienceRegex.type, JobRegex.minExperienceRegex.amount],
-		messages: [Messages.INVALID_MINIMUM_EXPERIENCE, Messages.INVALID_MINIMUM_EXPERIENCE],
+		rules: [
+			JobRegex.minExperienceRegex.type,
+			JobRegex.minExperienceRegex.amount,
+		],
+		messages: [
+			Messages.INVALID_MINIMUM_EXPERIENCE,
+			Messages.INVALID_MINIMUM_EXPERIENCE,
+		],
 	},
 	requirements: {
 		rules: [JobRegex.requirementRegex],
@@ -178,46 +185,207 @@ export const jobCreationValidationSchema = {
 	},
 };
 
-
 export const jobUpdationValidationSchema = {
 	role: {
 		rules: [JobRegex.roleRegex],
 		messages: [Messages.INVALID_ROLE],
-		optional: true
+		optional: true,
 	},
 	workTime: {
 		rules: [JobRegex.workTimeRegex],
 		messages: [Messages.INVALID_WORK_TIME],
-		optional: true
+		optional: true,
 	},
 	workMode: {
 		rules: [JobRegex.workModeRegex],
 		messages: [Messages.INVALID_WORK_MODE],
-		optional: true
+		optional: true,
 	},
 	jobLocation: {
 		rules: [JobRegex.jobLocationRegex],
 		messages: [Messages.INVALID_JOB_LOCATION],
-		optional: true
+		optional: true,
 	},
 	minimumExperience: {
-		rules: [JobRegex.minExperienceRegex.type, JobRegex.minExperienceRegex.amount],
-		messages: [Messages.INVALID_MINIMUM_EXPERIENCE, Messages.INVALID_MINIMUM_EXPERIENCE],
-		optional: true
+		rules: [
+			JobRegex.minExperienceRegex.type,
+			JobRegex.minExperienceRegex.amount,
+		],
+		messages: [
+			Messages.INVALID_MINIMUM_EXPERIENCE,
+			Messages.INVALID_MINIMUM_EXPERIENCE,
+		],
+		optional: true,
 	},
 	requirements: {
 		rules: [JobRegex.requirementRegex],
 		messages: [Messages.INVALID_REQUIREMENTS],
-		optional: true
+		optional: true,
 	},
 	responsibilities: {
 		rules: [JobRegex.responsibilityRegex],
 		messages: [Messages.INVALID_RESPONSIBILITIES],
-		optional: true
+		optional: true,
 	},
 	lastDate: {
 		rules: [JobRegex.lastDateRegex],
 		messages: [Messages.INVALID_LAST_DATE],
-		optional: true
+		optional: true,
+	},
+};
+
+export const problemUpdationSchema = {
+	title: {
+		rules: [
+			(value: unknown) => typeof value === "string" && value.trim().length > 0,
+		],
+		messages: ["Please provide a valid title"],
+		optional: true,
+	},
+	difficulty: {
+		rules: [
+			(value: unknown) =>
+				typeof value === "string" &&
+				["Beginner", "Intermediate", "Advanced"].includes(value),
+		],
+		messages: ["Please provide a valid difficulty"],
+		optional: true,
+	},
+	description: {
+		rules: [
+			(value: unknown) => typeof value === "string" && value.trim().length > 0,
+		],
+		messages: ["Please provide a description"],
+		optional: true,
+	},
+	functionName: {
+		rules: [
+			(value: unknown) =>
+				typeof value === "string" && camelCaseRegex.test(value.trim()),
+		],
+		messages: ["Please provide a valid function name (camelCase)"],
+		optional: true,
+	},
+	parameters: {
+		rules: [
+			(value: unknown) =>
+				Array.isArray(value) && value.length > 0 && value.length <= 5,
+		],
+		messages: ["Please provide valid parameters (1-5 allowed)"],
+		optional: true,
+	},
+	functionReturnType: {
+		rules: [
+			(value: unknown) =>
+				typeof value === "string" &&
+				["Array", "Floating Point", "Integer", "String", "Boolean"].includes(
+					value
+				),
+		],
+		messages: ["Please provide a valid function return type"],
+		optional: true,
+	},
+	functionReturnElemType: {
+		rules: [
+			(value: unknown, form: Record<string, unknown>) =>
+				form.functionReturnType === "Array"
+					? typeof value === "string" && value.trim().length > 0
+					: true,
+		],
+		messages: ["Please provide a valid function return element type"],
+		optional: true,
+	},
+	functionReturnNestedType: {
+		rules: [
+			(value: unknown, form: Record<string, unknown>) =>
+				form.functionReturnType === "Array"
+					? typeof value === "string" && value.trim().length > 0
+					: true,
+		],
+		messages: ["Please provide a valid function return nested type"],
+		optional: true,
+	},
+	evalFunction: {
+		rules: [
+			(value: unknown) => {
+				if (typeof value !== "string") return false;
+				try {
+					new Function(`return ${value}`)();
+					return true;
+				} catch {
+					return false;
+				}
+			},
+		],
+		messages: ["Please provide a valid evaluating function"],
+		optional: true,
+	},
+};
+
+export const problemCreationSchema = {
+	title: {
+		rules: [nameRegex],
+		messages: ["Please provide a valid title"],
+	},
+	difficulty: {
+		rules: [
+			(value: string) =>
+				["Beginner", "Intermediate", "Advanced"].includes(value),
+		],
+		messages: ["Please provide a valid difficulty"],
+	},
+	description: {
+		rules: [(value: string) => !!value],
+		messages: ["Please provide a description"],
+	},
+	functionName: {
+		rules: [camelCaseRegex],
+		messages: ["Please provide a valid function name (camelCase)"],
+	},
+	parameters: {
+		rules: [(value: unknown[]) => value?.length > 0],
+		messages: ["Please provide at least one parameter"],
+	},
+	functionReturnType: {
+		rules: [
+			(value: string) =>
+				[
+					"Array",
+					"Floating Point",
+					"Integer",
+					"String",
+					"Boolean",
+				].includes(value),
+		],
+		messages: ["Please provide a valid function return type"],
+	},
+	functionReturnElemType: {
+		rules: [
+			(value: string, form: Record<string, unknown>) =>
+				form.functionReturnType === "Array" ? !!value : true,
+		],
+		messages: ["Please provide a valid function return element type"],
+		optional: true,
+	},
+	functionReturnNestedType: {
+		rules: [
+			(value: string, form: Record<string, unknown>) =>
+				form.functionReturnType === "Array" ? !!value : true,
+		],
+		messages: ["Please provide a valid function return nested type"],
+		optional: true,
+	},
+	evalFunction: {
+		rules: [
+			(value: string) => {
+				try {
+					new Function(`return ${value}`)();
+					return true;
+				} catch {
+					return false;
+				}
+			},
+		],
+		messages: ["Please provide a valid evaluating function"],
 	},
 };
