@@ -5,15 +5,15 @@ import { Label } from "@/components/ui/label";
 import Requirements from "@/components/recruiterComponents/Requirements";
 import Responsibilities from "@/components/recruiterComponents/Responsibilities";
 import { useState } from "react";
-import { Calendar } from "@/components/ui/calendar";
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from "@/components/ui/popover";
-import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
+// import { Calendar } from "@/components/ui/calendar";
+// import {
+// 	Popover,
+// 	PopoverContent,
+// 	PopoverTrigger,
+// } from "@/components/ui/popover";
+// import { format } from "date-fns";
+// import { CalendarIcon } from "lucide-react";
+// import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import jobImage from "@/assets/interview.jpg";
 import { validateForm } from "@/validation/formValidation";
@@ -23,6 +23,9 @@ import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { recruiterRoutes } from "@/constants/routeUrl";
 import { useGetRecruiterData } from "@/hooks/useGetRecruiter";
+// import { enUS } from "date-fns/locale";
+import { fromDate } from "@internationalized/date";
+import { DatePicker } from "@heroui/date-picker";
 
 const PostJob = () => {
 	const [role, setRole] = useState("");
@@ -34,7 +37,7 @@ const PostJob = () => {
 	const [maxSalary, setMaxSalary] = useState("");
 	const [requirements, setRequirements] = useState<string[]>([]);
 	const [responsibilities, setResponsibilities] = useState<string[]>([]);
-	const [lastDate, setLastDate] = useState<Date>(new Date(Date.now()));
+	const [lastDate, setLastDate] = useState(fromDate(new Date(), "IST"));
 	const [error, setError] = useState({ field: "", message: "" });
 
 	const { toast } = useToast();
@@ -42,7 +45,9 @@ const PostJob = () => {
 	const recruiterData = useGetRecruiterData();
 
 	const handleSubmit = async () => {
-		const formattedDate = lastDate.toISOString().split("T")[0];
+		const formattedDate = new Date(lastDate.toDate())
+			.toISOString()
+			.split("T")[0];
 		const form = {
 			role,
 			workTime,
@@ -284,7 +289,7 @@ const PostJob = () => {
 								Last date to apply for this role
 							</Label>
 							<div className="lastDate">
-								<Popover>
+								{/* <Popover>
 									<PopoverTrigger asChild>
 										<Button
 											variant={"outline"}
@@ -309,13 +314,21 @@ const PostJob = () => {
 										<Calendar
 											mode="single"
 											selected={lastDate}
-											onSelect={(day) =>
-												day && setLastDate(day)
-											}
+											onSelect={(day) => day && setLastDate(day)}
 											initialFocus
+											locale={enUS}
 										/>
 									</PopoverContent>
-								</Popover>
+								</Popover> */}
+								<DatePicker
+									className="max-w-[284px] md:ml-4"
+									value={lastDate}
+									onChange={(value) =>
+										setLastDate(
+											value ?? fromDate(new Date(), "IST")
+										)
+									}
+								/>
 							</div>
 							{error.field === "lastDate" && (
 								<p className="text-red-500 text-sm">

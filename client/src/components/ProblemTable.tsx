@@ -98,7 +98,9 @@ const getColumn = (
 			),
 			cell: ({ row }: { row: Row<ProblemListType> }) => (
 				<div className="capitalize ml-9">
-					{Number(row.getValue("successRate")).toFixed(2)}%
+					{isNaN(Number(row.getValue("successRate")))
+						? "0"
+						: Number(row.getValue("successRate")).toFixed(2)}%
 				</div>
 			),
 		},
