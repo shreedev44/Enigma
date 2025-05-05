@@ -287,6 +287,7 @@ const PostJob = () => {
 											value ?? fromDate(new Date(), "IST")
 										)
 									}
+									aria-label="284px"
 								/>
 							</div>
 							{error.field === "lastDate" && (

@@ -5,15 +5,6 @@ import { Label } from "@/components/ui/label";
 import Requirements from "@/components/recruiterComponents/Requirements";
 import Responsibilities from "@/components/recruiterComponents/Responsibilities";
 import { useEffect, useState } from "react";
-import { Calendar } from "@/components/ui/calendar";
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from "@/components/ui/popover";
-import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import jobImage from "@/assets/interview.jpg";
 import { useToast } from "@/hooks/use-toast";
@@ -25,6 +16,8 @@ import { validateForm } from "@/validation/formValidation";
 import { jobUpdationValidationSchema } from "@/validation/formSchema";
 import { updateJob } from "@/api/recruiter";
 import ClassicSpinner from "@/components/loaders/ClassicSpinner";
+import { DatePicker } from "@heroui/date-picker";
+import { fromDate } from "@internationalized/date";
 
 const EditPost = () => {
 	const location = useLocation();
@@ -47,13 +40,16 @@ const EditPost = () => {
 	const [responsibilities, setResponsibilities] = useState<string[]>(
 		job.responsibilities
 	);
-	const [lastDate, setLastDate] = useState<Date>(job.lastDate);
+	const [lastDate, setLastDate] = useState(fromDate(new Date(), "IST"));
 	const [error, setError] = useState({ field: "", message: "" });
 	const [loading, setLoading] = useState(false);
 
 	const { toast } = useToast();
 
 	const handleSubmit = async () => {
+		const formattedDate = new Date(lastDate.toDate())
+			.toISOString()
+			.split("T")[0];
 		const form = {
 			role,
 			workTime,
@@ -62,7 +58,7 @@ const EditPost = () => {
 			minimumExperience,
 			requirements,
 			responsibilities,
-			lastDate,
+			lastDate: formattedDate,
 		};
 		let newForm: typeof form & { minSalary?: string; maxSalary?: string } =
 			{
@@ -324,38 +320,15 @@ const EditPost = () => {
 								Last date to apply for this role
 							</Label>
 							<div className="lastDate">
-								<Popover>
-									<PopoverTrigger asChild>
-										<Button
-											variant={"outline"}
-											className={cn(
-												"w-[240px] justify-start text-left font-normal",
-												!lastDate &&
-													"text-muted-foreground"
-											)}
-										>
-											<CalendarIcon />
-											{lastDate ? (
-												format(lastDate, "PPP")
-											) : (
-												<span>Pick a date</span>
-											)}
-										</Button>
-									</PopoverTrigger>
-									<PopoverContent
-										className="w-auto p-0"
-										align="start"
-									>
-										<Calendar
-											mode="single"
-											selected={lastDate}
-											onSelect={(day) =>
-												day && setLastDate(day)
-											}
-											initialFocus
-										/>
-									</PopoverContent>
-								</Popover>
+							<DatePicker
+									className="max-w-[284px] md:ml-4"
+									value={lastDate}
+									onChange={(value) =>
+										setLastDate(
+											value ?? fromDate(new Date(), "IST")
+										)
+									}
+								/>
 							</div>
 							{error.field === "lastDate" && (
 								<p className="text-red-500 text-sm">
