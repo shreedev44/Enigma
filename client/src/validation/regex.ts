@@ -25,19 +25,24 @@ const workModeRegex = /^(On-Site|Remote|Hybrid)$/;
 const jobLocationRegex = /^[a-zA-Z, ]{3,50}$/;
 const minExperienceRegex = {
 	type: /^[0-9]{1,2}$/,
-	amount: (value: number) => value <= 20,
+	amount: (value: unknown) => {
+		const exp = value as number;
+		return exp <= 20;
+	},
 };
 const salaryRegex = /^[0-9]{1,2}$/;
-const responsibilityRegex = (responsibilities: string[]) => {
+const responsibilityRegex = (value: unknown) => {
 	const regex = /^[\s\S]{3,500}$/;
+	const responsibilities = value as string[];
 	return (
 		responsibilities.length >= 3 &&
 		responsibilities.length <= 100 &&
 		responsibilities.every((responsibility) => regex.test(responsibility))
 	);
 };
-const requirementRegex = (requirements: string[]) => {
+const requirementRegex = (value: unknown) => {
 	const regex = /^[\s\S]{3,500}$/;
+	const requirements = value as string[];
 	return (
 		requirements.length >= 3 &&
 		requirements.length <= 100 &&

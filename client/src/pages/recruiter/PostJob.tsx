@@ -5,15 +5,6 @@ import { Label } from "@/components/ui/label";
 import Requirements from "@/components/recruiterComponents/Requirements";
 import Responsibilities from "@/components/recruiterComponents/Responsibilities";
 import { useState } from "react";
-// import { Calendar } from "@/components/ui/calendar";
-// import {
-// 	Popover,
-// 	PopoverContent,
-// 	PopoverTrigger,
-// } from "@/components/ui/popover";
-// import { format } from "date-fns";
-// import { CalendarIcon } from "lucide-react";
-// import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import jobImage from "@/assets/interview.jpg";
 import { validateForm } from "@/validation/formValidation";
@@ -23,7 +14,6 @@ import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { recruiterRoutes } from "@/constants/routeUrl";
 import { useGetRecruiterData } from "@/hooks/useGetRecruiter";
-// import { enUS } from "date-fns/locale";
 import { fromDate } from "@internationalized/date";
 import { DatePicker } from "@heroui/date-picker";
 
@@ -289,37 +279,6 @@ const PostJob = () => {
 								Last date to apply for this role
 							</Label>
 							<div className="lastDate">
-								{/* <Popover>
-									<PopoverTrigger asChild>
-										<Button
-											variant={"outline"}
-											className={cn(
-												"w-[240px] justify-start text-left font-normal",
-												!lastDate &&
-													"text-muted-foreground"
-											)}
-										>
-											<CalendarIcon />
-											{lastDate ? (
-												format(lastDate, "PPP")
-											) : (
-												<span>Pick a date</span>
-											)}
-										</Button>
-									</PopoverTrigger>
-									<PopoverContent
-										className="w-auto p-0"
-										align="start"
-									>
-										<Calendar
-											mode="single"
-											selected={lastDate}
-											onSelect={(day) => day && setLastDate(day)}
-											initialFocus
-											locale={enUS}
-										/>
-									</PopoverContent>
-								</Popover> */}
 								<DatePicker
 									className="max-w-[284px] md:ml-4"
 									value={lastDate}
