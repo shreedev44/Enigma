@@ -15,5 +15,6 @@ attemptRouter.get('/get-attempts/:problemNo', attemptController.getAttempts.bind
 attemptRouter.get('/find-attempt/:attemptId', attemptController.findAttempt.bind(attemptController))
 attemptRouter.get('/problem-stats', attemptController.getProfileStats.bind(attemptController))
 attemptRouter.get('/attempts-per-day', attemptController.getAttemptsPerDay.bind(attemptController))
+attemptRouter.get('/attempt-stats', attemptController.getStats.bind(attemptController))
 
 export default attemptRouter

@@ -14,4 +14,5 @@ export interface IAdminService {
         filter: string | null
     ): Promise<{ recruiters: RecruiterWithProfileType[]; totalPages: number }>
     blockOrUnblockUser(userId: string, block: boolean): Promise<boolean>
+    getUserStats(): Promise<{ totalStudents: number; totalRecruiters: number }>
 }

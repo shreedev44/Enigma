@@ -115,3 +115,18 @@ export const getJobDetails = async (jobId: string, role: Role) => {
 		return { success: false, error: message };
 	}
 };
+
+export const hideJob = async (jobId: string, role: Role) => {
+	try {
+		const { data } = await Api.patch(
+			`${commonEndpoints.HIDE_JOB}/${jobId}`,
+			{},
+			{ headers: getHeader(role) }
+		);
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};

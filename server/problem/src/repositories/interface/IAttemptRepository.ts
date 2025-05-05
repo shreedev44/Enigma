@@ -11,4 +11,5 @@ export interface IAttemptRepository extends IBaseRepository<AttemptType> {
     getProblemStats(userId: string): Promise<ProfileStatType | null>
     attemptsPerDay(userId: string): Promise<AttemptsPerDay[] | null>
     isSolved(userId: string, problemNo: number): Promise<boolean>
+    getStats(): Promise<{ totalAttempts: number; attemptsPerDay: number; acceptanceRate: number }>
 }

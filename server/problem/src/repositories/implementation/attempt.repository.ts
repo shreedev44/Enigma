@@ -178,6 +178,41 @@ class AttemptRepository extends BaseRepository<AttemptDocument> implements IAtte
             throw new Error('Error checking whether problem is solved')
         }
     }
+
+    async getStats(): Promise<{ totalAttempts: number; attemptsPerDay: number; acceptanceRate: number }> {
+        try {
+            const totalAttempts = await this.model.countDocuments()
+
+            const attemptsPerDayData = await this.model.aggregate([
+                {
+                    $group: {
+                        _id: {
+                            $dateToString: { format: '%Y/%m/%d', date: '$createdAt' },
+                        },
+                        count: { $sum: 1 },
+                    },
+                },
+                {
+                    $group: {
+                        _id: null,
+                        averageAttemptsPerDay: { $avg: '$count' },
+                    },
+                },
+            ])
+
+            const acceptedAttempts = await this.model.countDocuments({ status: 'Accepted' })
+            const acceptanceRate = totalAttempts > 0 ? (acceptedAttempts / totalAttempts) * 100 : 0
+
+            return {
+                totalAttempts,
+                attemptsPerDay: attemptsPerDayData[0]?.averageAttemptsPerDay || 0,
+                acceptanceRate,
+            }
+        } catch (err) {
+            console.log(err)
+            throw new Error('Error getting stats')
+        }
+    }
 }
 
 export default new AttemptRepository()

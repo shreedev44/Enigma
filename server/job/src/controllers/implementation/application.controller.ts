@@ -262,4 +262,13 @@ export class ApplicationController implements IApplicationController {
             next(err)
         }
     }
+
+    async getApplicationStats(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const stats = await this._applicationService.getStats()
+            res.status(_HttpStatus.OK).json(stats)
+        } catch (err) {
+            next(err)
+        }
+    }
 }

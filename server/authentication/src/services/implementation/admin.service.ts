@@ -92,4 +92,9 @@ export class AdminService implements IAdminService {
             } else return false
         }
     }
+
+    async getUserStats(): Promise<{ totalStudents: number; totalRecruiters: number }> {
+        const stats = await this._userRepository.userStats()
+        return stats
+    }
 }

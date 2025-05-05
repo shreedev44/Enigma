@@ -11,6 +11,8 @@ import Users from "@/pages/admin/Users";
 import Problems from "@/pages/admin/Problems";
 import AddProblem from "@/pages/admin/AddProblem";
 import ProblemDetails from "@/pages/admin/ProblemDetails";
+import Jobs from "@/pages/admin/Jobs";
+import JobDetails from "@/pages/admin/JobDetails";
 
 const AdminRoutes = () => {
   const ProtectRoute = ({ children }: { children: JSX.Element }) => {
@@ -107,6 +109,22 @@ const AdminRoutes = () => {
             element={
               <ProtectRoute>
                 <ProblemDetails />
+              </ProtectRoute>
+            }
+          />
+          <Route 
+            path={adminRoutes.JOBS}
+            element={
+              <ProtectRoute>
+                <Jobs />
+              </ProtectRoute>
+            }
+          />
+          <Route 
+            path={adminRoutes.JOB_DETAILS}
+            element={
+              <ProtectRoute>
+                <JobDetails />
               </ProtectRoute>
             }
           />

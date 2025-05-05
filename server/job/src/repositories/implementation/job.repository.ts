@@ -31,10 +31,15 @@ class JobRepository extends BaseRepository<IJobSchema> implements IJobRepository
         }
     }
 
-    async deleteById(userId: Types.ObjectId, jobId: string): Promise<boolean> {
+    async deleteById(userId: Types.ObjectId, jobId: string, isAdmin: boolean): Promise<boolean> {
         try {
-            const result = await this.model.updateOne({ userId, _id: jobId }, { listed: false })
-            return result.modifiedCount > 0
+            if (isAdmin) {
+                const result = await this.model.updateOne({ _id: jobId }, { listed: false })
+                return result.modifiedCount > 0
+            } else {
+                const result = await this.model.updateOne({ userId, _id: jobId }, { listed: false })
+                return result.modifiedCount > 0
+            }
         } catch (err) {
             console.error(err)
             throw new Error('Error deleting job by ID')

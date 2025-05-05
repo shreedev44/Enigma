@@ -16,4 +16,5 @@ export interface IUserRepository extends IBaseRepository<UserType> {
     ): Promise<RecruiterWithProfileType[]>
     blockUserById(id: string): Promise<boolean>
     unBlockUserById(id: string): Promise<boolean>
+    userStats(): Promise<{ totalStudents: number; totalRecruiters: number }>
 }

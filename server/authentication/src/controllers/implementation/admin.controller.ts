@@ -103,4 +103,13 @@ export class AdminController implements IAdminController {
             next(err)
         }
     }
+
+    async getStats(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const result = await this._adminService.getUserStats()
+            res.status(_HttpStatus.OK).json(result)
+        } catch (err) {
+            next(err)
+        }
+    }
 }

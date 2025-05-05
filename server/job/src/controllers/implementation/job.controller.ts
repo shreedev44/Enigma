@@ -61,7 +61,7 @@ export class JobController implements IJobController {
 
     async deleteJob(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const { id: userId } = JSON.parse(req.headers['x-user-payload'] as string)
+            const { id: userId, role } = JSON.parse(req.headers['x-user-payload'] as string)
             const { jobId } = req.params
 
             if (!userId || !jobId) {
@@ -76,7 +76,10 @@ export class JobController implements IJobController {
                 return
             }
 
-            const isDeleted = await this._jobService.deleteJob(userId, jobId)
+            let isAdmin = false
+            if (role === 'admin') isAdmin = true
+
+            const isDeleted = await this._jobService.deleteJob(userId, jobId, isAdmin)
 
             if (!isDeleted) {
                 res.status(_HttpStatus.NOT_FOUND).json({
@@ -138,12 +141,21 @@ export class JobController implements IJobController {
                 res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_ID })
                 return
             }
+
+            let isAdmin = false
+            if (req.headers['x-user-payload']) {
+                const { role } = JSON.parse(req.headers['x-user-payload'] as string)
+                if (role === 'admin') {
+                    isAdmin = true
+                }
+            }
             const { jobs, totalPages } = await this._jobService.getAllJobs(
                 Number(page),
                 String(sortBy),
                 Number(sortOrder) as 1 | -1,
                 String(filter),
-                String(userId)
+                String(userId),
+                isAdmin
             )
             res.status(_HttpStatus.OK).json({ jobs, totalPages })
         } catch (err) {

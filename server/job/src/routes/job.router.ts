@@ -23,7 +23,7 @@ jobRouter.patch(
     validateData(validationSchemas.jobUpdateValidationSchema),
     jobController.updateJob.bind(jobController)
 )
-jobRouter.patch('/hide/:jobId', validateRole('recruiter'), jobController.deleteJob.bind(jobController))
+jobRouter.patch('/hide/:jobId', jobController.deleteJob.bind(jobController))
 jobRouter.get('/recruiter-jobs', jobController.getJobsByUserId.bind(jobController))
 jobRouter.get('/:jobId', jobController.getJobDetails.bind(jobController))
 

@@ -49,6 +49,10 @@ export const adminEndpoints = {
 	UPDATE_PROBLEM: "/problem/update-problem",
 	UNLIST_PROBLEM: "/problem/unlist-problem",
 	LIST_PROBLEM: "/problem/list-problem",
+	GET_JOBS: "/job",
+	USER_STATS: "/auth/admin/user-stats",
+	JOB_STATS: "/job/application/job-stats",
+	PROBLEM_STATS: "/problem/attempt/attempt-stats",
 };
 
 export const commonEndpoints = {
@@ -60,4 +64,5 @@ export const commonEndpoints = {
 	REFRESH_TOKEN: `${import.meta.env.VITE_BASE_URL}/auth/refresh-token`,
 	LOGOUT: "/auth/logout",
 	GET_JOBS: "/job",
+	HIDE_JOB: "/job/hide",
 };

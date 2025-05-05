@@ -30,8 +30,8 @@ export class JobService implements IJobService {
         return new JobDTO.JobInfo(updatedJob)
     }
 
-    async deleteJob(userId: string, jobId: string): Promise<boolean> {
-        const isDeleted = await this._jobRepository.deleteById(new Types.ObjectId(userId), jobId)
+    async deleteJob(userId: string, jobId: string, isAdmin: boolean): Promise<boolean> {
+        const isDeleted = await this._jobRepository.deleteById(new Types.ObjectId(userId), jobId, isAdmin)
 
         if (!isDeleted) {
             throw createHttpError(_HttpStatus.NOT_FOUND, Messages.JOB_NOT_FOUND)
@@ -52,12 +52,13 @@ export class JobService implements IJobService {
         sortBy: string,
         sortOrder: 1 | -1,
         filter: string,
-        userId: string
+        userId: string,
+        isAdmin: boolean
     ): Promise<InstanceType<typeof JobDTO.Jobs>> {
         const dataPerPage = 2
         const skip = dataPerPage * (page - 1)
 
-        let query: object = { listed: true }
+        let query: object = isAdmin ? {} : { listed: true }
         if (filter || userId) {
             query = {
                 $and: [
@@ -70,7 +71,7 @@ export class JobService implements IJobService {
                             { jobLocation: { $regex: filter, $options: 'i' } },
                         ],
                     },
-                    { listed: true },
+                    ...(isAdmin ? [] : [{ listed: true }]),
                     ...(userId ? [{ userId: new Types.ObjectId(userId) }] : []),
                 ],
             }

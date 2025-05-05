@@ -20,4 +20,5 @@ export interface IApplicationService {
     getResumeUrl(applicationId: string, jobId: string, userId: string): Promise<string>
     shortlistSingleApplication(applicationId: string, jobId: string, userId: string): Promise<void>
     removeFromShortlist(applicationId: string, jobId: string, userId: string): Promise<void>
+    getStats(): Promise<{ totalJobs: number; applicationsPerJob: number }>
 }

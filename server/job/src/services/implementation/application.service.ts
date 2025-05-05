@@ -214,4 +214,9 @@ export class ApplicationService implements IApplicationService {
 
         await this._applicationRepository.removeFromShortlist(new Types.ObjectId(applicationId))
     }
+
+    async getStats(): Promise<{ totalJobs: number; applicationsPerJob: number }> {
+        const stats = await this._applicationRepository.getJobApplicationStats()
+        return stats
+    }
 }

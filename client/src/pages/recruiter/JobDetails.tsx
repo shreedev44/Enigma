@@ -1,5 +1,5 @@
 import { getJobDetails } from "@/api/common";
-import { hideJob } from "@/api/recruiter";
+import { hideJob } from "@/api/common";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import ClassicSpinner from "@/components/loaders/ClassicSpinner";
 import JobDetailsSkeleton from "@/components/loaders/JobDetailsSkeleton";
@@ -69,7 +69,7 @@ const JobDetails = () => {
 
 	const handleHide = async () => {
 		setLoading((prev) => ({ ...prev, hide: true }));
-		const response = await hideJob(state.jobId);
+		const response = await hideJob(state.jobId, "recruiter");
 
 		if (response.success) {
 			toast({

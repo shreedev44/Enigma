@@ -216,6 +216,43 @@ class ApplicationRepository extends BaseRepository<IApplicationSchema> implement
             throw new Error('Error finding application by email')
         }
     }
+
+    async getJobApplicationStats(): Promise<{ totalJobs: number; applicationsPerJob: number }> {
+        try {
+            const stats = await this.model.aggregate([
+                {
+                    $group: {
+                        _id: '$jobId',
+                        applicationCount: { $sum: 1 },
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'Jobs',
+                        localField: '_id',
+                        foreignField: '_id',
+                        as: 'job',
+                    },
+                },
+                {
+                    $match: {
+                        job: { $ne: [] },
+                    },
+                },
+                {
+                    $count: 'totalJobs',
+                },
+            ])
+
+            const totalJobs = stats.length > 0 ? stats[0].totalJobs : 0
+            const applicationsPerJob = totalJobs > 0 ? (await this.model.countDocuments()) / totalJobs : 0
+
+            return { totalJobs, applicationsPerJob }
+        } catch (err) {
+            console.error(err)
+            throw new Error('Error getting stats')
+        }
+    }
 }
 
 export default new ApplicationRepository()

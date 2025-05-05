@@ -6,4 +6,5 @@ export interface IAttemptController {
     findAttempt(req: Request, res: Response, next: NextFunction): Promise<void>
     getProfileStats(req: Request, res: Response, next: NextFunction): Promise<void>
     getAttemptsPerDay(req: Request, res: Response, next: NextFunction): Promise<void>
+    getStats(req: Request, res: Response, next: NextFunction): Promise<void>
 }

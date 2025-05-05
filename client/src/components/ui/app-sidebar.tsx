@@ -123,8 +123,8 @@ export function AppSidebar(props: {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  onClick={() => navigate(`/admin${adminRoutes.HOME}`)}
-                  className={location.pathname.split('/')[2] === 'jobposts' ? "outline outline-1" : ''}
+                  onClick={() => navigate(`/admin${adminRoutes.JOBS}`)}
+                  className={location.pathname.split('/')[2] === 'jobs' ? "outline outline-1" : ''}
                 >
                   <span>
                     <Briefcase />

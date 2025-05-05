@@ -4,4 +4,5 @@ export interface IAdminController {
     getStudents(req: Request, res: Response, next: NextFunction): Promise<void>
     getRecruiters(req: Request, res: Response, next: NextFunction): Promise<void>
     blockOrUnblockUser(req: Request, res: Response, next: NextFunction): Promise<void>
+    getStats(req: Request, res: Response, next: NextFunction): Promise<void>
 }

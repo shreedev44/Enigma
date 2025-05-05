@@ -151,6 +151,49 @@ class UserRepository extends BaseRepository<UserDocument> implements IUserReposi
             throw new Error('Error unblocking user')
         }
     }
+
+    async userStats(): Promise<{ totalStudents: number; totalRecruiters: number }> {
+        try {
+            const stats = await this.model.aggregate([
+                {
+                    $group: {
+                        _id: '$role',
+                        count: { $sum: 1 },
+                    },
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        totalStudents: {
+                            $cond: [{ $eq: ['$_id', 'student'] }, '$count', 0],
+                        },
+                        totalRecruiters: {
+                            $cond: [{ $eq: ['$_id', 'recruiter'] }, '$count', 0],
+                        },
+                    },
+                },
+                {
+                    $group: {
+                        _id: null,
+                        totalStudents: { $sum: '$totalStudents' },
+                        totalRecruiters: { $sum: '$totalRecruiters' },
+                    },
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        totalStudents: 1,
+                        totalRecruiters: 1,
+                    },
+                },
+            ])
+
+            return stats[0] || { totalStudents: 0, totalRecruiters: 0 }
+        } catch (err) {
+            console.log(err)
+            throw new Error('Error getting stats')
+        }
+    }
 }
 
 export default new UserRepository()

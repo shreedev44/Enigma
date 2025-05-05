@@ -128,6 +128,58 @@ export const listProblem = async (problemId: string) => {
 	}
 };
 
+export const getAllJobs = async (query = "") => {
+	try {
+		const { data } = await Api.get(`${adminEndpoints.GET_JOBS}?${query}`, {
+			headers,
+		});
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
+
+export const getUserStats = async () => {
+	try {
+		const { data } = await Api.get(adminEndpoints.USER_STATS, {
+			headers,
+		});
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+}
+
+export const getJobStats = async () => {
+	try {
+		const { data } = await Api.get(adminEndpoints.JOB_STATS, {
+			headers,
+		});
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+}
+
+export const getProblemStats = async () => {
+	try {
+		const { data } = await Api.get(adminEndpoints.PROBLEM_STATS, {
+			headers,
+		});
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+}
+
 // export const logout = async () => {
 // 	try {
 // 		const { data } = await Api.get(commonEndpoints.LOGOUT, {

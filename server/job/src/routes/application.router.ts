@@ -16,6 +16,7 @@ applicationRouter.post(
     upload.single('resume'),
     applicationController.apply.bind(applicationController)
 )
+applicationRouter.get('/job-stats', applicationController.getApplicationStats.bind(applicationController))
 applicationRouter.delete(
     '/delete/:applicationId',
     validateRole('student'),

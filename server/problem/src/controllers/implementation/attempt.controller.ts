@@ -80,4 +80,13 @@ export class AttemptController implements IAttemptController {
             next(err)
         }
     }
+
+    async getStats(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const stats = await this._attemptService.getStats()
+            res.status(_HttpStatus.OK).json(stats)
+        } catch (err) {
+            next(err)
+        }
+    }
 }
