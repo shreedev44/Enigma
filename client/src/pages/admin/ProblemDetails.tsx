@@ -20,10 +20,10 @@ import {
 import { DifficultyType, ProblemType } from "@/types/types";
 import { useToast } from "@/hooks/use-toast";
 import ClassicSpinner from "@/components/loaders/ClassicSpinner";
-import { useSidebarContext } from "@/components/adminComponents/Sidebar";
-import { adminRoutes } from "@/constants/routeUrl";
+import { useSidebarContext } from "@/context/SidebarContext";
 import { validateForm } from "@/validation/formValidation";
 import { problemUpdationSchema } from "@/validation/formSchema";
+import { adminRoutes } from "@/constants/routeUrl";
 
 const ProblemDetails = () => {
 	const { problemNo } = useParams();
@@ -103,7 +103,8 @@ const ProblemDetails = () => {
 				problem[key as keyof ProblemType]
 			) {
 				updatedFields[key as keyof ProblemType] =
-					formData[key as keyof ProblemType];
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					formData[key as keyof ProblemType] as any;
 			}
 		}
 
