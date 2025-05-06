@@ -7,27 +7,14 @@ import { useToast } from "@/hooks/use-toast";
 import Messages from "@/constants/Messages";
 import { useTheme } from "../../context/ThemeContext";
 import Breadcrumbs from "../Breadcrumbs";
-import { createContext, useContext, useState } from "react";
+import { useState } from "react";
+import { SidebarContext } from "@/context/SidebarContext";
 import { Outlet } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { adminRoutes } from "@/constants/routeUrl";
 import { forgotPassword } from "@/api/common";
 // import { logout } from "@/api/admin";
 
-const SidebarContext = createContext<{
-	setBreadcrumbs: (
-		breadcrumbs: { component: string; path?: string | undefined }[]
-	) => void;
-} | null>(null);
-export const useSidebarContext = () => {
-	const context = useContext(SidebarContext);
-	if (!context) {
-		throw new Error(
-			"useSidebarContext must be used within SidebarProvider"
-		);
-	}
-	return context;
-};
 
 const Sidebar = () => {
 	const { theme, toggleTheme } = useTheme();

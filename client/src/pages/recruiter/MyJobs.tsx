@@ -35,6 +35,7 @@ const MyJobs = () => {
 				});
 			}
 		})();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [pageData.page]);
 	return (
 		<div className="pt-24">

@@ -124,6 +124,7 @@ const EditPost = () => {
 			navigate(`/recruiter${recruiterRoutes.JOBS}`);
 			return;
 		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [job, jobId]);
 	return (
 		<div className="pt-24" key={jobId}>

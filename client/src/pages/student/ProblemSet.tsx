@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { getProblems } from "@/api/student";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { studentRoutes } from "@/constants/routeUrl";

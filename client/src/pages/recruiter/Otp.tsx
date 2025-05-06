@@ -34,6 +34,7 @@ const Otp = () => {
       navigate(`/recruiter${recruiterRoutes.SIGNUP}`);
       return;
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!email) {

@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect, useState } from "react";
-import { useSidebarContext } from "@/components/adminComponents/Sidebar";
+import { useSidebarContext } from "@/context/SidebarContext";
 import { blockAction, getRecruiters, getStudents } from "@/api/admin";
 import { useToast } from "@/hooks/use-toast";
 import { DataTable } from "@/components/adminComponents/UserTable";

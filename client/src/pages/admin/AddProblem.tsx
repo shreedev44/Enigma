@@ -1,4 +1,5 @@
-import { useSidebarContext } from "@/components/adminComponents/Sidebar";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useSidebarContext } from "@/context/SidebarContext";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,7 +13,6 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-// import CodeEditor from "@/components/CodeEditor";
 import { FaTrash } from "react-icons/fa6";
 import {
 	DataTypes,
@@ -708,26 +708,6 @@ const AddProblem = () => {
 						)}
 					</div>
 				</div>
-				{/* <div className="mb-8">
-					<Label htmlFor="returnType" className="text-sm">
-						<strong className="mr-3 text-lg">
-							Evaluating Function
-						</strong>{" "}
-						Write a function to define the logic of the valuation
-					</Label> */}
-					{/* <div
-            className={`md:mt-3 ${
-              error.field === "evalFunction" ? "border border-red-500" : ""
-            }`}
-          >
-            <CodeEditor
-              code={evalFunction}
-              setCode={setEvalFunction}
-              height="400px"
-              language="javascript"
-            />
-          </div> */}
-				{/* </div> */}
 				<div className="mb-24">
 					<Label htmlFor="" className="text-sm text-yellow-500">
 						It may take a while to generate the test cases.

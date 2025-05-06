@@ -65,6 +65,7 @@ const JobDetails = () => {
 				setLoading((prev) => ({ ...prev, job: false }));
 			}
 		})();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const handleHide = async () => {

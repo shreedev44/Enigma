@@ -1,4 +1,5 @@
-import { useSidebarContext } from "@/components/adminComponents/Sidebar";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useSidebarContext } from "@/context/SidebarContext";
 import { Button } from "@/components/ui/button";
 import { adminRoutes } from "@/constants/routeUrl";
 import { useEffect, useState, useCallback } from "react";

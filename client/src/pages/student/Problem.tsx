@@ -147,6 +147,7 @@ const Problem = () => {
 				setLoading({ ...loading, content: false });
 			}
 		})();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	useEffect(() => {

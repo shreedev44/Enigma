@@ -50,6 +50,7 @@ const GitHubCallback = () => {
         variant: "destructive",
       });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

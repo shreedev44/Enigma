@@ -1,4 +1,5 @@
-import { useSidebarContext } from "@/components/adminComponents/Sidebar";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useSidebarContext } from "@/context/SidebarContext";
 import JobCard from "@/components/JobCard";
 import JobCardSkeleton from "@/components/loaders/JobCardSkeleton";
 import { DynamicPagination } from "@/components/Pagination";

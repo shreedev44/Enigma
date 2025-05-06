@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { studentRoutes } from "@/constants/routeUrl";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";

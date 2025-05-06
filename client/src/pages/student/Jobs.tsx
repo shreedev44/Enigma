@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { getJobs } from "@/api/student";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import JobCard from "@/components/JobCard";
@@ -14,15 +15,6 @@ const Jobs = () => {
 	const [search, setSearch] = useState("");
 	const [query, setQuery] = useState("");
 	const [sort, setSort] = useState<"Newest" | "Oldest">("Newest");
-	// const [popoverOpen, setPopoverOpen] = useState(false);
-	// const [recruiters, setRecruiters] = useState<
-	// 	{ companyName: string; userId: string }[]
-	// >([]);
-	// const [recruiterSearch, setRecruiterSearch] = useState("");
-	// const [recruiterQuery, setRecruiterQuery] = useState({
-	// 	companyName: "",
-	// 	userId: "",
-	// });
 	const [loading, setLoading] = useState({ jobs: false, recruiters: false });
 	const [urlQuery, setUrlQuery] = useState({
 		page: "1",
@@ -75,13 +67,6 @@ const Jobs = () => {
 		setSearch,
 		sort,
 		setSort,
-		// popoverOpen,
-		// setPopoverOpen,
-		// recruiterSearch,
-		// setRecruiterSearch,
-		// recruiterQuery,
-		// setRecruiterQuery,
-		// recruiters,
 		loading: loading.recruiters,
 	};
 
@@ -143,44 +128,6 @@ const Jobs = () => {
 			setUrlQuery({ ...urlQuery, filter: query });
 		}
 	}, [query]);
-
-	// useEffect(() => {
-	// 	const fetchRecruiters = async (searchTerm: string) => {
-	// 		setLoading((prevLoading) => ({ ...prevLoading, recruiters: true }));
-	// 		const response = await getRecruiters(searchTerm);
-	// 		if (response.success) {
-	// 			setRecruiters(response.data.recruiters);
-	// 			setLoading((prevLoading) => ({
-	// 				...prevLoading,
-	// 				recruiters: false,
-	// 			}));
-	// 		} else {
-	// 			toast({
-	// 				description: response.error,
-	// 				variant: "destructive",
-	// 			});
-	// 			setLoading((prevLoading) => ({
-	// 				...prevLoading,
-	// 				recruiters: false,
-	// 			}));
-	// 		}
-	// 	};
-
-	// 	const debouncedFetchRecruiters = debounce(fetchRecruiters, 1500);
-
-	// 	if (recruiterSearch) {
-	// 		debouncedFetchRecruiters(recruiterSearch);
-	// 	}
-
-	// 	return () => {
-	// 		debouncedFetchRecruiters.clear();
-	// 	};
-	// }, [recruiterSearch]);
-
-	// useEffect(() => {
-	// 	console.log(recruiterQuery.userId)
-	// 	setUrlQuery((prev) => ({ ...prev, userId: recruiterQuery.userId }));
-	// }, [recruiterQuery]);
 
 	return (
 		<div className="pt-24">
