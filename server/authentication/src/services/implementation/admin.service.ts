@@ -32,7 +32,7 @@ export class AdminService implements IAdminService {
         }
         const students = await this._userRepository.getStudentWithProfile(sort, query)
 
-        const dataPerPage = 1
+        const dataPerPage = 6
         const totalPages = Math.ceil(students.length / dataPerPage)
 
         const startIndex = (page - 1) * dataPerPage
@@ -65,7 +65,7 @@ export class AdminService implements IAdminService {
         }
         const recruiters = await this._userRepository.getRecruiterWithProfile(sort, query)
 
-        const dataPerPage = 1
+        const dataPerPage = 6
         const totalPages = Math.ceil(recruiters.length / dataPerPage)
 
         const startIndex = (page - 1) * dataPerPage

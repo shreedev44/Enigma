@@ -84,7 +84,7 @@ export class ProblemService implements IProblemService {
             problems = await this._problemRepository.getProblems(sort, query)
         }
 
-        const dataPerPage = 1
+        const dataPerPage = 6
         const totalPages = Math.ceil(problems.length / dataPerPage)
 
         const startIndex = (page - 1) * dataPerPage

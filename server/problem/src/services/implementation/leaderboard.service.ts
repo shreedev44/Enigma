@@ -18,7 +18,7 @@ export class LeaderboardService implements ILeaderboardService {
     ): Promise<InstanceType<typeof LeaderboardDTO.LeaderboardInfo>> {
         const leaderboardData = await this._leaderboardRepository.getLeaderboard()
 
-        const dataPerPage = 1
+        const dataPerPage = 10
         const totalPages = Math.ceil(leaderboardData.length / dataPerPage)
 
         const startIndex = (page - 1) * dataPerPage

@@ -40,7 +40,7 @@ export class JobService implements IJobService {
     }
 
     async getJobsByUserId(userId: string, page: number): Promise<InstanceType<typeof JobDTO.Jobs>> {
-        const dataPerPage = 1
+        const dataPerPage = 6
         const skip = dataPerPage * (page - 1)
         const result = await this._jobRepository.findJobsByUserId(new Types.ObjectId(userId), skip, dataPerPage)
 
@@ -55,7 +55,7 @@ export class JobService implements IJobService {
         userId: string,
         isAdmin: boolean
     ): Promise<InstanceType<typeof JobDTO.Jobs>> {
-        const dataPerPage = 2
+        const dataPerPage = 6
         const skip = dataPerPage * (page - 1)
 
         let query: object = isAdmin ? {} : { listed: true }
