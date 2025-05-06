@@ -41,7 +41,7 @@ class AttemptRepository extends BaseRepository<AttemptDocument> implements IAtte
         }
     }
 
-    async getProblemStats(userId: string): Promise<ProfileStatType | null> {
+    async getProblemStats(userId: string): Promise<Omit<ProfileStatType, 'totalProblemsExist'> | null> {
         try {
             const result = await this.model.aggregate([
                 {
@@ -76,7 +76,7 @@ class AttemptRepository extends BaseRepository<AttemptDocument> implements IAtte
                     $facet: {
                         problemsSolvedByDifficulty: [
                             {
-                                $match: { hasAcceptedAttempt: 1 }, // Consider any problem with an accepted attempt as solved
+                                $match: { hasAcceptedAttempt: 1 },
                             },
                             {
                                 $group: {
@@ -87,15 +87,10 @@ class AttemptRepository extends BaseRepository<AttemptDocument> implements IAtte
                         ],
                         totalProblemsSolved: [
                             {
-                                $match: { hasAcceptedAttempt: 1 }, // Count only solved problems
+                                $match: { hasAcceptedAttempt: 1 },
                             },
                             {
                                 $count: 'totalSolved',
-                            },
-                        ],
-                        totalProblemsExist: [
-                            {
-                                $count: 'totalExist',
                             },
                         ],
                     },
@@ -125,7 +120,6 @@ class AttemptRepository extends BaseRepository<AttemptDocument> implements IAtte
             return {
                 problemsSolvedByDifficulty,
                 totalProblemsSolved: result[0].totalProblemsSolved[0]?.totalSolved || 0,
-                totalProblemsExist: result[0].totalProblemsExist[0]?.totalExist || 0,
                 acceptedAttempts: attemptStats.find((stat: { _id: string }) => stat._id === 'Accepted')?.count || 0,
                 notAcceptedAttempts: attemptStats
                     .filter((stat: { _id: string }) => stat._id !== 'Accepted')

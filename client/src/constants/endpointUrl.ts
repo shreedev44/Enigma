@@ -19,6 +19,7 @@ export const studentEndpoints = {
 	MY_APPLICATIONS: "/job/application/my-applications",
 	DELETE_APPLICATION: "/job/application/delete",
 	LEADERBOARD_RANK: "/problem/leaderboard/rank",
+	LEADERBOARD_TOP_THREE: "/problem/leaderboard/top-three",
 };
 
 export const recruiterEndpoints = {

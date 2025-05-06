@@ -8,7 +8,7 @@ export interface IAttemptRepository extends IBaseRepository<AttemptType> {
         problemNo: number
     ): Promise<Pick<AttemptType, '_id' | 'createdAt' | 'language' | 'status'>[]>
     findAttemptById(attemptId: string): Promise<AttemptType | null>
-    getProblemStats(userId: string): Promise<ProfileStatType | null>
+    getProblemStats(userId: string): Promise<Omit<ProfileStatType, 'totalProblemsExist'> | null>
     attemptsPerDay(userId: string): Promise<AttemptsPerDay[] | null>
     isSolved(userId: string, problemNo: number): Promise<boolean>
     getStats(): Promise<{ totalAttempts: number; attemptsPerDay: number; acceptanceRate: number }>

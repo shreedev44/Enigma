@@ -315,6 +315,19 @@ export const leaderboardRank = async (userId = "") => {
 	}
 };
 
+export const leaderboardTopThree = async () => {
+	try {
+		const { data } = await Api.get(studentEndpoints.LEADERBOARD_TOP_THREE, {
+			headers,
+		});
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
+
 // export const logout = async () => {
 // 	try {
 // 		const { data } = await Api.get(commonEndpoints.LOGOUT, {

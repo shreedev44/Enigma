@@ -231,6 +231,15 @@ class ProblemRepository extends BaseRepository<ProblemDocument> implements IProb
             throw new Error('Error listing problem')
         }
     }
+
+    async countDocuments(): Promise<number> {
+        try {
+            return await this.model.countDocuments({ status: 'listed' })
+        } catch (err) {
+            console.log(err)
+            throw new Error('Error counting documents')
+        }
+    }
 }
 
 export default new ProblemRepository()

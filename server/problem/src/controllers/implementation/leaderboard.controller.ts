@@ -54,7 +54,7 @@ export class LeaderboardController implements ILeaderboardController {
         try {
             const leaderboard = await this._leaderboardService.getTopThree()
 
-            res.status(_HttpStatus.OK).json({ leaderboard })
+            res.status(_HttpStatus.OK).json(leaderboard)
         } catch (err) {
             next(err)
         }

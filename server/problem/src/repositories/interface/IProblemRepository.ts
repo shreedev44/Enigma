@@ -16,4 +16,5 @@ export interface IProblemRepository extends IBaseRepository<ProblemType> {
     updateProblemById(problemId: string, problem: Partial<ProblemType>): Promise<ProblemDocument | null>
     unlistProblemById(problemId: string): Promise<ProblemDocument | null>
     listProblemById(problemId: string): Promise<ProblemDocument | null>
+    countDocuments(): Promise<number>
 }

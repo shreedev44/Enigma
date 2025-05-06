@@ -94,11 +94,12 @@ export class AttemptService implements IAttemptService {
 
     async getProfileStats(userId: string): Promise<InstanceType<typeof AttemptDTO.ProfileStats>> {
         const stats = await this._attemptRepository.getProblemStats(userId)
+        const totalProblemsExist = await this._problemRepository.countDocuments()
 
         if (!stats) {
             throw createHttpError(_HttpStatus.NOT_FOUND, Messages.STATS_NOT_RETRIEVED)
         }
-        return new AttemptDTO.ProfileStats(stats)
+        return new AttemptDTO.ProfileStats({ ...stats, totalProblemsExist })
     }
 
     async getAttemptsPerDay(userId: string): Promise<InstanceType<typeof AttemptDTO.AttemptsAttendance>[]> {
