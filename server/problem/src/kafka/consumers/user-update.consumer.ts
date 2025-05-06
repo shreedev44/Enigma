@@ -2,21 +2,22 @@ import leaderboardRepository from '@repositories/implementation/leaderboard.repo
 import { kafka } from '../client'
 import { retryProcessing } from '@utils'
 
-interface UserRegistrationEvent {
+interface UserUpdateEvent {
     userId: string
-    username: string
-    profilePicture: string
+    username?: string
+    profilePicture?: string
 }
 
-const consumer = kafka.consumer({ groupId: 'problem-service-user-registration' })
+const consumer = kafka.consumer({ groupId: 'problem-service-user-updation' })
 
 const processMessage = async (message: { value: Buffer }) => {
     try {
-        const userData: UserRegistrationEvent = JSON.parse(message.value.toString())
+        const userData = JSON.parse(message.value.toString())
 
-        const totalUsers = await leaderboardRepository.getCount()
-        const obj = { ...userData, rank: totalUsers + 1 }
-        await leaderboardRepository.create(obj)
+        const obj: Omit<UserUpdateEvent, 'userId'> = {}
+        if (userData.username) obj.username = userData.username
+        if (userData.profilePicture) obj.profilePicture = userData.profilePicture
+        await leaderboardRepository.updateUserById(userData.userId, obj)
     } catch (error) {
         if (error instanceof Error) {
             throw new Error(`Failed to process message: ${error.message}`)
@@ -26,9 +27,9 @@ const processMessage = async (message: { value: Buffer }) => {
     }
 }
 
-export const UserRegistrationConsumer = async () => {
+export const UserUpdateConsumer = async () => {
     await consumer.connect()
-    await consumer.subscribe({ topic: 'user-registration', fromBeginning: true })
+    await consumer.subscribe({ topic: 'user-updation', fromBeginning: true })
 
     await consumer.run({
         eachMessage: async ({ topic, partition, message }) => {

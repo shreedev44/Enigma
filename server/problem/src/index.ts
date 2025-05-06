@@ -16,7 +16,8 @@ import problemRouter from '@routes/problem.router'
 import attemptRouter from '@routes/attempt.router'
 import leaderboardRouter from '@routes/leaderboard.router'
 
-import { runConsumer } from '@consumers'
+import { UserRegistrationConsumer } from '@consumers'
+import { UserUpdateConsumer } from './kafka/consumers/user-update.consumer'
 
 class App {
     public app: Application
@@ -28,9 +29,7 @@ class App {
         this.initializeMiddlewares()
         this.initializeRoutes()
         this.initializeDatabase()
-        runConsumer().catch((error) => {
-            console.error('Error running the consumer:', error)
-        })
+        this.initializeConsumers()
     }
 
     private initializeMiddlewares(): void {
@@ -45,6 +44,15 @@ class App {
         this.app.use('/leaderboard', leaderboardRouter)
         this.app.use(notFoundHandler)
         this.app.use(errorHandler)
+    }
+
+    private initializeConsumers(): void {
+        UserRegistrationConsumer().catch((error) => {
+            console.error('Error running registration consumer:', error)
+        })
+        UserUpdateConsumer().catch((error) => {
+            console.error('Error running updation consumer', error)
+        })
     }
 
     private initializeDatabase(): void {

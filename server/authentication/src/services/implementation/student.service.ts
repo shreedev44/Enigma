@@ -4,6 +4,7 @@ import { IStudentService } from '@services/interface'
 import { IStudentRepository } from '@repositories/interface'
 import { handleCloudinaryDelete, handleCloudinaryUpload, createHttpError } from '@utils'
 import { StudentDTO } from '@dtos'
+import { sendUserUpdationEvent } from '@producers'
 
 export class StudentService implements IStudentService {
     constructor(private _studentRepository: IStudentRepository) {}
@@ -22,6 +23,7 @@ export class StudentService implements IStudentService {
         data: Partial<StudentProfileType>,
         profilePicture: FileType | undefined
     ): Promise<InstanceType<typeof StudentDTO.ProfileInfo>> {
+        const obj: { username?: string; profilePicture?: string } = {}
         if (profilePicture) {
             const imageUrl = await handleCloudinaryUpload(profilePicture.buffer)
             data.profilePicture = imageUrl
@@ -29,6 +31,7 @@ export class StudentService implements IStudentService {
             if (url && url.split('/')[2] === 'res.cloudinary.com') {
                 await handleCloudinaryDelete(url)
             }
+            obj.profilePicture = imageUrl
         }
 
         const profile = await this._studentRepository.updateById(userId, data)
@@ -36,6 +39,15 @@ export class StudentService implements IStudentService {
         if (!profile) {
             throw createHttpError(_HttpStatus.NOT_FOUND, Messages.NO_PROFILE)
         }
+
+        if (data.firstName || data.lastName) {
+            obj.username = `${profile?.firstName} ${profile?.lastName}`
+        }
+
+        if (obj.profilePicture || obj.username) {
+            sendUserUpdationEvent({ ...obj, userId: String(profile.userId) })
+        }
+
         return new StudentDTO.ProfileInfo(profile)
     }
 }
