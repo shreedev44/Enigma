@@ -49,4 +49,14 @@ export class LeaderboardController implements ILeaderboardController {
             next(err)
         }
     }
+
+    async getTopThree(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const leaderboard = await this._leaderboardService.getTopThree()
+
+            res.status(_HttpStatus.OK).json({ leaderboard })
+        } catch (err) {
+            next(err)
+        }
+    }
 }

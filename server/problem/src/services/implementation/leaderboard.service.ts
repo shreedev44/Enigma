@@ -51,4 +51,10 @@ export class LeaderboardService implements ILeaderboardService {
 
         return { rank: leaderboard.rank }
     }
+
+    async getTopThree(): Promise<InstanceType<typeof LeaderboardDTO.TopThree>> {
+        const leaderboard = await this._leaderboardRepository.getLeaderboard()
+
+        return new LeaderboardDTO.TopThree({ leaderboard: leaderboard.slice(0, 3) })
+    }
 }
