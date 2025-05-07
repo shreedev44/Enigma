@@ -10,9 +10,11 @@ import debounce from "debounce";
 import leaderboardImage from "@/assets/leaderboard.png";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const ProblemSet = () => {
 	const { toast } = useToast();
+	const navigate = useNavigate();
 
 	const [problems, setProblems] = useState<ProblemListType[]>([]);
 	const [filteredProblems, setFilteredProblems] = useState<ProblemListType[]>(
@@ -230,7 +232,7 @@ const ProblemSet = () => {
 				{leaderboardLoading ? (
 					<Skeleton className="md:w-1/3 bg-zinc-200 dark:bg-zinc-700 rounded-lg px-5 h-72" />
 				) : (
-					<div className="md:w-1/3 bg-zinc-200 dark:bg-zinc-700 rounded-lg px-5 flex flex-col justify-between py-5">
+					<div className="md:w-1/3 bg-zinc-200 dark:bg-zinc-900 rounded-lg px-5 flex flex-col justify-between py-5 h-[350px]">
 						<div>
 							<div className="flex justify-center">
 								<img
@@ -240,22 +242,27 @@ const ProblemSet = () => {
 								/>
 							</div>
 							<h1 className="text-lg font-mono font-bold m-3 text-center">
-								Leaderboard
+								Leaderboard Top 3
 							</h1>
-						</div>
-						<div>
-							{leaderboard &&
-								leaderboard.map((value) => (
-									<p
-										key={value.userId}
-										className="text-xl md:text-2xl my-2 font-mono font-bold"
-									>
-										{value.rank} {value.username}
-									</p>
-								))}
+							<div className="mt-5">
+								{leaderboard &&
+									leaderboard.map((value) => (
+										<p
+											key={value.userId}
+											className="text-xl md:text-2xl my-2 font-mono font-bold"
+										>
+											{value.rank} {value.username}
+										</p>
+									))}
+							</div>
 						</div>
 						<div className="flex justify-center">
-							<Button className="bg-fleace rounded-full">
+							<Button
+								className="bg-fleace rounded-full font-bold font-mono"
+								onClick={() =>
+									navigate(studentRoutes.LEADERBOARD)
+								}
+							>
 								View Leaderboard
 							</Button>
 						</div>

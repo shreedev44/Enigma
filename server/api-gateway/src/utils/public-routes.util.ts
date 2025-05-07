@@ -18,6 +18,7 @@ const PUBLIC_ROUTES: { method: string; path: string }[] = [
     { method: "POST", path: "/api/problem/compile" },
     { method: "GET", path: "/api/problem/leaderboard/update-ranks" },
     { method: "GET", path: "/api/problem/leaderboard" },
+    { method: "GET", path: "/api/problem/leaderboard/top-three" },
     { method: "GET", path: "/api/job/:id" },
 ];
 

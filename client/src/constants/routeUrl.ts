@@ -17,6 +17,7 @@ export const studentRoutes = {
 	JOB_DETAILS: "/jobs/details",
 	INTERVIEW: "/interview",
 	MEETING: "/meet",
+	LEADERBOARD: "/leaderboard",
 };
 
 export const recruiterRoutes = {
@@ -35,6 +36,7 @@ export const recruiterRoutes = {
 	APPLICATION_DETILAILS: "/application-details",
 	INTERVIEW: "/interview",
 	MEETING: "/meet",
+	LEADERBOARD: "/leaderboard",
 };
 
 export const adminRoutes = {
@@ -48,5 +50,5 @@ export const adminRoutes = {
 	ADD_PROBLEM: "/problems/add-problem",
 	PROBLEM_DETAILS: "/problem",
 	JOBS: "/jobs",
-	JOB_DETAILS: '/job-details'
+	JOB_DETAILS: "/job-details",
 };

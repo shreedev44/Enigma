@@ -328,6 +328,19 @@ export const leaderboardTopThree = async () => {
 	}
 };
 
+export const getLeaderboard = async (page: number) => {
+	try {
+		const { data } = await Api.get(`${studentEndpoints.LEADERBOARD}?page=${page}`, {
+			headers,
+		});
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
+
 // export const logout = async () => {
 // 	try {
 // 		const { data } = await Api.get(commonEndpoints.LOGOUT, {

@@ -17,6 +17,7 @@ import Compiler from "@/pages/student/Compiler";
 import Jobs from "@/pages/student/Jobs";
 import JobDetails from "@/pages/student/JobDetails";
 import Interview from "@/pages/student/Interview";
+import Leaderboard from "@/pages/student/Leaderboard";
 
 const StudentRoutes = () => {
 	const ProtectRoute = ({ children }: { children: JSX.Element }) => {
@@ -121,6 +122,10 @@ const StudentRoutes = () => {
 							<Interview />
 						</ProtectRoute>
 					}
+				/>
+				<Route
+					path={studentRoutes.LEADERBOARD}
+					element={<Leaderboard />}
 				/>
 			</Routes>
 		</>

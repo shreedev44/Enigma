@@ -131,3 +131,15 @@ export type Application = {
 	education: Education[];
 	experience: Experience[];
 };
+
+export interface LeaderboardEntry {
+	userId: string
+	rank: number;
+	username: string;
+	profilePicture: string
+	solved: {
+		beginner: number
+		intermediate: number
+		advanced: number
+	}
+  }

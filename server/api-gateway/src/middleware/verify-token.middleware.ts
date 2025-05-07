@@ -18,12 +18,12 @@ export default async function verifyToken(
 				return next();
 			}
 			return res
-			.status(401)
-			.json({ error: "Access denied, No token provided" });
+				.status(401)
+				.json({ error: "Access denied, No token provided" });
 		}
-		
+
 		const token = authHeader.split(" ")[1];
-		
+
 		if (!token) {
 			if (isPublic(req)) {
 				return next();
@@ -60,13 +60,12 @@ export default async function verifyToken(
 
 		next();
 	} catch (err: any) {
-		if (isPublic(req)) {
-			return next();
-		}
-
 		if (err.name === "TokenExpiredError") {
 			return res.status(403).json({ error: "Token has expired" });
 		} else {
+			if (isPublic(req)) {
+				return next();
+			}
 			return res.status(403).json({ error: "Invalid token" });
 		}
 	}
