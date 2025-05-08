@@ -133,8 +133,28 @@ const applicationValidationSchema = {
     },
 }
 
+const subscriptionPlanSchema = {
+    name: {
+        rules: [Regex.NAME],
+        messages: [Messages.INVALID_PLAN_NAME],
+    },
+    features: {
+        rules: [Regex.FEATURES],
+        messages: [Messages.INVALID_FEATURES],
+    },
+    price: {
+        rules: [Regex.PRICE],
+        messages: [Messages.INVALID_PRICE],
+    },
+    durationInDays: {
+        rules: [Regex.DURATION],
+        messages: [Messages.INVALID_DURATION],
+    },
+}
+
 export const validationSchemas = {
     jobCreationValidationSchema,
     jobUpdateValidationSchema,
     applicationValidationSchema,
+    subscriptionPlanSchema,
 }

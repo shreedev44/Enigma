@@ -1,3 +1,5 @@
 export * from './IJob'
 export * from './IApplication'
 export * from './IInterview'
+export * from './ISubscription'
+export * from './ISubscriptionPlan'

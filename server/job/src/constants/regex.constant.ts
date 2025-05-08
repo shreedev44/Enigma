@@ -62,6 +62,10 @@ const STATUS = /^(received|shortlisted)$/
 const RESUME = /^(https?:\/\/[^\s$.?#].[^\s]*)$/
 const OBJECT_ID = /^[a-f\d]{24}$/i
 
+const FEATURES = (features: string[]) => features.length >= 1
+const PRICE = (price: string) => Number(price) > 0
+const DURATION = (duration: string) => Number(duration) >= 1
+
 export const Regex = {
     ROLE,
     NAME,
@@ -83,4 +87,7 @@ export const Regex = {
     STATUS,
     RESUME,
     OBJECT_ID,
+    FEATURES,
+    PRICE,
+    DURATION,
 }

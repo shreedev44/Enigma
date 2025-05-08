@@ -36,4 +36,12 @@ export const Messages = {
     APPLICATION_SUCCESS: 'Applied for job',
     APPLICATOIN_SHORTLISTED: 'Application shortlisted',
     REMOVED_FROM_SHORTLIST: 'Applicatoin removed from shortlist',
+
+    INVALID_PLAN_NAME: 'Invalid plan name',
+    INVALID_FEATURES: 'Atleast 1 feature is required',
+    INVALID_PRICE: 'Invalid price',
+    INVALID_DURATION: 'Invalid plan duration',
+    PLAN_ADDED: 'Subscription plan added',
+    PLAN_LISTED: 'Plan is now listed for the user',
+    PLAN_UNLISTED: 'Plan is now unlisted from the user',
 }
