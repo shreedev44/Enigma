@@ -2,7 +2,7 @@ import { Document } from 'mongoose'
 
 export interface ISubscriptionPlanSchema extends Document {
     name: string
-    features: string[]
+    maxInterviews: number
     price: number
     durationInDays: number
     listed: boolean

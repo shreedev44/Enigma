@@ -174,6 +174,7 @@ export class JobController implements IJobController {
 
             if (!Types.ObjectId.isValid(jobId)) {
                 res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_ID })
+                console.log('---------------------------------getjobdetails')
                 return
             }
 

@@ -152,7 +152,7 @@ export const getUserStats = async () => {
 		const message = error.response?.data?.error || "An error occured";
 		return { success: false, error: message };
 	}
-}
+};
 
 export const getJobStats = async () => {
 	try {
@@ -165,7 +165,7 @@ export const getJobStats = async () => {
 		const message = error.response?.data?.error || "An error occured";
 		return { success: false, error: message };
 	}
-}
+};
 
 export const getProblemStats = async () => {
 	try {
@@ -178,7 +178,65 @@ export const getProblemStats = async () => {
 		const message = error.response?.data?.error || "An error occured";
 		return { success: false, error: message };
 	}
-}
+};
+
+export const createPlan = async (planData: Record<string, unknown>) => {
+	try {
+		const { data } = await Api.post(
+			adminEndpoints.SUBSCRIPTION_PLAN,
+			planData,
+			{ headers }
+		);
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
+
+export const listPlan = async (planId: string) => {
+	try {
+		const { data } = await Api.patch(
+			`${adminEndpoints.LIST_PLAN}/${planId}`,
+			{},
+			{ headers }
+		);
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
+
+export const unListPlan = async (planId: string) => {
+	try {
+		const { data } = await Api.patch(
+			`${adminEndpoints.UNLIST_PLAN}/${planId}`,
+			{},
+			{ headers }
+		);
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
+
+export const getPLans = async () => {
+	try {
+		const { data } = await Api.get(adminEndpoints.SUBSCRIPTION_PLAN, {
+			headers,
+		});
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
 
 // export const logout = async () => {
 // 	try {

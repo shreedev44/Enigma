@@ -60,7 +60,7 @@ const Jobs = () => {
     }, [pageData.page, query]);
 
     return (
-        <div>
+        <div className="mb-5">
             <div className="flex justify-center mb-6">
                 <input
                     type="text"

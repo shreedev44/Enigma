@@ -1,14 +1,14 @@
 import mongoose, { Schema } from 'mongoose'
 import { ISubscriptionPlanSchema } from '@entities'
 
-const JobSchema = new Schema<ISubscriptionPlanSchema>(
+const SubscriptionPlanSchema = new Schema<ISubscriptionPlanSchema>(
     {
         name: {
             type: String,
             required: true,
         },
-        features: {
-            type: [String],
+        maxInterviews: {
+            type: Number,
             required: true,
         },
         price: {
@@ -30,4 +30,4 @@ const JobSchema = new Schema<ISubscriptionPlanSchema>(
     }
 )
 
-export default mongoose.model<ISubscriptionPlanSchema>('SubscriptionPlan', JobSchema, 'SubscriptionPlans')
+export default mongoose.model<ISubscriptionPlanSchema>('SubscriptionPlan', SubscriptionPlanSchema, 'SubscriptionPlans')

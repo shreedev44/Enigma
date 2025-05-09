@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose'
 import { ISubscriptionSchema } from '@entities'
 
-const JobSchema = new Schema<ISubscriptionSchema>(
+const SubscriptionSchema = new Schema<ISubscriptionSchema>(
     {
         userId: {
             type: Schema.Types.ObjectId,
@@ -25,4 +25,4 @@ const JobSchema = new Schema<ISubscriptionSchema>(
     }
 )
 
-export default mongoose.model<ISubscriptionSchema>('Subscription', JobSchema, 'Subscriptions')
+export default mongoose.model<ISubscriptionSchema>('Subscription', SubscriptionSchema, 'Subscriptions')

@@ -40,6 +40,7 @@ export const recruiterEndpoints = {
 	SHORTLIST_SINGLE_APPLICATION: "/job/application/shortlist-application",
 	REMOVE_FROM_SHORTLIST: "/job/application/remove-from-shortlist",
 	SCHEDULE_INTERVIEW: "/job/interview/schedule",
+	GET_PLANS: "/job/subscription-plan/listed"
 };
 
 export const adminEndpoints = {
@@ -55,6 +56,9 @@ export const adminEndpoints = {
 	USER_STATS: "/auth/admin/user-stats",
 	JOB_STATS: "/job/application/job-stats",
 	PROBLEM_STATS: "/problem/attempt/attempt-stats",
+	SUBSCRIPTION_PLAN: "/job/subscription-plan",
+	UNLIST_PLAN: "/job/subscription-plan/unlist",
+	LIST_PLAN: "/job/subscription-plan/list",
 };
 
 export const commonEndpoints = {
@@ -66,5 +70,6 @@ export const commonEndpoints = {
 	REFRESH_TOKEN: `${import.meta.env.VITE_BASE_URL}/auth/refresh-token`,
 	LOGOUT: "/auth/logout",
 	GET_JOBS: "/job",
+	JOB_DETAILS: "/job/job-details",
 	HIDE_JOB: "/job/hide",
 };

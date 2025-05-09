@@ -37,6 +37,7 @@ export const recruiterRoutes = {
 	INTERVIEW: "/interview",
 	MEETING: "/meet",
 	LEADERBOARD: "/leaderboard",
+	SUBSCRIPTIONS: "/subscription-plans"
 };
 
 export const adminRoutes = {
@@ -48,7 +49,9 @@ export const adminRoutes = {
 	RECRUITERS: "/users/recruiters",
 	PROBLEMS: "/problems",
 	ADD_PROBLEM: "/problems/add-problem",
-	PROBLEM_DETAILS: "/problem",
+	PROBLEM_DETAILS: "/problems",
 	JOBS: "/jobs",
-	JOB_DETAILS: "/job-details",
+	JOB_DETAILS: "/jobs/job-details",
+	SUBCSRIPTIONS: "/subscription-plans",
+	ADD_PLAN: "/subscription-plans/add-plan",
 };

@@ -101,7 +101,7 @@ export type JobCardProps = {
 	minimumExperience: number;
 	lastDate: Date;
 	createdAt: Date;
-	url?: string
+	url?: string;
 };
 
 export type AppliationDrawerProps = {
@@ -118,4 +118,15 @@ export type SelectButtonProps = {
 	values: { value: string; display: string }[];
 	state: string;
 	setState: (value: string) => void;
+};
+
+export type PricingCardProps = {
+	_id: string;
+	name: string;
+	price: string;
+	maxInterviews: number;
+	durationInDays: number;
+	highlight?: boolean;
+	listed: boolean;
+	userLevel: "admin" | "recruiter";
 };

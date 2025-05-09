@@ -105,7 +105,7 @@ export const resetPassword = async (
 export const getJobDetails = async (jobId: string, role: Role) => {
 	try {
 		const { data } = await Api.get(
-			`${commonEndpoints.GET_JOBS}/${jobId}`,
+			`${commonEndpoints.JOB_DETAILS}/${jobId}`,
 			{ headers: getHeader(role) }
 		);
 		return { success: true, data };

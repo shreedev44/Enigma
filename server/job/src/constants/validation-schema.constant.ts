@@ -138,8 +138,8 @@ const subscriptionPlanSchema = {
         rules: [Regex.NAME],
         messages: [Messages.INVALID_PLAN_NAME],
     },
-    features: {
-        rules: [Regex.FEATURES],
+    maxInterviews: {
+        rules: [Regex.INTERVIEWS],
         messages: [Messages.INVALID_FEATURES],
     },
     price: {

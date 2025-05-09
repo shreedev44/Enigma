@@ -25,7 +25,7 @@ export class SubscriptionPlanService implements ISubscriptionPlanService {
     }
 
     async findAllPlans(): Promise<ISubscriptionPlanSchema[]> {
-        const plans = await this._subscriptionPlanRepository.findAllListedSubscriptions()
+        const plans = await this._subscriptionPlanRepository.findAllSubscriptions()
         return plans
     }
 }

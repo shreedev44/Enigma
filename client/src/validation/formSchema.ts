@@ -12,6 +12,7 @@ import {
 	optionalBasedAtRegex,
 	JobRegex,
 	camelCaseRegex,
+	planRegex,
 } from "./regex";
 
 export const studentSignupValidationSchema = {
@@ -237,7 +238,8 @@ export const jobUpdationValidationSchema = {
 export const problemUpdationSchema = {
 	title: {
 		rules: [
-			(value: unknown) => typeof value === "string" && value.trim().length > 0,
+			(value: unknown) =>
+				typeof value === "string" && value.trim().length > 0,
 		],
 		messages: ["Please provide a valid title"],
 		optional: true,
@@ -253,7 +255,8 @@ export const problemUpdationSchema = {
 	},
 	description: {
 		rules: [
-			(value: unknown) => typeof value === "string" && value.trim().length > 0,
+			(value: unknown) =>
+				typeof value === "string" && value.trim().length > 0,
 		],
 		messages: ["Please provide a description"],
 		optional: true,
@@ -278,9 +281,13 @@ export const problemUpdationSchema = {
 		rules: [
 			(value: unknown) =>
 				typeof value === "string" &&
-				["Array", "Floating Point", "Integer", "String", "Boolean"].includes(
-					value
-				),
+				[
+					"Array",
+					"Floating Point",
+					"Integer",
+					"String",
+					"Boolean",
+				].includes(value),
 		],
 		messages: ["Please provide a valid function return type"],
 		optional: true,
@@ -387,5 +394,24 @@ export const problemCreationSchema = {
 			},
 		],
 		messages: ["Please provide a valid evaluating function"],
+	},
+};
+
+export const planCreationSchema = {
+	name: {
+		rules: [planRegex.nameRegex],
+		messages: [Messages.INVALID_NAME],
+	},
+	price: {
+		rules: [planRegex.price],
+		messages: [Messages.INVALID_PRICE],
+	},
+	maxInterviews: {
+		rules: [planRegex.interviews],
+		messages: [Messages.INVALID_INTERVIEWS],
+	},
+	durationInDays: {
+		rules: [planRegex.duration],
+		messages: [Messages.INVALID_DURATION],
 	},
 };

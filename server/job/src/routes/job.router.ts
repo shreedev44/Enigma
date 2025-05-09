@@ -25,6 +25,6 @@ jobRouter.patch(
 )
 jobRouter.patch('/hide/:jobId', jobController.deleteJob.bind(jobController))
 jobRouter.get('/recruiter-jobs', jobController.getJobsByUserId.bind(jobController))
-jobRouter.get('/:jobId', jobController.getJobDetails.bind(jobController))
+jobRouter.get('/job-details/:jobId', jobController.getJobDetails.bind(jobController))
 
 export default jobRouter

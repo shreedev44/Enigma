@@ -51,6 +51,10 @@ const requirementRegex = (value: unknown) => {
 };
 const lastDateRegex = /^\d{4}-\d{2}-\d{2}$/;
 
+const interviews = (value: unknown) => Number(value) >= 1;
+const price = (value: unknown) => Number(value) >= 1;
+const duration = (value: unknown) => Number(value) >= 1;
+
 export {
 	nameRegex,
 	optionalNameRegex,
@@ -76,4 +80,11 @@ export const JobRegex = {
 	responsibilityRegex,
 	requirementRegex,
 	lastDateRegex,
+};
+
+export const planRegex = {
+	nameRegex,
+	price,
+	interviews,
+	duration,
 };
