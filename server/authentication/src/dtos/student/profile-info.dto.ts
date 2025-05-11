@@ -6,6 +6,7 @@ export class ProfileInfo {
     githubProfile: string
     linkedinProfile: string
     profilePicture: string
+    skills: string
 
     constructor(profile: any) {
         this.firstName = profile.firstName
@@ -13,5 +14,6 @@ export class ProfileInfo {
         this.githubProfile = profile.githubProfile
         this.linkedinProfile = profile.linkedinProfile
         this.profilePicture = profile.profilePicture
+        this.skills = profile.skills
     }
 }

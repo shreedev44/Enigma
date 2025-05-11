@@ -21,6 +21,7 @@ export const studentEndpoints = {
 	LEADERBOARD_RANK: "/problem/leaderboard/rank",
 	LEADERBOARD_TOP_THREE: "/problem/leaderboard/top-three",
 	LEADERBOARD: "/problem/leaderboard",
+	UPDATE_SKILLS: "/auth/student/update-skills",
 };
 
 export const recruiterEndpoints = {

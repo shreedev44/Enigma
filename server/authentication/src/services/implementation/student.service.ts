@@ -50,4 +50,12 @@ export class StudentService implements IStudentService {
 
         return new StudentDTO.ProfileInfo(profile)
     }
+
+    async updateSkills(userId: string, skills: string[]): Promise<void> {
+        const updated = await this._studentRepository.updateSkillsByUserId(userId, skills)
+
+        if (!updated) {
+            throw createHttpError(_HttpStatus.NOT_FOUND, Messages.USER_NOT_FOUND)
+        }
+    }
 }

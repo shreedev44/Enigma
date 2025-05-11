@@ -42,4 +42,5 @@ export const Messages = {
     INVALID_PAGE: 'Invalid page selected',
     BLOCKED: 'User blocked successfully',
     UNBLOCKED: 'User unblocked successfully',
+    SKILLS_UPDATED: 'Skills updated',
 }

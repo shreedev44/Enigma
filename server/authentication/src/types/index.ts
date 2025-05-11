@@ -19,6 +19,7 @@ export interface StudentProfileType extends Document {
     githubProfile?: string
     linkedinProfile?: string
     profilePicture?: string
+    skills?: string[]
     userId: ObjectId
     createdAt?: Date
     updatedAt?: Date

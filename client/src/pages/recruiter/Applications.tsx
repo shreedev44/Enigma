@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { recruiterRoutes } from "@/constants/routeUrl";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { X } from "lucide-react";
 import { ApplicationShort } from "@/types/types";
@@ -15,6 +15,20 @@ import {
 } from "@/api/recruiter";
 import { useToast } from "@/hooks/use-toast";
 import { DynamicPagination } from "@/components/Pagination";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+	Command,
+	CommandEmpty,
+	CommandGroup,
+	CommandItem,
+	CommandList,
+} from "@/components/ui/command";
+import { fetchSkills } from "@/api/common";
+import _ from "lodash";
 
 const Applications = () => {
 	const location = useLocation();
@@ -30,6 +44,9 @@ const Applications = () => {
 	const [totalApplications, setTotalApplications] = useState(0);
 	const [trigger, setTrigger] = useState(true);
 	const [shortlistView, setShortlistView] = useState(false);
+	const [open, setOpen] = useState(false);
+	const [suggestionLoading, setSuggestionLoading] = useState(false);
+	const [suggestions, setSuggestions] = useState<string[]>([]);
 
 	const { toast } = useToast();
 
@@ -127,6 +144,47 @@ const Applications = () => {
 		}
 	};
 
+	const fetchSkillKeywords = async (query: string) => {
+		setSuggestionLoading(true);
+		try {
+			return await fetchSkills(query);
+		} catch (error) {
+			console.error("Error fetching skill suggestions:", error);
+			return [];
+		} finally {
+			setSuggestionLoading(false);
+		}
+	};
+
+	const debouncedFetchSuggestions = useCallback(
+		_.debounce(async (query: string) => {
+			if (query.trim().length > 0) {
+				const results = await fetchSkillKeywords(query);
+				setSuggestions(results);
+				setOpen(true);
+			} else {
+				setSuggestions([]);
+				setOpen(false);
+			}
+		}, 300),
+		[]
+	);
+
+	const handleSelectTag = (selectedTag: string) => {
+		if (!tags.includes(selectedTag)) {
+			setTags([...tags, selectedTag]);
+			setTagInput("");
+			setOpen(false);
+		}
+	};
+
+	useEffect(() => {
+		debouncedFetchSuggestions(tagInput);
+		return () => {
+			debouncedFetchSuggestions.cancel();
+		};
+	}, [tagInput, debouncedFetchSuggestions]);
+
 	return (
 		<div className="pt-24">
 			<Breadcrumbs
@@ -149,20 +207,74 @@ const Applications = () => {
 					{!shortlistView && (
 						<div className="space-y-4 w-full md:max-w-md">
 							<div className="flex gap-2">
-								<Input
-									placeholder="Add a tag..."
-									className="border"
-									value={tagInput}
-									onChange={(e) =>
-										setTagInput(e.target.value)
-									}
-									onKeyDown={(e) => {
-										if (e.key === "Enter") {
-											handleAddTag();
-											e.preventDefault();
-										}
-									}}
-								/>
+								<Popover open={open}>
+									<PopoverTrigger asChild>
+										<div className="relative flex-1">
+											<Input
+												placeholder="Add a tag..."
+												className="border"
+												value={tagInput}
+												onChange={(e) =>
+													setTagInput(e.target.value)
+												}
+												onKeyDown={(e) => {
+													if (e.key === "Enter") {
+														handleAddTag();
+														e.preventDefault();
+													}
+												}}
+												onFocus={() => {
+													if (tagInput.trim())
+														setOpen(true);
+												}}
+											/>
+										</div>
+									</PopoverTrigger>
+									<PopoverContent
+										className="p-0 flex"
+										align="start"
+										sideOffset={4}
+										avoidCollisions={false}
+									>
+										<Command shouldFilter={false}>
+											<CommandList>
+												{suggestionLoading ? (
+													<div className="flex items-center justify-center p-4 text-sm">
+														Loading suggestions...
+													</div>
+												) : suggestions.length > 0 ? (
+													<CommandGroup>
+														{suggestions.map(
+															(suggestion) => (
+																<CommandItem
+																	key={
+																		suggestion
+																	}
+																	onSelect={() =>
+																		handleSelectTag(
+																			suggestion
+																		)
+																	}
+																	onMouseDown={(
+																		e
+																	) =>
+																		e.preventDefault()
+																	}
+																>
+																	{suggestion}
+																</CommandItem>
+															)
+														)}
+													</CommandGroup>
+												) : (
+													<CommandEmpty>
+														No skills found.
+													</CommandEmpty>
+												)}
+											</CommandList>
+										</Command>
+									</PopoverContent>
+								</Popover>
 								<Button
 									type="button"
 									onClick={handleAddTag}

@@ -34,7 +34,7 @@ export default function DifficultyRadial(props: {
   ];
 	return (
 		<Card className="flex flex-col bg-white dark:bg-zinc-900 !border-none">
-			<CardContent className="flex-1 pb-0">
+			<CardContent className="flex-1 pb-0 mb-5">
 				<ChartContainer
 					config={chartConfig}
 					className="mx-auto aspect-square max-h-[250px]"

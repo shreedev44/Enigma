@@ -6,4 +6,5 @@ export interface IStudentRepository extends IBaseRepository<StudentProfileType> 
     findByUserId(userId: string): Promise<StudentProfileType>
     updateById(userId: string, data: Partial<StudentProfileType>): Promise<StudentProfileType | null>
     findPicById(userId: string): Promise<string | undefined>
+    updateSkillsByUserId(userId: string, skills: string[]): Promise<boolean>
 }

@@ -27,6 +27,11 @@ const UserSchema: Schema = new Schema<StudentProfileType>(
             type: mongoose.Types.ObjectId,
             required: true,
         },
+        skills: {
+            type: [String],
+            required: true,
+            default: [],
+        },
     },
     {
         timestamps: true,

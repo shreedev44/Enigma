@@ -30,6 +30,7 @@ const GitHubCallback = () => {
               status: response.data.user.status,
               accessToken: response.data.accessToken,
               profilePicture: response.data.profile.profilePicture,
+              skills: response.data.profile.skills
             })
           );
           navigate(studentRoutes.HOME);

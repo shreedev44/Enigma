@@ -38,4 +38,21 @@ export class StudentController implements IStudentController {
             next(err)
         }
     }
+
+    async updateSkills(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const { skills } = req.body
+            const { id } = JSON.parse(req.headers['x-user-payload'] as string)
+
+            if (!skills) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INCOMPLETE_FORM })
+                return
+            }
+
+            await this._studentService.updateSkills(id, skills)
+            res.status(_HttpStatus.OK).json({ message: Messages.SKILLS_UPDATED })
+        } catch (err) {
+            next(err)
+        }
+    }
 }

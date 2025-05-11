@@ -17,5 +17,6 @@ studentRouter.patch(
     validateData(validationSchemas.studentProfileValidationSchema),
     studentController.updateProfile.bind(studentController)
 )
+studentRouter.patch('/update-skills', studentController.updateSkills.bind(studentController))
 
 export default studentRouter

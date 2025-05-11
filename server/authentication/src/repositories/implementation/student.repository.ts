@@ -47,6 +47,16 @@ class StudentRepository extends BaseRepository<StudentDocument> implements IStud
             throw new Error('Error finding picture by userId')
         }
     }
+
+    async updateSkillsByUserId(userId: string, skills: string[]): Promise<boolean> {
+        try {
+            const result = await this.model.updateOne({ userId }, { skills })
+            return result.modifiedCount > 0
+        } catch (err) {
+            console.error(err)
+            throw new Error('Error updating skills')
+        }
+    }
 }
 
 export default new StudentRepository()

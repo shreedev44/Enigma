@@ -26,6 +26,7 @@ export class VerifyUser {
             this.profile.profilePicture = returnObj.profile.profilePicture
             this.profile.userId = returnObj.profile.userId
             this.profile._id = returnObj.profile._id
+            this.profile.skills = returnObj.profile.skills
         } else if (returnObj?.profile?.companyName) {
             this.profile.companyName = returnObj.profile.companyName
             this.profile.bio = returnObj.profile.bio

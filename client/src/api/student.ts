@@ -330,9 +330,27 @@ export const leaderboardTopThree = async () => {
 
 export const getLeaderboard = async (page: number) => {
 	try {
-		const { data } = await Api.get(`${studentEndpoints.LEADERBOARD}?page=${page}`, {
-			headers,
-		});
+		const { data } = await Api.get(
+			`${studentEndpoints.LEADERBOARD}?page=${page}`,
+			{
+				headers,
+			}
+		);
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
+
+export const updateSkills = async (skills: string[]) => {
+	try {
+		const { data } = await Api.patch(
+			studentEndpoints.UPDATE_SKILLS,
+			{ skills },
+			{ headers }
+		);
 		return { success: true, data };
 	} catch (err) {
 		const error = err as any;

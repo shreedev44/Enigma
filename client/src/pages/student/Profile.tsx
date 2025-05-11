@@ -14,6 +14,7 @@ import {
 	getProfile,
 	leaderboardRank,
 	myApplications,
+	updateSkills,
 } from "@/api/student";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
@@ -32,6 +33,7 @@ import { AcceptanceRadial } from "@/components/charts/AcceptanceRadial";
 import { Drawer, DrawerTrigger } from "@/components/ui/drawer";
 import ApplicationDrawer from "@/components/studentComponents/ApplicationsDrawer";
 import { ApplicationWithJob } from "@/types/types";
+import SkillsModal from "@/components/studentComponents/SkillsModal";
 
 const Profile = () => {
 	const { toast } = useToast();
@@ -65,8 +67,9 @@ const Profile = () => {
 	const [applications, setApplications] = useState<ApplicationWithJob[]>([]);
 	const [pageData, setPageData] = useState({ page: 1, totalPages: 1 });
 	const [rank, setRank] = useState("");
+	const [skills, setSkills] = useState<string[]>([]);
 
-	const {_id} = useGetStudentData()
+	const { _id } = useGetStudentData();
 
 	const setPage = (page: number) => {
 		setPageData((prev) => ({ ...prev, page }));
@@ -83,6 +86,7 @@ const Profile = () => {
 				setGithubProfile(profile.githubProfile);
 				setLinkedinProfile(profile.linkedinProfile);
 				setProfilePic(profile.profilePicture || defaultPic);
+				setSkills(profile.skills)
 				setProfileLoading(false);
 
 				const applicationResp = await myApplications();
@@ -180,6 +184,21 @@ const Profile = () => {
 		if (response.success) {
 			toast({
 				description: "Your password reset link was sent to your email",
+			});
+		} else {
+			toast({
+				description: response.error,
+				variant: "destructive",
+			});
+		}
+	};
+
+	const handleUpdateSkills = async () => {
+		const response = await updateSkills(skills);
+
+		if (response.success) {
+			toast({
+				description: response.data.message,
 			});
 		} else {
 			toast({
@@ -295,7 +314,7 @@ const Profile = () => {
 							</div>
 						</div>
 					</div>
-					<div className="flex justify-center my-10">
+					<div className="flex justify-center mt-10 mb-5 gap-3">
 						<Dialog>
 							<DialogTrigger>
 								<Button
@@ -320,6 +339,23 @@ const Profile = () => {
 								setLinkedinProfile={setLinkedinProfile}
 								isModalOpen={isModalOpen}
 								changePassword={changePassword}
+							/>
+						</Dialog>
+						<Dialog>
+							<DialogTrigger>
+								<Button
+									size={"lg"}
+									className="bg-fleace font-bold"
+									disabled={profileLoading}
+									onClick={() => setModalOpen(!isModalOpen)}
+								>
+									Skills
+								</Button>
+							</DialogTrigger>
+							<SkillsModal
+								skills={skills}
+								setSkills={setSkills}
+								handleUpdateSkills={handleUpdateSkills}
 							/>
 						</Dialog>
 					</div>

@@ -6,6 +6,7 @@ export interface IStudentSchema extends Document {
     githubProfile?: string
     linkedinProfile?: string
     profilePicture?: string
+    skills: string[]
     userId: Schema.Types.ObjectId
     createdAt?: Date
     updatedAt?: Date

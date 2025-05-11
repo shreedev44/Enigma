@@ -67,6 +67,7 @@ interface UserStoreType {
   accessToken: string | null;
   profilePicture?: string;
   name?: string;
+  skills?: string[]
 }
 
 interface ReduxStoreType {
