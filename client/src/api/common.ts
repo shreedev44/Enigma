@@ -130,3 +130,27 @@ export const hideJob = async (jobId: string, role: Role) => {
 		return { success: false, error: message };
 	}
 };
+
+export const fetchSkills = async (keyword: string) => {
+	const url = `https://ec.europa.eu/esco/api/search?text=${encodeURIComponent(
+		keyword
+	)}&type=skill&limit=5`;
+
+	try {
+		const response = await fetch(url);
+		if (!response.ok) {
+			throw new Error(`ESCO API error: ${response.status}`);
+		}
+
+		const data = await response.json();
+
+		const skillNames = data._embedded.results.map(
+			(result: { title: string }) => result.title
+		);
+
+		return skillNames;
+	} catch (error) {
+		console.error("Failed to fetch skills:", error);
+		return [];
+	}
+};
