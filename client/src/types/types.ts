@@ -26,7 +26,7 @@ export type TestCaseType = {
 export type DifficultyType = "Beginner" | "Intermediate" | "Advanced";
 
 export type ProblemType = {
-	_id?: string
+	_id?: string;
 	problemNo?: number;
 	title: string;
 	difficulty: DifficultyType;
@@ -52,7 +52,7 @@ export type ProblemListType = {
 	successRate?: number;
 	solved?: "solved" | "unsolved";
 	status?: "listed" | "unlisted";
-	createdAt?: Date
+	createdAt?: Date;
 };
 
 export type Language = "javascript" | "python" | "java" | "golang" | "cpp";
@@ -133,13 +133,21 @@ export type Application = {
 };
 
 export interface LeaderboardEntry {
-	userId: string
+	userId: string;
 	rank: number;
 	username: string;
-	profilePicture: string
+	profilePicture: string;
 	solved: {
-		beginner: number
-		intermediate: number
-		advanced: number
-	}
-  }
+		beginner: number;
+		intermediate: number;
+		advanced: number;
+	};
+}
+
+export interface CurrentSubscription {
+	planId: string;
+	startedAt: Date;
+	expiresAt: Date;
+	createdAt: Date;
+	updatedAt: Date;
+}

@@ -18,6 +18,30 @@ class InterviewRepository extends BaseRepository<IInterviewSchema> implements II
             throw new Error('Error finding interviews')
         }
     }
+
+    async canConductInterview(userId: Types.ObjectId, date: Date, totalMaxInterviews: number): Promise<boolean> {
+        try {
+            const interviewsUsed = await this.model.countDocuments({
+                userId,
+                createdAt: { $gte: date },
+            })
+
+            if (interviewsUsed < totalMaxInterviews) {
+                return true
+            } else {
+                const oneWeekAgo = new Date(new Date().setDate(new Date().getDate() - 7))
+                const interviewsThisWeek = await this.model.countDocuments({
+                    userId,
+                    createdAt: { $gte: oneWeekAgo },
+                })
+
+                return interviewsThisWeek < 5
+            }
+        } catch (err) {
+            console.error(err)
+            throw new Error('Error counting interviews from date')
+        }
+    }
 }
 
 export default new InterviewRepository()

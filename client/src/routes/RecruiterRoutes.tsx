@@ -18,6 +18,7 @@ import Applications from "@/pages/recruiter/Applications";
 import ApplicationDetails from "@/pages/recruiter/ApplicationDetails";
 import Interview from "@/pages/recruiter/Interview";
 import Subscriptions from "@/pages/recruiter/Subscriptions";
+import PaymentSuccess from "@/pages/recruiter/PaymentSuccess";
 
 const RecruiterRoutes = () => {
 	const ProtectRoute = ({ children }: { children: JSX.Element }) => {
@@ -161,6 +162,14 @@ const RecruiterRoutes = () => {
 					element={
 						<ProtectRoute>
 							<Subscriptions />
+						</ProtectRoute>
+					}
+				/>
+				<Route
+					path={recruiterRoutes.PAYMENT_SUCCESS}
+					element={
+						<ProtectRoute>
+							<PaymentSuccess />
 						</ProtectRoute>
 					}
 				/>

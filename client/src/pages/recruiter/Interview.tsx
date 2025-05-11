@@ -25,11 +25,14 @@ const Interview = () => {
 		const response = await scheduleInterview({ meetingTime });
 
 		if (response.success) {
-			navigate(recruiterRoutes.MEETING, {
-				state: {
-					meetingId: response.data.meetingId,
-				},
-			});
+			navigate(
+				recruiterRoutes.MEETING + "?roomID=" + response.data.meetingId,
+				{
+					state: {
+						meetingId: response.data.meetingId,
+					},
+				}
+			);
 		} else {
 			toast({
 				description: response.error,

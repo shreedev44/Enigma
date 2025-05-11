@@ -40,6 +40,15 @@ class SubscriptionPlanRepository
             throw new Error('Error getting all the subscriptions plans')
         }
     }
+
+    async findById(planId: Types.ObjectId): Promise<ISubscriptionPlanSchema | null> {
+        try {
+            return await this.model.findOne({ _id: planId, listed: true })
+        } catch (err) {
+            console.error(err)
+            throw new Error('Error finding plan using id')
+        }
+    }
 }
 
 export default new SubscriptionPlanRepository()

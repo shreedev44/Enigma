@@ -1,5 +1,10 @@
 import { IInterviewService } from '@services/interface'
-import { IApplicationRepository, IInterviewRepository, IJobRepository } from '@repositories/interface'
+import {
+    IApplicationRepository,
+    IInterviewRepository,
+    IJobRepository,
+    ISubscriptionRepository,
+} from '@repositories/interface'
 import { IInterviewSchema } from '@entities'
 import { createHttpError, generateUID } from '@utils'
 import { _HttpStatus, Messages } from '@constants'
@@ -10,10 +15,24 @@ export class InterviewService implements IInterviewService {
     constructor(
         private _interviewRepository: IInterviewRepository,
         private _applicationRepository: IApplicationRepository,
-        private _jobRepository: IJobRepository
+        private _jobRepository: IJobRepository,
+        private _subscriptionRepository: ISubscriptionRepository
     ) {}
 
     async createInterview(userId: string, meetingTime: Date, candidateEmail: string, jobId: string): Promise<string> {
+        const subscriptions = await this._subscriptionRepository.findAllWithEarlyDate(new Types.ObjectId(userId))
+        const { totalMaxInterviews, earliestStartDate } = subscriptions[0]
+        console.log(totalMaxInterviews, earliestStartDate)
+        const eligible = await this._interviewRepository.canConductInterview(
+            new Types.ObjectId(userId),
+            earliestStartDate,
+            totalMaxInterviews
+        )
+
+        if (!eligible) {
+            throw createHttpError(_HttpStatus.BAD_REQUEST, Messages.LIMIT_REACHED)
+        }
+
         const meetingId = await generateUID(10)
 
         const obj: Partial<IInterviewSchema> = {

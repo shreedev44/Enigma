@@ -20,7 +20,7 @@ export const studentEndpoints = {
 	DELETE_APPLICATION: "/job/application/delete",
 	LEADERBOARD_RANK: "/problem/leaderboard/rank",
 	LEADERBOARD_TOP_THREE: "/problem/leaderboard/top-three",
-	LEADERBOARD: "/problem/leaderboard"
+	LEADERBOARD: "/problem/leaderboard",
 };
 
 export const recruiterEndpoints = {
@@ -40,7 +40,10 @@ export const recruiterEndpoints = {
 	SHORTLIST_SINGLE_APPLICATION: "/job/application/shortlist-application",
 	REMOVE_FROM_SHORTLIST: "/job/application/remove-from-shortlist",
 	SCHEDULE_INTERVIEW: "/job/interview/schedule",
-	GET_PLANS: "/job/subscription-plan/listed"
+	GET_PLANS: "/job/subscription-plan/listed",
+	CREATE_PAYMENT_SESSION: "/job/subscription/payment-session",
+	SESSION_DETAILS: "/job/subscription/session-details",
+	GET_SUBSCRIPTION: "/job/subscription/subscription-details",
 };
 
 export const adminEndpoints = {

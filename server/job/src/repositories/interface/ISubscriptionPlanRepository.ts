@@ -6,4 +6,5 @@ export interface ISubscriptionPlanRepository extends IBaseRepository<ISubscripti
     listOrUnlistById(planId: Types.ObjectId, list: boolean): Promise<void>
     findAllListedSubscriptions(): Promise<ISubscriptionPlanSchema[]>
     findAllSubscriptions(): Promise<ISubscriptionPlanSchema[]>
+    findById(planId: Types.ObjectId): Promise<ISubscriptionPlanSchema | null>
 }

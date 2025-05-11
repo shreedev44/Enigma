@@ -15,6 +15,7 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { createPaymentSession } from "@/api/recruiter";
 
 const PricingCard: React.FC<PricingCardProps> = ({
 	_id,
@@ -26,7 +27,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
 	listed,
 	userLevel,
 }) => {
-	const [visible, setVisibility] = useState(listed)
+	const [visible, setVisibility] = useState(listed);
 	const { toast } = useToast();
 	const [loading, setLoading] = useState(false);
 	const handleList = async (planId: string) => {
@@ -40,7 +41,23 @@ const PricingCard: React.FC<PricingCardProps> = ({
 				description: response.data.message,
 			});
 			setLoading(false);
-			setVisibility(!visible)
+			setVisibility(!visible);
+		} else {
+			toast({
+				description: response.error,
+				variant: "destructive",
+			});
+			setLoading(false);
+		}
+	};
+
+	const handleBuy = async () => {
+		setLoading(true);
+		const response = await createPaymentSession(_id);
+
+		if (response.success) {
+			window.location.href = response.data.url
+			setLoading(false);
 		} else {
 			toast({
 				description: response.error,
@@ -81,12 +98,18 @@ const PricingCard: React.FC<PricingCardProps> = ({
 						</AlertDialogHeader>
 						<AlertDialogFooter>
 							<AlertDialogCancel>Cancel</AlertDialogCancel>
-							<AlertDialogAction onClick={() => handleList(_id)}>Continue</AlertDialogAction>
+							<AlertDialogAction onClick={() => handleList(_id)}>
+								Continue
+							</AlertDialogAction>
 						</AlertDialogFooter>
 					</AlertDialogContent>
 				</AlertDialog>
 			) : (
-				<Button className="font-bold font-mono" disabled={highlight}>
+				<Button
+					className="font-bold font-mono"
+					disabled={highlight || loading}
+					onClick={handleBuy}
+				>
 					{loading ? <ClassicSpinner /> : "Buy"}
 				</Button>
 			)}

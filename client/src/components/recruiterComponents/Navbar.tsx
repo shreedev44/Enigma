@@ -101,6 +101,16 @@ const Navbar = () => {
 						>
 							Interviews
 						</Button>
+						<Button
+							className="bg-fleace text-fleace-foreground font-bold mr-3 hidden md:inline rounded-full"
+							onClick={() =>
+								navigate(
+									`/recruiter${recruiterRoutes.SUBSCRIPTIONS}`
+								)
+							}
+						>
+							Premium
+						</Button>
 					</>
 				) : (
 					<></>
@@ -202,6 +212,18 @@ const Navbar = () => {
 								}
 							>
 								Interviews
+							</Button>
+						</SheetClose>
+						<SheetClose asChild>
+							<Button
+								variant={"outline"}
+								onClick={() =>
+									navigate(
+										`/recruiter${recruiterRoutes.SUBSCRIPTIONS}`
+									)
+								}
+							>
+								Premium
 							</Button>
 						</SheetClose>
 						<SheetClose asChild>

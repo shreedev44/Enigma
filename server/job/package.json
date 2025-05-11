@@ -29,6 +29,7 @@
     "nanoid": "^5.1.5",
     "pdf-parse": "^1.1.1",
     "redis": "^4.7.0",
+    "stripe": "^18.1.0",
     "tsconfig-paths": "^4.2.0",
     "winston": "^3.17.0",
     "winston-loki": "^6.1.3"

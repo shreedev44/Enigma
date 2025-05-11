@@ -31,4 +31,16 @@ export function validateEnv() {
     if (!env.FRONTEND_ORIGIN) {
         throw new Error('FRONTEND_ORIGIN is not found in the env')
     }
+    if (!env.STRIPE_SECRET_KEY) {
+        throw new Error('STRIPE_SECRET_KEY is not found in the env')
+    }
+    if (!env.STRIPE_WEBHOOK_KEY) {
+        throw new Error('STRIPE_API_KEY is not found in the env')
+    }
+    if (!env.STRIPE_SUCCESS_URL) {
+        throw new Error('STRIPE_SUCCESS_URL is not found in the env')
+    }
+    if (!env.STRIPE_CANCEL_URL) {
+        throw new Error('STRIPE_CANCEL_URL is not found in the env')
+    }
 }

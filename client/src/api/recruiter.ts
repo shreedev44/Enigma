@@ -262,6 +262,34 @@ export const getPlans = async () => {
 		return { success: false, error: message };
 	}
 };
+
+export const createPaymentSession = async (planId: string) => {
+	try {
+		const { data } = await Api.post(
+			`${recruiterEndpoints.CREATE_PAYMENT_SESSION}/${planId}`,
+			{},
+			{ headers }
+		);
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
+
+export const getSubscriptionDetails = async () => {
+	try {
+		const { data } = await Api.get(recruiterEndpoints.GET_SUBSCRIPTION, {
+			headers,
+		});
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
 // export const logout = async () => {
 // 	try {
 // 		const { data } = await Api.get(commonEndpoints.LOGOUT, {

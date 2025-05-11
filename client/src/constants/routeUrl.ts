@@ -37,7 +37,8 @@ export const recruiterRoutes = {
 	INTERVIEW: "/interview",
 	MEETING: "/meet",
 	LEADERBOARD: "/leaderboard",
-	SUBSCRIPTIONS: "/subscription-plans"
+	SUBSCRIPTIONS: "/subscription-plans",
+	PAYMENT_SUCCESS: '/subscription/payment-success'
 };
 
 export const adminRoutes = {

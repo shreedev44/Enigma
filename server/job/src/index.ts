@@ -16,6 +16,8 @@ import jobRouter from '@routes/job.router'
 import applicationRouter from '@routes/application.router'
 import interviewRouter from '@routes/interview.router'
 import subscriptionPlanRouter from '@routes/subscription-plan.router'
+import subscriptionRouter from '@routes/subscription.router'
+import webhookRouter from '@routes/webhook.router'
 
 class App {
     public app: Application
@@ -25,6 +27,7 @@ class App {
 
         this.app = express()
 
+        this.initializeWebhookRoutes()
         this.initializeMiddlewares()
         this.initializeRoutes()
         this.initializeDatabase()
@@ -41,8 +44,13 @@ class App {
         this.app.use('/application', applicationRouter)
         this.app.use('/interview', interviewRouter)
         this.app.use('/subscription-plan', subscriptionPlanRouter)
+        this.app.use('/subscription', subscriptionRouter)
         this.app.use(notFoundHandler)
         this.app.use(errorHandler)
+    }
+
+    private initializeWebhookRoutes(): void {
+        this.app.use('/webhook', webhookRouter)
     }
 
     private initializeDatabase(): void {

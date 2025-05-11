@@ -11,6 +11,10 @@ const SubscriptionSchema = new Schema<ISubscriptionSchema>(
             type: Schema.Types.ObjectId,
             required: true,
         },
+        transactionId: {
+            type: String,
+            required: true,
+        },
         startedAt: {
             type: Date,
             required: true,

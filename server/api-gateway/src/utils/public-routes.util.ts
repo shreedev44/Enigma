@@ -20,6 +20,7 @@ const PUBLIC_ROUTES: { method: string; path: string }[] = [
     { method: "GET", path: "/api/problem/leaderboard" },
     { method: "GET", path: "/api/problem/leaderboard/top-three" },
     { method: "GET", path: "/api/job/:id" },
+    { method: "POST", path: "/api/job/webhook/stripe" },
 ];
 
 export function isPublic(req: Request): boolean {

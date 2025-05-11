@@ -44,4 +44,11 @@ export const Messages = {
     PLAN_ADDED: 'Subscription plan added',
     PLAN_LISTED: 'Plan is now listed for the user',
     PLAN_UNLISTED: 'Plan is now unlisted from the user',
+    PLAN_NOT_FOUND: 'Plan is not found',
+
+    PAYMENT_FAILED: 'Payment verification failed',
+    SESSION_NOT_FOUND: 'Payment session not found',
+    SIGNATURE_NOT_FOUND: 'Signature not found',
+    NO_SUBSCRIPTION: 'No current subscriptions',
+    LIMIT_REACHED: 'Your max interview limit reached',
 }

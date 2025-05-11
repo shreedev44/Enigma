@@ -29,4 +29,16 @@ export const env = {
     get FRONTEND_ORIGIN() {
         return process.env.FRONTEND_ORIGIN!
     },
+    get STRIPE_SECRET_KEY() {
+        return process.env.STRIPE_SECRET_KEY!
+    },
+    get STRIPE_WEBHOOK_KEY() {
+        return process.env.STRIPE_WEBHOOK_KEY!
+    },
+    get STRIPE_SUCCESS_URL() {
+        return process.env.STRIPE_SUCCESS_URL!
+    },
+    get STRIPE_CANCEL_URL() {
+        return process.env.STRIPE_CANCEL_URL!
+    },
 }
