@@ -10,7 +10,7 @@ const studentController = new StudentController(studentService)
 
 const studentRouter = Router()
 
-studentRouter.get('/get-profile', studentController.getProfile.bind(studentController))
+studentRouter.get('/get-profile/:userId', studentController.getProfile.bind(studentController))
 studentRouter.patch(
     '/update-profile',
     upload.single('profilePicture'),

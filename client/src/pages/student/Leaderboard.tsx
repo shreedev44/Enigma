@@ -5,6 +5,8 @@ import { getLeaderboard } from "@/api/student";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import { DynamicPagination } from "@/components/Pagination";
+import { useNavigate } from "react-router-dom";
+import { studentRoutes } from "@/constants/routeUrl";
 
 const Leaderboard = () => {
 	const [leaderboardData, setLeaderboard] = useState<LeaderboardEntry[]>([]);
@@ -19,6 +21,7 @@ const Leaderboard = () => {
 	};
 
 	const { toast } = useToast();
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		(async () => {
@@ -153,7 +156,19 @@ const Leaderboard = () => {
 											>
 												{entry.rank}
 											</div>
-											<div className="text-left pl-4">
+											<div
+												className="text-left pl-4 cursor-pointer hover:underline"
+												onClick={() =>
+													navigate(
+														studentRoutes.STRANGER_PROFILE,
+														{
+															state: {
+																userId: entry.userId,
+															},
+														}
+													)
+												}
+											>
 												{entry.username}
 											</div>
 											<div>

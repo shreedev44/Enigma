@@ -63,8 +63,9 @@ export class AttemptController implements IAttemptController {
 
     async getProfileStats(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
+            const { userId } = req.params
             const { id } = JSON.parse(req.headers['x-user-payload'] as string)
-            const stats = await this._attemptService.getProfileStats(id)
+            const stats = await this._attemptService.getProfileStats(userId ? userId : id)
             res.status(_HttpStatus.OK).json({ stats })
         } catch (err) {
             next(err)
@@ -73,8 +74,9 @@ export class AttemptController implements IAttemptController {
 
     async getAttemptsPerDay(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
+            const { userId } = req.params
             const { id } = JSON.parse(req.headers['x-user-payload'] as string)
-            const attemptsPerDay = await this._attemptService.getAttemptsPerDay(id)
+            const attemptsPerDay = await this._attemptService.getAttemptsPerDay(userId ? userId : id)
             res.status(_HttpStatus.OK).json({ attemptsPerDay })
         } catch (err) {
             next(err)

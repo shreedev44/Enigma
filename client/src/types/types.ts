@@ -122,6 +122,7 @@ export interface Experience {
 
 export type Application = {
 	_id: string;
+	userId?: string
 	name: string;
 	email: string;
 	phone: string;

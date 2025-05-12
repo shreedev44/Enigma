@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-hooks/exhaustive-deps */
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { studentRoutes } from "@/constants/routeUrl";
@@ -7,15 +8,8 @@ import { IoIosNavigate } from "react-icons/io";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect, useState } from "react";
 import { useGetProfilePic, useGetStudentData } from "@/hooks/useGetStudent";
-import defaultPic from "../../assets/default-avatar.jpg";
-import {
-	getAttemptAttendance,
-	getProblemStats,
-	getProfile,
-	leaderboardRank,
-	myApplications,
-	updateSkills,
-} from "@/api/student";
+import defaultPic from "@/assets/default-avatar.jpg";
+import { myApplications, updateSkills } from "@/api/student";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
 import EditProfileModal from "@/components/studentComponents/EditProfileModal";
@@ -25,7 +19,13 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { forgotPassword } from "@/api/common";
+import {
+	forgotPassword,
+	getProfile,
+	getAttemptAttendance,
+	getProblemStats,
+	leaderboardRank,
+} from "@/api/common";
 import HeatMap from "@/components/charts/HeatMap";
 import DifficultyRadial from "@/components/charts/DifficultyRadial";
 import ProblemRadial from "@/components/charts/ProblemRadial";
@@ -34,8 +34,17 @@ import { Drawer, DrawerTrigger } from "@/components/ui/drawer";
 import ApplicationDrawer from "@/components/studentComponents/ApplicationsDrawer";
 import { ApplicationWithJob } from "@/types/types";
 import SkillsModal from "@/components/studentComponents/SkillsModal";
+import { Role } from "@/types/formTypes";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const Profile = () => {
+const Profile = ({
+	userLevel = "student",
+	ownProfile = true,
+}: {
+	userLevel: Role;
+	ownProfile: boolean;
+}) => {
 	const { toast } = useToast();
 	const studentData = useGetStudentData();
 
@@ -69,15 +78,33 @@ const Profile = () => {
 	const [rank, setRank] = useState("");
 	const [skills, setSkills] = useState<string[]>([]);
 
-	const { _id } = useGetStudentData();
+	const navigate = useNavigate();
+	const location = useLocation();
 
 	const setPage = (page: number) => {
 		setPageData((prev) => ({ ...prev, page }));
 	};
 
+	let userId = "";
+	if (ownProfile) {
+		userId = studentData._id;
+	} else {
+		const state = location.state || {};
+		if (!state.userId) {
+			if (userLevel === "student") {
+				navigate(studentRoutes.PROFILE);
+				return;
+			} else {
+				navigate(`/recruiter${studentRoutes.PROFILE}`);
+				return;
+			}
+		}
+
+		userId = state.userId;
+	}
 	useEffect(() => {
 		(async () => {
-			const response = await getProfile();
+			const response = await getProfile(userLevel, userId);
 
 			if (response.success) {
 				const { profile } = response.data;
@@ -86,16 +113,18 @@ const Profile = () => {
 				setGithubProfile(profile.githubProfile);
 				setLinkedinProfile(profile.linkedinProfile);
 				setProfilePic(profile.profilePicture || defaultPic);
-				setSkills(profile.skills)
+				setSkills(profile.skills);
 				setProfileLoading(false);
 
-				const applicationResp = await myApplications();
-				if (applicationResp.success) {
-					setApplications(applicationResp.data.applications);
-					setPageData((prev) => ({
-						...prev,
-						totalPages: applicationResp.data.totalPages,
-					}));
+				if (ownProfile) {
+					const applicationResp = await myApplications();
+					if (applicationResp.success) {
+						setApplications(applicationResp.data.applications);
+						setPageData((prev) => ({
+							...prev,
+							totalPages: applicationResp.data.totalPages,
+						}));
+					}
 				}
 			} else {
 				toast({
@@ -106,7 +135,7 @@ const Profile = () => {
 		})();
 
 		(async () => {
-			const response = await leaderboardRank(_id);
+			const response = await leaderboardRank(userLevel, userId);
 
 			if (response.success) {
 				setRank(String(response.data.rank));
@@ -121,7 +150,7 @@ const Profile = () => {
 
 	useEffect(() => {
 		(async () => {
-			const response = await getProblemStats();
+			const response = await getProblemStats(userLevel, userId);
 
 			if (response.success) {
 				setSolvedPerDifficulty(
@@ -146,7 +175,7 @@ const Profile = () => {
 
 	useEffect(() => {
 		(async () => {
-			const response = await getAttemptAttendance();
+			const response = await getAttemptAttendance(userLevel, userId);
 
 			if (response.success) {
 				setAttemptAttendance(response.data.attemptsPerDay);
@@ -160,22 +189,24 @@ const Profile = () => {
 	}, []);
 
 	useEffect(() => {
-		(async () => {
-			const response = await myApplications(`page=${pageData.page}`);
+		if (ownProfile) {
+			(async () => {
+				const response = await myApplications(`page=${pageData.page}`);
 
-			if (response.success) {
-				setApplications(response.data.applications);
-				setPageData((prev) => ({
-					...prev,
-					totalPages: response.data.totalPages,
-				}));
-			} else {
-				toast({
-					description: response.error,
-					variant: "destructive",
-				});
-			}
-		})();
+				if (response.success) {
+					setApplications(response.data.applications);
+					setPageData((prev) => ({
+						...prev,
+						totalPages: response.data.totalPages,
+					}));
+				} else {
+					toast({
+						description: response.error,
+						variant: "destructive",
+					});
+				}
+			})();
+		}
 	}, [pageData.page]);
 
 	const changePassword = async () => {
@@ -254,7 +285,7 @@ const Profile = () => {
 							<p>Leaderboard Rank: {rank}</p>
 						</div>
 					</div>
-					<div className="flex justify-start mt-6 pl-7 md:pl-10">
+					<div className="flex justify-start mt-6 pl-7 mb-10 md:pl-10">
 						<div className="flex flex-col justify-center">
 							<div className="flex flex-col justify-center">
 								<p className="text-xl font-bold font-mono">
@@ -314,73 +345,105 @@ const Profile = () => {
 							</div>
 						</div>
 					</div>
-					<div className="flex justify-center mt-10 mb-5 gap-3">
-						<Dialog>
-							<DialogTrigger>
-								<Button
-									size={"lg"}
-									className="bg-fleace font-bold"
-									disabled={profileLoading}
-									onClick={() => setModalOpen(!isModalOpen)}
-								>
-									Edit Profile
-								</Button>
-							</DialogTrigger>
-							<EditProfileModal
-								firstName={firstName}
-								setFirstName={setFirstName}
-								lastName={lastName}
-								setLastName={setLastName}
-								profilePicture={useGetProfilePic() || ""}
-								setProfilePicture={setProfilePic}
-								githubProfile={githubProfile}
-								setGithubProfile={setGithubProfile}
-								linkedinProfile={linkedinProfile}
-								setLinkedinProfile={setLinkedinProfile}
-								isModalOpen={isModalOpen}
-								changePassword={changePassword}
-							/>
-						</Dialog>
-						<Dialog>
-							<DialogTrigger>
-								<Button
-									size={"lg"}
-									className="bg-fleace font-bold"
-									disabled={profileLoading}
-									onClick={() => setModalOpen(!isModalOpen)}
-								>
+					{ownProfile ? (
+						<>
+							<div className="flex justify-center mb-5 gap-3">
+								<Dialog>
+									<DialogTrigger>
+										<Button
+											size={"lg"}
+											className="bg-fleace font-bold"
+											disabled={profileLoading}
+											onClick={() =>
+												setModalOpen(!isModalOpen)
+											}
+										>
+											Edit Profile
+										</Button>
+									</DialogTrigger>
+									<EditProfileModal
+										firstName={firstName}
+										setFirstName={setFirstName}
+										lastName={lastName}
+										setLastName={setLastName}
+										profilePicture={
+											useGetProfilePic() || ""
+										}
+										setProfilePicture={setProfilePic}
+										githubProfile={githubProfile}
+										setGithubProfile={setGithubProfile}
+										linkedinProfile={linkedinProfile}
+										setLinkedinProfile={setLinkedinProfile}
+										isModalOpen={isModalOpen}
+										changePassword={changePassword}
+									/>
+								</Dialog>
+								<Dialog>
+									<DialogTrigger>
+										<Button
+											size={"lg"}
+											className="bg-fleace font-bold"
+											disabled={profileLoading}
+											onClick={() =>
+												setModalOpen(!isModalOpen)
+											}
+										>
+											Skills
+										</Button>
+									</DialogTrigger>
+									<SkillsModal
+										skills={skills}
+										setSkills={setSkills}
+										handleUpdateSkills={handleUpdateSkills}
+									/>
+								</Dialog>
+							</div>
+							<hr className="border-t-2 border-fleace mb-5" />
+							<div className="flex justify-center">
+								<p className="text-2xl font-bold font-mono">
+									Job Applications
+								</p>
+							</div>
+							<div className="flex flex-col my-6 px-7 md:px-10">
+								<Drawer>
+									<DrawerTrigger asChild>
+										<Button className="bg-fleace font-bold">
+											My applications
+										</Button>
+									</DrawerTrigger>
+									<ApplicationDrawer
+										applications={applications}
+										setApplications={setApplications}
+										pageData={pageData}
+										setPage={setPage}
+										key={234}
+									/>
+								</Drawer>
+							</div>
+						</>
+					) : (
+						<>
+							<div className="flex justify-center">
+								<p className="text-2xl font-bold font-mono">
 									Skills
-								</Button>
-							</DialogTrigger>
-							<SkillsModal
-								skills={skills}
-								setSkills={setSkills}
-								handleUpdateSkills={handleUpdateSkills}
-							/>
-						</Dialog>
-					</div>
-					<hr className="border-t-2 border-fleace mb-5" />
-					<div className="flex justify-center">
-						<p className="text-2xl font-bold font-mono">
-							Job Applications
-						</p>
-					</div>
-					<div className="flex flex-col my-6 px-7 md:px-10">
-						<Drawer>
-							<DrawerTrigger asChild>
-								<Button className="bg-fleace font-bold">
-									My applications
-								</Button>
-							</DrawerTrigger>
-							<ApplicationDrawer
-								applications={applications}
-								setApplications={setApplications}
-								pageData={pageData}
-								setPage={setPage}
-								key={234}
-							/>
-						</Drawer>
-					</div>
+								</p>
+							</div>
+							<div className="flex flex-col my-6 px-7 md:px-10">
+								<ScrollArea className="h-40">
+									{skills.map((value, index) => {
+										return (
+											<p
+												key={index}
+												className="text-lg font-bold font-mono"
+											>
+												- {value}
+											</p>
+										);
+									})}
+								</ScrollArea>
+							</div>
+						</>
+					)}
 				</div>
 				<div className="row-span-3 md:col-span-4 bg-zinc-300 dark:bg-zinc-800 rounded-xl p-5">
 					<span className="text-xl font-mono font-bold">

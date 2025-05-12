@@ -6,7 +6,7 @@ import { IoIosNavigate } from "react-icons/io";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect, useState } from "react";
 import { useGetProfilePic, useGetRecruiterData } from "@/hooks/useGetRecruiter";
-import defaultPic from "../../assets/default-avatar.jpg";
+import defaultPic from "@/assets/default-avatar.jpg";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
 import {

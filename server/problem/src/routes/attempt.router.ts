@@ -13,8 +13,8 @@ const attemptRouter = Router()
 attemptRouter.post('/submit-solution', attemptController.submitSolution.bind(attemptController))
 attemptRouter.get('/get-attempts/:problemNo', attemptController.getAttempts.bind(attemptController))
 attemptRouter.get('/find-attempt/:attemptId', attemptController.findAttempt.bind(attemptController))
-attemptRouter.get('/problem-stats', attemptController.getProfileStats.bind(attemptController))
-attemptRouter.get('/attempts-per-day', attemptController.getAttemptsPerDay.bind(attemptController))
+attemptRouter.get('/problem-stats/:userId', attemptController.getProfileStats.bind(attemptController))
+attemptRouter.get('/attempts-per-day/:userId', attemptController.getAttemptsPerDay.bind(attemptController))
 attemptRouter.get('/attempt-stats', attemptController.getStats.bind(attemptController))
 
 export default attemptRouter

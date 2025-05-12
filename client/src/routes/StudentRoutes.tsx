@@ -10,7 +10,7 @@ import Home from "@/pages/student/Home";
 import Otp from "@/pages/student/Otp";
 import ForgotPassword from "@/pages/ForgotPassword";
 import ResetPassword from "@/pages/ResetPassword";
-import Profile from "@/pages/student/Profile";
+import Profile from "@/pages/StudentProfile";
 import ProblemSet from "@/pages/student/ProblemSet";
 import Problem from "@/pages/student/Problem";
 import Compiler from "@/pages/student/Compiler";
@@ -93,7 +93,7 @@ const StudentRoutes = () => {
 					path={studentRoutes.PROFILE}
 					element={
 						<ProtectRoute>
-							<Profile />
+							<Profile userLevel="student" ownProfile={true} />
 						</ProtectRoute>
 					}
 				/>
@@ -120,6 +120,14 @@ const StudentRoutes = () => {
 					element={
 						<ProtectRoute>
 							<Interview />
+						</ProtectRoute>
+					}
+				/>
+				<Route
+					path={studentRoutes.STRANGER_PROFILE}
+					element={
+						<ProtectRoute>
+							<Profile userLevel="student" ownProfile={false} />
 						</ProtectRoute>
 					}
 				/>

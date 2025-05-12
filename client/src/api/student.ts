@@ -59,19 +59,6 @@ export const githubAuth = async (code: string) => {
 	}
 };
 
-export const getProfile = async () => {
-	try {
-		const { data } = await Api.get(studentEndpoints.FETCH_PROFILE, {
-			headers,
-		});
-		return { success: true, data };
-	} catch (err) {
-		const error = err as any;
-		const message = error.response?.data?.error || "An error occured";
-		return { success: false, error: message };
-	}
-};
-
 export const updateProfile = async (formData: FormData) => {
 	try {
 		const { data } = await Api.patch(
@@ -200,32 +187,6 @@ export const findAttempt = async (attemptId: string) => {
 	}
 };
 
-export const getProblemStats = async () => {
-	try {
-		const { data } = await Api.get(studentEndpoints.PROBLEM_STATS, {
-			headers,
-		});
-		return { success: true, data };
-	} catch (err) {
-		const error = err as any;
-		const message = error.response?.data?.error || "An error occured";
-		return { success: false, error: message };
-	}
-};
-
-export const getAttemptAttendance = async () => {
-	try {
-		const { data } = await Api.get(studentEndpoints.ATTEMPT_ATTENDANCE, {
-			headers,
-		});
-		return { success: true, data };
-	} catch (err) {
-		const error = err as any;
-		const message = error.response?.data?.error || "An error occured";
-		return { success: false, error: message };
-	}
-};
-
 export const getJobs = async (query = "") => {
 	try {
 		const { data } = await Api.get(
@@ -291,20 +252,6 @@ export const deleteApplication = async (applicationId: string) => {
 	try {
 		const { data } = await Api.delete(
 			`${studentEndpoints.DELETE_APPLICATION}/${applicationId}`,
-			{ headers }
-		);
-		return { success: true, data };
-	} catch (err) {
-		const error = err as any;
-		const message = error.response?.data?.error || "An error occured";
-		return { success: false, error: message };
-	}
-};
-
-export const leaderboardRank = async (userId = "") => {
-	try {
-		const { data } = await Api.get(
-			`${studentEndpoints.LEADERBOARD_RANK}/${userId}`,
 			{ headers }
 		);
 		return { success: true, data };

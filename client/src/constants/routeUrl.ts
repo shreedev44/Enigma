@@ -9,7 +9,7 @@ export const studentRoutes = {
 	}&redirect_uri=${import.meta.env.VITE_ORIGIN + "/github-auth&scope=user"}`,
 	FORGOT_PASSWORD: "/forgot-password",
 	RESET_PASSWORD: "/reset-password",
-	PROFILE: "/profile",
+	PROFILE: "/my-profile",
 	PROBLEM_SET: "/problemset",
 	PROBLEM: "/problem",
 	COMPILER: "/online-compiler",
@@ -18,6 +18,7 @@ export const studentRoutes = {
 	INTERVIEW: "/interview",
 	MEETING: "/meet",
 	LEADERBOARD: "/leaderboard",
+	STRANGER_PROFILE: "/profile",
 };
 
 export const recruiterRoutes = {
@@ -27,7 +28,7 @@ export const recruiterRoutes = {
 	HOME: "/home",
 	FORGOT_PASSWORD: "/forgot-password",
 	RESET_PASSWORD: "/reset-password",
-	PROFILE: "/profile",
+	PROFILE: "/my-profile",
 	POST_JOB: "/post-job",
 	JOBS: "/my-jobs",
 	JOB_DETAILS: "/job-details",
@@ -38,7 +39,8 @@ export const recruiterRoutes = {
 	MEETING: "/meet",
 	LEADERBOARD: "/leaderboard",
 	SUBSCRIPTIONS: "/subscription-plans",
-	PAYMENT_SUCCESS: '/subscription/payment-success'
+	PAYMENT_SUCCESS: "/subscription/payment-success",
+	STUDENT_PROFILE: "/student-profile",
 };
 
 export const adminRoutes = {

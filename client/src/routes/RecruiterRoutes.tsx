@@ -9,7 +9,8 @@ import Home from "@/pages/recruiter/Home";
 import Otp from "@/pages/recruiter/Otp";
 import ForgotPassword from "@/pages/ForgotPassword";
 import ResetPassword from "@/pages/ResetPassword";
-import Profile from "@/pages/recruiter/Profile";
+import Profile from "@/pages/RecruiterProfile";
+import StudentProfile from "@/pages/StudentProfile";
 import PostJob from "@/pages/recruiter/PostJob";
 import MyJobs from "@/pages/recruiter/MyJobs";
 import JobDetails from "@/pages/recruiter/JobDetails";
@@ -170,6 +171,17 @@ const RecruiterRoutes = () => {
 					element={
 						<ProtectRoute>
 							<PaymentSuccess />
+						</ProtectRoute>
+					}
+				/>
+				<Route
+					path={recruiterRoutes.STUDENT_PROFILE}
+					element={
+						<ProtectRoute>
+							<StudentProfile
+								userLevel="recruiter"
+								ownProfile={false}
+							/>
 						</ProtectRoute>
 					}
 				/>

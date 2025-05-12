@@ -67,7 +67,7 @@ export function AcceptanceRadial(props: {accepted: number, rejected: number}) {
 													y={(viewBox.cy || 0) - 16}
 													className="fill-foreground text-2xl font-bold"
 												>
-													{acceptance.toLocaleString()}%
+													{isNaN(Number(acceptance)) ? '0' : acceptance.toLocaleString()}%
 												</tspan>
 												<tspan
 													x={viewBox.cx}

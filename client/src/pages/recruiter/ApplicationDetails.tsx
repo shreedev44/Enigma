@@ -29,6 +29,7 @@ const ApplicationDetails = () => {
 
 	const [application, setApplication] = useState<Application>({
 		_id: "",
+		userId: "",
 		name: "",
 		email: "",
 		phone: "",
@@ -285,7 +286,28 @@ const ApplicationDetails = () => {
 							</div>
 						</div>
 
-						<div className="md:flex md:max-w-3xl justify-around items-center">
+						<div className="md:flex md:max-w-3xl justify-around items-center gap-2">
+							<Button
+								className={`${
+									!shortlisted ? "bg-mildgreen" : ""
+								} w-full md:w-auto`}
+								variant={
+									shortlisted ? "destructive" : "default"
+								}
+								disabled={loading}
+								onClick={() =>
+									navigate(
+										`/recruiter${recruiterRoutes.STUDENT_PROFILE}`,
+										{
+											state: {
+												userId: application.userId,
+											},
+										}
+									)
+								}
+							>
+								{loading ? <ClassicSpinner /> : "View Profile"}
+							</Button>
 							<Button
 								className={`${
 									!shortlisted ? "bg-mildgreen" : ""

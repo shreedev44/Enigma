@@ -154,3 +154,65 @@ export const fetchSkills = async (keyword: string) => {
 		return [];
 	}
 };
+
+export const getProfile = async (role: Role, userId: string) => {
+	try {
+		const { data } = await Api.get(
+			`${commonEndpoints.FETCH_STUDENT_PROFILE}/${userId}`,
+			{
+				headers: getHeader(role),
+			}
+		);
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
+
+export const getAttemptAttendance = async (role: Role, userId: string) => {
+	try {
+		const { data } = await Api.get(
+			`${commonEndpoints.ATTEMPT_ATTENDANCE}/${userId}`,
+			{
+				headers: getHeader(role),
+			}
+		);
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
+
+export const getProblemStats = async (role: Role, userId: string) => {
+	try {
+		const { data } = await Api.get(
+			`${commonEndpoints.PROBLEM_STATS}/${userId}`,
+			{
+				headers: getHeader(role),
+			}
+		);
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
+
+export const leaderboardRank = async (role: Role, userId: string) => {
+	try {
+		const { data } = await Api.get(
+			`${commonEndpoints.LEADERBOARD_RANK}/${userId}`,
+			{ headers: getHeader(role) }
+		);
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};

@@ -10,13 +10,14 @@ export class StudentController implements IStudentController {
     async getProfile(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { id } = JSON.parse(req.headers['x-user-payload'] as string)
+            const { userId } = req.params
             if (!id) {
                 res.status(_HttpStatus.BAD_REQUEST).json({
                     message: Messages.INCOMPLETE_FORM,
                 })
                 return
             }
-            const profile = await this._studentService.getProfile(id as string)
+            const profile = await this._studentService.getProfile(userId ? userId : (id as string))
             res.status(_HttpStatus.OK).json({ profile })
         } catch (err) {
             next(err)
