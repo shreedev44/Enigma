@@ -54,4 +54,10 @@ export const Messages = {
 
     INTERVIEW_ACCEPTED: 'Interview schedule accepted',
     INTERVIEW_REJECTED: 'Interview schedule rejected',
+
+    BLACKLISTED: 'Applicant blacklisted',
+    ALREADY_BLACKLISTED: 'Applicant already blacklisted',
+    APPLICANT_NOT_FOUND: 'Applicant not found in blacklist',
+    REMOVED_FROM_BLACKLISTED: 'Applicant is now removed from blacklist',
+    BLOCKED_TO_APPLY: "You are restricted to apply for this recruiter's job",
 }

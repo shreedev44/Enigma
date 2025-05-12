@@ -212,7 +212,7 @@ class ApplicationRepository extends BaseRepository<IApplicationSchema> implement
         }
     }
 
-    async getJobApplicationStats(): Promise<{ totalJobs: number; applicationsPerJob: number }> {
+    async getJobApplicationStats(): Promise<{ applicationsPerJob: number }> {
         try {
             const stats = await this.model.aggregate([
                 {
@@ -242,7 +242,7 @@ class ApplicationRepository extends BaseRepository<IApplicationSchema> implement
             const totalJobs = stats.length > 0 ? stats[0].totalJobs : 0
             const applicationsPerJob = totalJobs > 0 ? (await this.model.countDocuments()) / totalJobs : 0
 
-            return { totalJobs, applicationsPerJob }
+            return { applicationsPerJob }
         } catch (err) {
             console.error(err)
             throw new Error('Error getting stats')

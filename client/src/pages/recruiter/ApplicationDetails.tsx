@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
+	blackListApplicant,
 	getApplcationDetails,
 	getResumeUrl,
 	removeFromShortlist,
@@ -45,6 +46,7 @@ const ApplicationDetails = () => {
 	const [loading, setLoading] = useState(false);
 	const [date, setDate] = useState(fromDate(new Date(), "IST"));
 	const [error, setError] = useState("");
+	const [blacklisted, setBlacklisted] = useState(false);
 	useEffect(() => {
 		if (!state) {
 			navigate(-1);
@@ -66,7 +68,7 @@ const ApplicationDetails = () => {
 			meetingTime,
 			candidateEmail: application.email,
 			jobId: state.jobId,
-			applicationId: state.applicationId
+			applicationId: state.applicationId,
 		});
 
 		if (response.success) {
@@ -77,7 +79,8 @@ const ApplicationDetails = () => {
 						window.location.host +
 						recruiterRoutes.MEETING +
 						"?roomID=" +
-						response.data.meetingId
+						response.data.meetingId +
+						"&role=host"
 				)
 				.then(() => {
 					toast({
@@ -145,6 +148,28 @@ const ApplicationDetails = () => {
 				description: response.error,
 				variant: "destructive",
 			});
+		}
+	};
+
+	const handleBlacklist = async () => {
+		setLoading(true);
+		const response = await blackListApplicant(
+			application.userId as string,
+			application.name
+		);
+
+		if (response.success) {
+			toast({
+				description: response.data.message,
+			});
+			setBlacklisted(true);
+			setLoading(false);
+		} else {
+			toast({
+				description: response.error,
+				variant: "destructive",
+			});
+			setLoading(false);
 		}
 	};
 	return (
@@ -287,80 +312,93 @@ const ApplicationDetails = () => {
 							</div>
 						</div>
 
-						<div className="md:flex md:max-w-3xl justify-around items-center gap-2">
-							<Button
-								className={`${
-									!shortlisted ? "bg-mildgreen" : ""
-								} w-full md:w-auto`}
-								variant={
-									shortlisted ? "destructive" : "default"
-								}
-								disabled={loading}
-								onClick={() =>
-									navigate(
-										`/recruiter${recruiterRoutes.STUDENT_PROFILE}`,
-										{
-											state: {
-												userId: application.userId,
-											},
-										}
-									)
-								}
-							>
-								{loading ? <ClassicSpinner /> : "View Profile"}
-							</Button>
-							<Button
-								className={`${
-									!shortlisted ? "bg-mildgreen" : ""
-								} w-full md:w-auto`}
-								variant={
-									shortlisted ? "destructive" : "default"
-								}
-								disabled={loading}
-								onClick={handleShorlisting}
-							>
-								{loading ? (
-									<ClassicSpinner />
-								) : shortlisted ? (
-									"Remove From Shortlist"
-								) : (
-									"Add To Shortlist"
-								)}
-							</Button>
-							<Button
-								className="bg-bluegrey mt-4 md:mt-0 w-full md:w-auto"
-								disabled={loading}
-								onClick={handleResumeDownload}
-							>
-								{loading ? (
-									<ClassicSpinner />
-								) : (
-									"Download Resume"
-								)}
-							</Button>
-							<Button
-								className="bg-mildgreen mt-4 md:mt-0 w-full md:w-auto"
-								disabled={loading}
-								onClick={handleSchedule}
-							>
-								{loading ? (
-									<ClassicSpinner />
-								) : (
-									"Shedule Interview"
-								)}
-							</Button>
-							<DatePicker
-								className="max-w-[284px] md:ml-4"
-								value={date}
-								onChange={(value) =>
-									setDate(
-										value ?? fromDate(new Date(), "IST")
-									)
-								}
-								onClick={handleSchedule}
-							/>
+						<div className="md:flex justify-between gap-2 items-center">
+							<div className="md:flex gap-2">
+								<Button
+									className={`${
+										!shortlisted ? "bg-mildgreen" : ""
+									} w-full md:w-auto`}
+									disabled={loading}
+									onClick={() =>
+										navigate(
+											`/recruiter${recruiterRoutes.STUDENT_PROFILE}`,
+											{
+												state: {
+													userId: application.userId,
+												},
+											}
+										)
+									}
+								>
+									{loading ? (
+										<ClassicSpinner />
+									) : (
+										"View Profile"
+									)}
+								</Button>
+								<Button
+									className={`${
+										!shortlisted ? "bg-mildgreen" : ""
+									} w-full md:w-auto mt-2 md:mt-0`}
+									variant={
+										shortlisted ? "destructive" : "default"
+									}
+									disabled={loading}
+									onClick={handleShorlisting}
+								>
+									{loading ? (
+										<ClassicSpinner />
+									) : shortlisted ? (
+										"Remove From Shortlist"
+									) : (
+										"Add To Shortlist"
+									)}
+								</Button>
+								<Button
+									className="bg-bluegrey mt-4 md:mt-0 w-full md:w-auto"
+									disabled={loading}
+									onClick={handleResumeDownload}
+								>
+									{loading ? (
+										<ClassicSpinner />
+									) : (
+										"Download Resume"
+									)}
+								</Button>
+								<Button
+									className="bg-mildgreen mt-4 md:mt-0 w-full md:w-auto"
+									disabled={loading}
+									onClick={handleSchedule}
+								>
+									{loading ? (
+										<ClassicSpinner />
+									) : (
+										"Shedule Interview"
+									)}
+								</Button>
+								<DatePicker
+									className="max-w-[284px] md:ml-4 mt-2 md:mt-0"
+									value={date}
+									onChange={(value) =>
+										setDate(
+											value ?? fromDate(new Date(), "IST")
+										)
+									}
+									onClick={handleSchedule}
+								/>
+							</div>
+							<div className="flex mt-2 md:mt-0">
+								<Button
+									variant={"destructive"}
+									className="w-full md:max-w-[286px] md:ml-4"
+									disabled={blacklisted}
+									onClick={handleBlacklist}
+								>
+									Blacklist Applicant
+								</Button>
+							</div>
 						</div>
-							<p className="text-red-500 ml-3">{error}</p>
+						<p className="text-red-500 ml-3">{error}</p>
 					</CardContent>
 				</Card>
 			</div>

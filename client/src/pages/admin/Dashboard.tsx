@@ -1,8 +1,15 @@
 import { useSidebarContext } from "@/context/SidebarContext";
 import { useEffect, useState } from "react";
-import { getUserStats, getJobStats, getProblemStats } from "@/api/admin";
+import {
+	getUserStats,
+	getApplicationStats,
+	getProblemStats,
+	getJobStats,
+} from "@/api/admin";
 import { useToast } from "@/hooks/use-toast";
 import ClassicSpinner from "@/components/loaders/ClassicSpinner";
+import LineChartComponent from "@/components/charts/LineChart";
+import { generateDailyCounts } from "@/utils/generateDateArray";
 
 const Dashboard = () => {
 	const { setBreadcrumbs } = useSidebarContext();
@@ -18,6 +25,12 @@ const Dashboard = () => {
 		attemptsPerDay: 0,
 		acceptanceRate: 0,
 	});
+	const [jobData, setJobData] = useState<{ date: string; count: number }[]>(
+		[]
+	);
+	const [attemptData, setAttemptData] = useState<
+		{ date: string; count: number }[]
+	>([]);
 
 	useEffect(() => {
 		setBreadcrumbs([{ component: "Dashboard" }]);
@@ -30,31 +43,42 @@ const Dashboard = () => {
 			try {
 				const [
 					userStatsResponse,
-					jobStatsResponse,
+					applicationStatsReponse,
 					problemStatsResponse,
+					jobStatsResponse,
 				] = await Promise.all([
 					getUserStats(),
-					getJobStats(),
+					getApplicationStats(),
 					getProblemStats(),
+					getJobStats(),
 				]);
 
 				if (
 					userStatsResponse.success &&
-					jobStatsResponse.success &&
-					problemStatsResponse.success
+					applicationStatsReponse.success &&
+					problemStatsResponse.success &&
+					jobStatsResponse.success
 				) {
 					setStats({
 						totalStudents: userStatsResponse.data.totalStudents,
 						totalRecruiters: userStatsResponse.data.totalRecruiters,
-						totalJobs: jobStatsResponse.data.totalJobs,
+						totalJobs: jobStatsResponse.data.result.length,
 						applicationsPerJob:
-							jobStatsResponse.data.applicationsPerJob,
+							applicationStatsReponse.data.applicationsPerJob,
 						totalAttempts: problemStatsResponse.data.totalAttempts,
 						attemptsPerDay:
 							problemStatsResponse.data.attemptsPerDay,
 						acceptanceRate:
 							problemStatsResponse.data.acceptanceRate,
 					});
+					setJobData(
+						generateDailyCounts(jobStatsResponse.data.result)
+					);
+					setAttemptData(
+						generateDailyCounts(
+							problemStatsResponse.data.attemptsByDate
+						)
+					);
 				} else {
 					toast({
 						description: "Failed to fetch some stats.",
@@ -144,18 +168,20 @@ const Dashboard = () => {
 						<h2 className="text-xl md:text-2xl font-bold mb-4">
 							Jobs Per Day
 						</h2>
-						<div className="h-64 bg-gray-100 rounded-lg shadow-md flex justify-center items-center">
-							<p className="text-gray-500"></p>
-						</div>
+						<LineChartComponent
+							chartLabel="Number of jobs posted each day in the last year"
+							data={jobData}
+						/>
 					</div>
 
 					<div className="mt-10">
 						<h2 className="text-xl md:text-2xl font-bold mb-4">
 							Attempts Per Day
 						</h2>
-						<div className="h-64 bg-gray-100 rounded-lg shadow-md flex justify-center items-center">
-							<p className="text-gray-500"></p>
-						</div>
+						<LineChartComponent
+							chartLabel="Number of attempts each day in the last year"
+							data={attemptData}
+						/>
 					</div>
 				</>
 			)}

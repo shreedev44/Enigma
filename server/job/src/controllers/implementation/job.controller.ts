@@ -184,4 +184,13 @@ export class JobController implements IJobController {
             next(err)
         }
     }
+
+    async getJobStats(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const result = await this._jobService.getJobStats()
+            res.status(_HttpStatus.OK).json({ result })
+        } catch (err) {
+            next(err)
+        }
+    }
 }

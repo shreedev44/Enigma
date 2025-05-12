@@ -111,7 +111,12 @@ export class AttemptService implements IAttemptService {
         return attemptsPerDay.map((attempt) => new AttemptDTO.AttemptsAttendance(attempt))
     }
 
-    async getStats(): Promise<{ totalAttempts: number; attemptsPerDay: number; acceptanceRate: number }> {
+    async getStats(): Promise<{
+        totalAttempts: number
+        attemptsPerDay: number
+        acceptanceRate: number
+        attemptsByDate: { date: string; count: number }[]
+    }> {
         const stats = await this._attemptRepository.getStats()
 
         return stats

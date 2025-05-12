@@ -22,5 +22,5 @@ export interface IApplicationService {
     removeFromShortlist(applicationId: string, jobId: string, userId: string): Promise<void>
     acceptShedule(applicationId: string, userId: string): Promise<void>
     rejectShedule(applicationId: string, userId: string): Promise<void>
-    getStats(): Promise<{ totalJobs: number; applicationsPerJob: number }>
+    getStats(): Promise<{ applicationsPerJob: number }>
 }

@@ -18,6 +18,7 @@ import interviewRouter from '@routes/interview.router'
 import subscriptionPlanRouter from '@routes/subscription-plan.router'
 import subscriptionRouter from '@routes/subscription.router'
 import webhookRouter from '@routes/webhook.router'
+import blacklistRouter from '@routes/blacklist.router'
 
 class App {
     public app: Application
@@ -45,6 +46,7 @@ class App {
         this.app.use('/interview', interviewRouter)
         this.app.use('/subscription-plan', subscriptionPlanRouter)
         this.app.use('/subscription', subscriptionRouter)
+        this.app.use('/blacklist', blacklistRouter)
         this.app.use(notFoundHandler)
         this.app.use(errorHandler)
     }

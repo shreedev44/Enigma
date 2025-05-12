@@ -1,6 +1,11 @@
 import pdf from 'pdf-parse'
 import { IApplicationService } from '@services/interface'
-import { IApplicationRepository, IInterviewRepository, IJobRepository } from '@repositories/interface'
+import {
+    IApplicationRepository,
+    IBlacklistRepository,
+    IInterviewRepository,
+    IJobRepository,
+} from '@repositories/interface'
 import { createHttpError, generatePresignedUrl, generateUID, uploadResume, validateApplication } from '@utils'
 import { _HttpStatus, Messages, parsePrompt } from '@constants'
 import { Types } from 'mongoose'
@@ -12,10 +17,21 @@ export class ApplicationService implements IApplicationService {
     constructor(
         private _applicationRepository: IApplicationRepository,
         private _jobRepository: IJobRepository,
-        private _interviewRepository: IInterviewRepository
+        private _interviewRepository: IInterviewRepository,
+        private _blacklistRepository: IBlacklistRepository
     ) {}
 
     async createApplication(userId: string, jobId: string, file: Express.Multer.File): Promise<void> {
+        const job = await this._jobRepository.findByJobId(new Types.ObjectId(jobId))
+        const blacklisted = await this._blacklistRepository.getBlacklistedApplicant(
+            new Types.ObjectId(job?.userId),
+            new Types.ObjectId(userId)
+        )
+
+        if (blacklisted) {
+            throw createHttpError(_HttpStatus.BAD_REQUEST, Messages.BLOCKED_TO_APPLY)
+        }
+
         const applicationExist = await this._applicationRepository.findApplication(
             new Types.ObjectId(userId),
             new Types.ObjectId(jobId)
@@ -24,8 +40,6 @@ export class ApplicationService implements IApplicationService {
         if (applicationExist) {
             throw createHttpError(_HttpStatus.CONFLICT, Messages.APPLICATION_EXISTS)
         }
-
-        const job = await this._jobRepository.findByJobId(new Types.ObjectId(jobId))
 
         if (!job?.listed) {
             throw createHttpError(_HttpStatus.BAD_REQUEST, Messages.JOB_NOT_FOUND)
@@ -216,7 +230,7 @@ export class ApplicationService implements IApplicationService {
         await this._applicationRepository.changeStatusById(new Types.ObjectId(applicationId), 'rejected')
     }
 
-    async getStats(): Promise<{ totalJobs: number; applicationsPerJob: number }> {
+    async getStats(): Promise<{ applicationsPerJob: number }> {
         const stats = await this._applicationRepository.getJobApplicationStats()
         return stats
     }

@@ -108,6 +108,42 @@ class JobRepository extends BaseRepository<IJobSchema> implements IJobRepository
             throw new Error('Error getting job details')
         }
     }
+
+    async getJobStats(): Promise<{ date: Date; count: number }[]> {
+        try {
+            const result = await this.model.aggregate([
+                {
+                    $match: {
+                        createdAt: {
+                            $gte: new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
+                        },
+                    },
+                },
+                {
+                    $group: {
+                        _id: {
+                            $dateToString: { format: '%Y-%m-%d', date: '$createdAt' },
+                        },
+                        count: { $sum: 1 },
+                    },
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        date: '$_id',
+                        count: 1,
+                    },
+                },
+                {
+                    $sort: { date: 1 },
+                },
+            ])
+            return result
+        } catch (err) {
+            console.error(err)
+            throw new Error('Error getting jobs stats')
+        }
+    }
 }
 
 export default new JobRepository()

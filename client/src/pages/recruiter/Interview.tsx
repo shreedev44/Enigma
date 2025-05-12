@@ -26,7 +26,10 @@ const Interview = () => {
 
 		if (response.success) {
 			navigate(
-				recruiterRoutes.MEETING + "?roomID=" + response.data.meetingId,
+				recruiterRoutes.MEETING +
+					"?roomID=" +
+					response.data.meetingId +
+					"&role=host",
 				{
 					state: {
 						meetingId: response.data.meetingId,
@@ -63,7 +66,8 @@ const Interview = () => {
 						window.location.host +
 						recruiterRoutes.MEETING +
 						"?roomID=" +
-						response.data.meetingId
+						response.data.meetingId +
+						"&role=host"
 				)
 				.then(() => {
 					toast({

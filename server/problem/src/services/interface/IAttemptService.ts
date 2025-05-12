@@ -12,5 +12,10 @@ export interface IAttemptService {
     findAttempt(attemptId: string): Promise<InstanceType<typeof AttemptDTO.AttemptInfo>>
     getProfileStats(userId: string): Promise<InstanceType<typeof AttemptDTO.ProfileStats>>
     getAttemptsPerDay(userId: string): Promise<InstanceType<typeof AttemptDTO.AttemptsAttendance>[]>
-    getStats(): Promise<{ totalAttempts: number; attemptsPerDay: number; acceptanceRate: number }>
+    getStats(): Promise<{
+        totalAttempts: number
+        attemptsPerDay: number
+        acceptanceRate: number
+        attemptsByDate: { date: string; count: number }[]
+    }>
 }

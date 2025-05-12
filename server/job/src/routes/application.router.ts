@@ -5,8 +5,14 @@ import ApplicationRepository from '@repositories/implementation/application.repo
 import { upload, validateRole } from '@middlewares'
 import JobRepository from '@repositories/implementation/job.repository'
 import InterviewRepository from '@repositories/implementation/interview.repository'
+import BlacklistRepository from '@repositories/implementation/blacklist.repository'
 
-const applicationService = new ApplicationService(ApplicationRepository, JobRepository, InterviewRepository)
+const applicationService = new ApplicationService(
+    ApplicationRepository,
+    JobRepository,
+    InterviewRepository,
+    BlacklistRepository
+)
 const applicationController = new ApplicationController(applicationService)
 
 const applicationRouter = Router()

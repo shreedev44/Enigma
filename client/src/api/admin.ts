@@ -154,9 +154,9 @@ export const getUserStats = async () => {
 	}
 };
 
-export const getJobStats = async () => {
+export const getApplicationStats = async () => {
 	try {
-		const { data } = await Api.get(adminEndpoints.JOB_STATS, {
+		const { data } = await Api.get(adminEndpoints.APPLICATION_STATS, {
 			headers,
 		});
 		return { success: true, data };
@@ -230,6 +230,17 @@ export const getPLans = async () => {
 		const { data } = await Api.get(adminEndpoints.SUBSCRIPTION_PLAN, {
 			headers,
 		});
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
+
+export const getJobStats = async () => {
+	try {
+		const { data } = await Api.get(adminEndpoints.JOB_STATS, { headers });
 		return { success: true, data };
 	} catch (err) {
 		const error = err as any;

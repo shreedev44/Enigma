@@ -87,4 +87,9 @@ export class JobService implements IJobService {
         }
         return new JobDTO.JobInfo(jobDetails)
     }
+
+    async getJobStats(): Promise<{ date: Date; count: number }[]> {
+        const result = await this._jobRepository.getJobStats()
+        return result
+    }
 }

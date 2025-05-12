@@ -43,6 +43,8 @@ export const recruiterEndpoints = {
 	CREATE_PAYMENT_SESSION: "/job/subscription/payment-session",
 	SESSION_DETAILS: "/job/subscription/session-details",
 	GET_SUBSCRIPTION: "/job/subscription/subscription-details",
+	BLACKLIST: "/job/blacklist",
+	REMOVE_BLACKLIST: "/job/blacklist/remove",
 };
 
 export const adminEndpoints = {
@@ -56,11 +58,12 @@ export const adminEndpoints = {
 	LIST_PROBLEM: "/problem/list-problem",
 	GET_JOBS: "/job",
 	USER_STATS: "/auth/admin/user-stats",
-	JOB_STATS: "/job/application/job-stats",
+	APPLICATION_STATS: "/job/application/job-stats",
 	PROBLEM_STATS: "/problem/attempt/attempt-stats",
 	SUBSCRIPTION_PLAN: "/job/subscription-plan",
 	UNLIST_PLAN: "/job/subscription-plan/unlist",
 	LIST_PLAN: "/job/subscription-plan/list",
+	JOB_STATS: "/job/job-stats"
 };
 
 export const commonEndpoints = {

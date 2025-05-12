@@ -173,7 +173,12 @@ class AttemptRepository extends BaseRepository<AttemptDocument> implements IAtte
         }
     }
 
-    async getStats(): Promise<{ totalAttempts: number; attemptsPerDay: number; acceptanceRate: number }> {
+    async getStats(): Promise<{
+        totalAttempts: number
+        attemptsPerDay: number
+        acceptanceRate: number
+        attemptsByDate: { date: string; count: number }[]
+    }> {
         try {
             const totalAttempts = await this.model.countDocuments()
 
@@ -181,15 +186,26 @@ class AttemptRepository extends BaseRepository<AttemptDocument> implements IAtte
                 {
                     $group: {
                         _id: {
-                            $dateToString: { format: '%Y/%m/%d', date: '$createdAt' },
+                            date: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
                         },
                         count: { $sum: 1 },
                     },
                 },
                 {
+                    $project: {
+                        _id: 0,
+                        date: '$_id.date',
+                        count: 1,
+                    },
+                },
+                {
+                    $sort: { date: 1 },
+                },
+                {
                     $group: {
                         _id: null,
                         averageAttemptsPerDay: { $avg: '$count' },
+                        attemptsByDate: { $push: { date: '$date', count: '$count' } },
                     },
                 },
             ])
@@ -201,6 +217,7 @@ class AttemptRepository extends BaseRepository<AttemptDocument> implements IAtte
                 totalAttempts,
                 attemptsPerDay: attemptsPerDayData[0]?.averageAttemptsPerDay || 0,
                 acceptanceRate,
+                attemptsByDate: attemptsPerDayData[0]?.attemptsByDate || [],
             }
         } catch (err) {
             console.log(err)

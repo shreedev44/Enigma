@@ -290,6 +290,52 @@ export const getSubscriptionDetails = async () => {
 		return { success: false, error: message };
 	}
 };
+
+export const blackListApplicant = async (
+	applicantId: string,
+	applicantName: string
+) => {
+	try {
+		const { data } = await Api.post(
+			recruiterEndpoints.BLACKLIST,
+			{ applicantId, applicantName },
+			{ headers }
+		);
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
+
+export const getBlacklist = async () => {
+	try {
+		const { data } = await Api.get(recruiterEndpoints.BLACKLIST, {
+			headers,
+		});
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
+
+export const removeFromBlacklist = async (applicantId: string) => {
+	try {
+		const { data } = await Api.patch(
+			recruiterEndpoints.REMOVE_BLACKLIST,
+			{ applicantId },
+			{ headers }
+		);
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
 // export const logout = async () => {
 // 	try {
 // 		const { data } = await Api.get(commonEndpoints.LOGOUT, {

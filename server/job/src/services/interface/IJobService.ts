@@ -15,4 +15,5 @@ export interface IJobService {
         isAdmin: boolean
     ): Promise<InstanceType<typeof JobDTO.Jobs>>
     getJobDetails(jobId: string): Promise<InstanceType<typeof JobDTO.JobInfo>>
+    getJobStats(): Promise<{ date: Date; count: number }[]>
 }
