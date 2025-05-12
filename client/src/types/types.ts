@@ -96,7 +96,12 @@ export type ApplicationWithJob = {
 	companyName: string;
 	role: string;
 	createdAt: Date;
-	status: 'received' | 'shortlisted' | 'interview requested' | 'accepted' | 'rejected'
+	status:
+		| "received"
+		| "shortlisted"
+		| "interview requested"
+		| "accepted"
+		| "rejected";
 };
 
 export type ApplicationShort = {
@@ -123,7 +128,7 @@ export interface Experience {
 
 export type Application = {
 	_id: string;
-	userId?: string
+	userId?: string;
 	name: string;
 	email: string;
 	phone: string;
@@ -152,4 +157,11 @@ export interface CurrentSubscription {
 	expiresAt: Date;
 	createdAt: Date;
 	updatedAt: Date;
+}
+
+export interface Filters {
+	expectedSalary: number;
+	workMode: string;
+	workTime: string;
+	minimumExperience: number;
 }

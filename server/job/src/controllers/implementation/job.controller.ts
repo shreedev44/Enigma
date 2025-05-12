@@ -123,12 +123,24 @@ export class JobController implements IJobController {
 
     async getAllJobs(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            const { page = 1, sortBy = 'updatedAt', sortOrder = -1, filter = '', userId = '' } = req.query
+            const {
+                page = 1,
+                sortBy = 'updatedAt',
+                sortOrder = -1,
+                filter = '',
+                userId = '',
+                expectedSalary = '',
+                workMode = '',
+                workTime = '',
+                minimumExperience = '',
+            } = req.query
             if (isNaN(Number(page))) {
                 res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_PAGE })
                 return
             }
             const sortOptions = ['companyName', 'updatedAt', 'title']
+            const workModes = ['Remote', 'On-Site', 'Hybrid']
+            const workTimes = ['Full-Time', 'Part-Time']
             if (!sortOptions.includes(String(sortBy))) {
                 res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_SORT_OPTION })
                 return
@@ -139,6 +151,22 @@ export class JobController implements IJobController {
             }
             if (userId && !Types.ObjectId.isValid(String(userId))) {
                 res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_ID })
+                return
+            }
+            if (expectedSalary && (isNaN(Number(expectedSalary)) || Number(expectedSalary) < 0)) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_FILTER })
+                return
+            }
+            if (workMode && !workModes.includes(String(workMode))) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_FILTER })
+                return
+            }
+            if (workTime && !workTimes.includes(String(workTime))) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_FILTER })
+                return
+            }
+            if (minimumExperience && Number(minimumExperience) < 0) {
+                res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_FILTER })
                 return
             }
 
@@ -155,7 +183,11 @@ export class JobController implements IJobController {
                 Number(sortOrder) as 1 | -1,
                 String(filter),
                 String(userId),
-                isAdmin
+                isAdmin,
+                Number(expectedSalary),
+                String(workMode),
+                String(workTime),
+                Number(minimumExperience)
             )
             res.status(_HttpStatus.OK).json({ jobs, totalPages })
         } catch (err) {

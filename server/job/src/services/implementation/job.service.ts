@@ -53,29 +53,62 @@ export class JobService implements IJobService {
         sortOrder: 1 | -1,
         filter: string,
         userId: string,
-        isAdmin: boolean
+        isAdmin: boolean,
+        expectedSalary?: number,
+        workMode?: string,
+        workTime?: string,
+        minimumExperience?: number
     ): Promise<InstanceType<typeof JobDTO.Jobs>> {
         const dataPerPage = 6
         const skip = dataPerPage * (page - 1)
 
         let query: object = isAdmin ? {} : { listed: true }
-        if (filter || userId) {
-            query = {
-                $and: [
-                    {
-                        $or: [
-                            { role: { $regex: filter, $options: 'i' } },
-                            { companyName: { $regex: filter, $options: 'i' } },
-                            { workTime: { $regex: filter, $options: 'i' } },
-                            { workMode: { $regex: filter, $options: 'i' } },
-                            { jobLocation: { $regex: filter, $options: 'i' } },
-                        ],
-                    },
-                    ...(isAdmin ? [] : [{ listed: true }]),
-                    ...(userId ? [{ userId: new Types.ObjectId(userId) }] : []),
-                ],
-            }
+
+        const andConditions = []
+
+        if (filter) {
+            const orConditions = [
+                { role: { $regex: filter, $options: 'i' } },
+                { companyName: { $regex: filter, $options: 'i' } },
+                { workTime: { $regex: filter, $options: 'i' } },
+                { workMode: { $regex: filter, $options: 'i' } },
+                { jobLocation: { $regex: filter, $options: 'i' } },
+            ]
+            andConditions.push({ $or: orConditions })
         }
+
+        if (!isAdmin) {
+            andConditions.push({ listed: true })
+        }
+
+        if (userId) {
+            andConditions.push({ userId: new Types.ObjectId(userId) })
+        }
+
+        if (expectedSalary && expectedSalary !== 0) {
+            andConditions.push({
+                minSalary: { $lte: expectedSalary },
+                maxSalary: { $gte: expectedSalary },
+            })
+        }
+
+        if (workMode) {
+            andConditions.push({ workMode: workMode })
+        }
+
+        if (workTime) {
+            andConditions.push({ workTime: workTime })
+        }
+
+        if (minimumExperience) {
+            andConditions.push({ minimumExperience: { $gte: minimumExperience } })
+        }
+
+        if (andConditions.length > 0) {
+            query = { $and: andConditions }
+        }
+        console.log(query)
+
         const result = await this._jobRepository.findAllJobs(skip, dataPerPage, query, sortBy, sortOrder)
         return new JobDTO.Jobs(result)
     }

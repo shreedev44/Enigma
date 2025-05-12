@@ -12,7 +12,11 @@ export interface IJobService {
         sortOrder: 1 | -1,
         filter: string,
         userId: string,
-        isAdmin: boolean
+        isAdmin: boolean,
+        expectedSalary?: number,
+        workMode?: string,
+        workTime?: string,
+        minimumExperience?: number
     ): Promise<InstanceType<typeof JobDTO.Jobs>>
     getJobDetails(jobId: string): Promise<InstanceType<typeof JobDTO.JobInfo>>
     getJobStats(): Promise<{ date: Date; count: number }[]>

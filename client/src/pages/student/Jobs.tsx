@@ -4,6 +4,7 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import JobCard from "@/components/JobCard";
 import JobCardSkeleton from "@/components/loaders/JobCardSkeleton";
 import { DynamicPagination } from "@/components/Pagination";
+import FilterButton from "@/components/studentComponents/JobFilterButton";
 import JobSearch from "@/components/studentComponents/JobSearch";
 
 import { useToast } from "@/hooks/use-toast";
@@ -21,6 +22,10 @@ const Jobs = () => {
 		sortOrder: "-1",
 		filter: "",
 		userId: "",
+		expectedSalary: "",
+		workMode: "",
+		workTime: "",
+		minimumExperience: "",
 	});
 	const [jobs, setJobs] = useState<JobCardProps[]>([]);
 	const [filtered, setFiltered] = useState<JobCardProps[]>([]);
@@ -31,19 +36,36 @@ const Jobs = () => {
 		filter = "",
 		page = "1",
 		sortOrder = "-1",
-		userId = ""
+		userId = "",
+		expectedSalary = "",
+		workMode = "",
+		workTime = "",
+		minimumExperience = ""
 	) => {
 		if (urlQuery.page !== page) setUrlQuery({ ...urlQuery, page });
 		if (urlQuery.sortOrder !== sortOrder)
 			setUrlQuery({ ...urlQuery, sortOrder });
 		if (urlQuery.filter !== filter) setUrlQuery({ ...urlQuery, filter });
 		if (urlQuery.userId !== userId) setUrlQuery({ ...urlQuery, userId });
+		if (urlQuery.expectedSalary !== expectedSalary)
+			setUrlQuery({ ...urlQuery, expectedSalary });
+		if (urlQuery.workMode !== workMode)
+			setUrlQuery({ ...urlQuery, workMode });
+		if (urlQuery.workTime !== workTime)
+			setUrlQuery({ ...urlQuery, workTime });
+		if (urlQuery.minimumExperience !== minimumExperience)
+			setUrlQuery({ ...urlQuery, minimumExperience });
+
 
 		return new URLSearchParams({
 			page,
 			sortOrder,
 			filter,
 			userId,
+			expectedSalary,
+			workMode,
+			workTime,
+			minimumExperience,
 		}).toString();
 	};
 
@@ -82,7 +104,16 @@ const Jobs = () => {
 		(async () => {
 			setLoading((prevLoading) => ({ ...prevLoading, jobs: true }));
 			const response = await getJobs(
-				filteredUrl(urlQuery.filter, urlQuery.page, urlQuery.sortOrder)
+				filteredUrl(
+					urlQuery.filter,
+					urlQuery.page,
+					urlQuery.sortOrder,
+					urlQuery.userId,
+					urlQuery.expectedSalary,
+					urlQuery.workMode,
+					urlQuery.workTime,
+					urlQuery.minimumExperience,
+				)
 			);
 			if (response.success) {
 				setJobs(response.data.jobs);
@@ -129,11 +160,13 @@ const Jobs = () => {
 		}
 	}, [query]);
 
+	const handleFilterApply = (filters: Record<string, string>) => {
+		setUrlQuery((prev) => ({ ...prev, ...filters }));
+	};
+
 	return (
 		<div className="pt-24">
-			<Breadcrumbs
-				components={[{ component: "Jobs" }]}
-			/>
+			<Breadcrumbs components={[{ component: "Jobs" }]} />
 			<section>
 				<div className="md:px-20 px-5 md:my-10 my-4">
 					<p className="font-mono font-bold text-lg md:text-3xl text-center">
@@ -142,7 +175,10 @@ const Jobs = () => {
 				</div>
 			</section>
 
-			<JobSearch {...jobSearchProps} />
+			<div className="md:flex justify-center gap-5 mx-4 md:mx-0">
+				<JobSearch {...jobSearchProps} />
+				<FilterButton handleFilterApply={handleFilterApply} urlQuery={urlQuery} />
+			</div>
 
 			<div className="flex justify-center">
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 items-start p-4 md:p-8">
