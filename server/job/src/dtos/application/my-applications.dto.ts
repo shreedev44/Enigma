@@ -13,6 +13,7 @@ export class MyApplications {
                 companyName: application.companyName,
                 role: application.role,
                 createdAt: application.createdAt,
+                status: application.status,
             }
         })
         this.totalPages = returnObj.totalPages

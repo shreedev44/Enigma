@@ -51,4 +51,7 @@ export const Messages = {
     SIGNATURE_NOT_FOUND: 'Signature not found',
     NO_SUBSCRIPTION: 'No current subscriptions',
     LIMIT_REACHED: 'Your max interview limit reached',
+
+    INTERVIEW_ACCEPTED: 'Interview schedule accepted',
+    INTERVIEW_REJECTED: 'Interview schedule rejected',
 }

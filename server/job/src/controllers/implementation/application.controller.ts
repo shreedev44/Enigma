@@ -271,4 +271,26 @@ export class ApplicationController implements IApplicationController {
             next(err)
         }
     }
+
+    async acceptSchedule(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const { applicationId } = req.body
+            const { id: userId } = JSON.parse(req.headers['x-user-payload'] as string)
+            await this._applicationService.acceptShedule(applicationId, userId)
+            res.status(_HttpStatus.OK).json({ message: Messages.INTERVIEW_ACCEPTED })
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    async rejectSchedule(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const { applicationId } = req.body
+            const { id: userId } = JSON.parse(req.headers['x-user-payload'] as string)
+            await this._applicationService.rejectShedule(applicationId, userId)
+            res.status(_HttpStatus.OK).json({ message: Messages.INTERVIEW_REJECTED })
+        } catch (err) {
+            next(err)
+        }
+    }
 }

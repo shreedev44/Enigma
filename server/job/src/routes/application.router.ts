@@ -4,8 +4,9 @@ import { ApplicationService } from '@services/implementation'
 import ApplicationRepository from '@repositories/implementation/application.repository'
 import { upload, validateRole } from '@middlewares'
 import JobRepository from '@repositories/implementation/job.repository'
+import InterviewRepository from '@repositories/implementation/interview.repository'
 
-const applicationService = new ApplicationService(ApplicationRepository, JobRepository)
+const applicationService = new ApplicationService(ApplicationRepository, JobRepository, InterviewRepository)
 const applicationController = new ApplicationController(applicationService)
 
 const applicationRouter = Router()
@@ -61,6 +62,16 @@ applicationRouter.patch(
     '/remove-from-shortlist/:jobId/:applicationId',
     validateRole('recruiter'),
     applicationController.removeApplicationFromShortlist.bind(applicationController)
+)
+applicationRouter.patch(
+    '/accept-schedule',
+    validateRole('student'),
+    applicationController.acceptSchedule.bind(applicationController)
+)
+applicationRouter.patch(
+    '/reject-schedule',
+    validateRole('student'),
+    applicationController.rejectSchedule.bind(applicationController)
 )
 
 export default applicationRouter

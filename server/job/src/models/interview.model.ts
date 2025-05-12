@@ -18,6 +18,9 @@ const InterviewSchema = new Schema<IInterviewSchema>(
             type: Date,
             required: true,
         },
+        applicationId: {
+            type: Schema.Types.ObjectId,
+        },
     },
     {
         timestamps: true,

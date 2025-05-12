@@ -306,6 +306,36 @@ export const updateSkills = async (skills: string[]) => {
 	}
 };
 
+export const acceptSchedule = async (applicationId: string) => {
+	try {
+		const { data } = await Api.patch(
+			studentEndpoints.ACCEPT_SCHEDULE,
+			{ applicationId },
+			{ headers }
+		);
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
+
+export const rejectSchedule = async (applicationId: string) => {
+	try {
+		const { data } = await Api.patch(
+			studentEndpoints.REJECT_SCHEDULE,
+			{ applicationId },
+			{ headers }
+		);
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
+
 // export const logout = async () => {
 // 	try {
 // 		const { data } = await Api.get(commonEndpoints.LOGOUT, {

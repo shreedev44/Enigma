@@ -18,6 +18,8 @@ export const studentEndpoints = {
 	LEADERBOARD_TOP_THREE: "/problem/leaderboard/top-three",
 	LEADERBOARD: "/problem/leaderboard",
 	UPDATE_SKILLS: "/auth/student/update-skills",
+	ACCEPT_SCHEDULE: "/job/application/accept-schedule",
+	REJECT_SCHEDULE: "/job/application/reject-schedule",
 };
 
 export const recruiterEndpoints = {

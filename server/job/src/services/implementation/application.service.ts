@@ -1,6 +1,6 @@
 import pdf from 'pdf-parse'
 import { IApplicationService } from '@services/interface'
-import { IApplicationRepository, IJobRepository } from '@repositories/interface'
+import { IApplicationRepository, IInterviewRepository, IJobRepository } from '@repositories/interface'
 import { createHttpError, generatePresignedUrl, generateUID, uploadResume, validateApplication } from '@utils'
 import { _HttpStatus, Messages, parsePrompt } from '@constants'
 import { Types } from 'mongoose'
@@ -11,7 +11,8 @@ import { applicationReceivedEvent } from '@producers'
 export class ApplicationService implements IApplicationService {
     constructor(
         private _applicationRepository: IApplicationRepository,
-        private _jobRepository: IJobRepository
+        private _jobRepository: IJobRepository,
+        private _interviewRepository: IInterviewRepository
     ) {}
 
     async createApplication(userId: string, jobId: string, file: Express.Multer.File): Promise<void> {
@@ -199,7 +200,7 @@ export class ApplicationService implements IApplicationService {
             throw createHttpError(_HttpStatus.NOT_FOUND, Messages.JOB_NOT_FOUND)
         }
 
-        await this._applicationRepository.shortlistSingleApplication(new Types.ObjectId(applicationId))
+        await this._applicationRepository.changeStatusById(new Types.ObjectId(applicationId), 'shortlisted')
     }
 
     async removeFromShortlist(applicationId: string, jobId: string, userId: string): Promise<void> {
@@ -212,11 +213,28 @@ export class ApplicationService implements IApplicationService {
             throw createHttpError(_HttpStatus.NOT_FOUND, Messages.JOB_NOT_FOUND)
         }
 
-        await this._applicationRepository.removeFromShortlist(new Types.ObjectId(applicationId))
+        await this._applicationRepository.changeStatusById(new Types.ObjectId(applicationId), 'rejected')
     }
 
     async getStats(): Promise<{ totalJobs: number; applicationsPerJob: number }> {
         const stats = await this._applicationRepository.getJobApplicationStats()
         return stats
+    }
+
+    async acceptShedule(applicationId: string, userId: string): Promise<void> {
+        const application = await this._applicationRepository.findApplicationById(new Types.ObjectId(applicationId))
+        if (!application || String(application?.userId) !== userId) {
+            throw createHttpError(_HttpStatus.NOT_FOUND, Messages.APPLICATION_NOT_FOUND)
+        }
+        await this._applicationRepository.changeStatusById(new Types.ObjectId(applicationId), 'accepted')
+    }
+
+    async rejectShedule(applicationId: string, userId: string): Promise<void> {
+        const application = await this._applicationRepository.findApplicationById(new Types.ObjectId(applicationId))
+        if (!application || String(application?.userId) !== userId) {
+            throw createHttpError(_HttpStatus.NOT_FOUND, Messages.APPLICATION_NOT_FOUND)
+        }
+        await this._applicationRepository.changeStatusById(new Types.ObjectId(applicationId), 'rejected')
+        await this._interviewRepository.deleteByApplicationId(new Types.ObjectId(applicationId))
     }
 }

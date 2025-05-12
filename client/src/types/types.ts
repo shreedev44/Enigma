@@ -96,6 +96,7 @@ export type ApplicationWithJob = {
 	companyName: string;
 	role: string;
 	createdAt: Date;
+	status: 'received' | 'shortlisted' | 'interview requested' | 'accepted' | 'rejected'
 };
 
 export type ApplicationShort = {

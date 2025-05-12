@@ -19,10 +19,15 @@ export class InterviewService implements IInterviewService {
         private _subscriptionRepository: ISubscriptionRepository
     ) {}
 
-    async createInterview(userId: string, meetingTime: Date, candidateEmail: string, jobId: string): Promise<string> {
+    async createInterview(
+        userId: string,
+        meetingTime: Date,
+        candidateEmail: string,
+        jobId: string,
+        applicationId: string
+    ): Promise<string> {
         const subscriptions = await this._subscriptionRepository.findAllWithEarlyDate(new Types.ObjectId(userId))
         const { totalMaxInterviews, earliestStartDate } = subscriptions[0]
-        console.log(totalMaxInterviews, earliestStartDate)
         const eligible = await this._interviewRepository.canConductInterview(
             new Types.ObjectId(userId),
             earliestStartDate,
@@ -42,12 +47,17 @@ export class InterviewService implements IInterviewService {
         }
         if (candidateEmail) {
             obj.candidateEmail = candidateEmail
+            obj.applicationId = new Types.ObjectId(applicationId)
         }
 
         const interview = await this._interviewRepository.create(obj)
 
         if (!interview) {
             throw createHttpError(_HttpStatus.INTERNAL_SERVER_ERROR, Messages.SERVER_ERROR)
+        }
+
+        if (applicationId) {
+            await this._applicationRepository.changeStatusById(new Types.ObjectId(applicationId), 'interview requested')
         }
 
         const application = await this._applicationRepository.findByEmail(candidateEmail)

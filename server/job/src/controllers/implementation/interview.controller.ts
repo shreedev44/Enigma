@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express'
+import { application, NextFunction, Request, Response } from 'express'
 import { _HttpStatus, Messages } from '@constants'
 import { IInterviewService } from '@services/interface'
 import { IInterviewController } from '@controllers/interface'
@@ -9,7 +9,7 @@ export class InterviewController implements IInterviewController {
     async schedule(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const { id: userId } = JSON.parse(req.headers['x-user-payload'] as string)
-            const { meetingTime, candidateEmail = '', jobId } = req.body
+            const { meetingTime, candidateEmail = '', jobId, applicationId } = req.body
 
             if (!meetingTime) {
                 res.status(_HttpStatus.BAD_REQUEST).json({
@@ -18,7 +18,13 @@ export class InterviewController implements IInterviewController {
                 return
             }
 
-            const result = await this._interviewService.createInterview(userId, meetingTime, candidateEmail, jobId)
+            const result = await this._interviewService.createInterview(
+                userId,
+                meetingTime,
+                candidateEmail,
+                jobId,
+                applicationId
+            )
             res.status(_HttpStatus.CREATED).json({ meetingId: result })
         } catch (err) {
             next(err)

@@ -170,6 +170,7 @@ class ApplicationRepository extends BaseRepository<IApplicationSchema> implement
                         companyName: '$job.companyName',
                         role: '$job.role',
                         createdAt: 1,
+                        status: 1,
                     },
                 },
                 {
@@ -190,21 +191,15 @@ class ApplicationRepository extends BaseRepository<IApplicationSchema> implement
         }
     }
 
-    async shortlistSingleApplication(applicationId: Types.ObjectId): Promise<void> {
+    async changeStatusById(
+        applicationId: Types.ObjectId,
+        status: 'received' | 'shortlisted' | 'interview requested' | 'accepted' | 'rejected'
+    ): Promise<void> {
         try {
-            await this.model.updateOne({ _id: applicationId }, { status: 'shortlisted' })
+            await this.model.updateOne({ _id: applicationId }, { status })
         } catch (err) {
             console.error(err)
             throw new Error('Error shortlisting single application')
-        }
-    }
-
-    async removeFromShortlist(applicationId: Types.ObjectId): Promise<void> {
-        try {
-            await this.model.updateOne({ _id: applicationId }, { status: 'received' })
-        } catch (err) {
-            console.error(err)
-            throw new Error('Error removing application from shortlist')
         }
     }
 

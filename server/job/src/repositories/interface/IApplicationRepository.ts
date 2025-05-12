@@ -19,8 +19,10 @@ export interface IApplicationRepository extends IBaseRepository<IApplicationSche
     ): Promise<{ applications: IApplicationSchema[]; totalPages: number; totalApplications: number }>
     findApplication(userId: Types.ObjectId, jobId: Types.ObjectId): Promise<IApplicationSchema | null>
     shortlistApplications(jobId: Types.ObjectId, tags: string[]): Promise<{ shortlisted: number }>
-    shortlistSingleApplication(applicationId: Types.ObjectId): Promise<void>
-    removeFromShortlist(applicationId: Types.ObjectId): Promise<void>
+    changeStatusById(
+        applicationId: Types.ObjectId,
+        status: 'received' | 'shortlisted' | 'interview requested' | 'accepted' | 'rejected'
+    ): Promise<void>
     getShortlist(
         jobId: Types.ObjectId,
         skip: number,

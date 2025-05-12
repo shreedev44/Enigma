@@ -21,4 +21,5 @@ export type ApplicationWithJob = {
     companyName: string
     role: string
     createdAt: Date
+    status: string
 }

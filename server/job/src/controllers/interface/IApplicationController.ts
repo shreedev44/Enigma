@@ -12,4 +12,6 @@ export interface IApplicationController {
     shortlistSingleApplication(req: Request, res: Response, next: NextFunction): Promise<void>
     removeApplicationFromShortlist(req: Request, res: Response, next: NextFunction): Promise<void>
     getApplicationStats(req: Request, res: Response, next: NextFunction): Promise<void>
+    acceptSchedule(req: Request, res: Response, next: NextFunction): Promise<void>
+    rejectSchedule(req: Request, res: Response, next: NextFunction): Promise<void>
 }

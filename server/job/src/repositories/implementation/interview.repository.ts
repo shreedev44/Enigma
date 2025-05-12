@@ -42,6 +42,15 @@ class InterviewRepository extends BaseRepository<IInterviewSchema> implements II
             throw new Error('Error counting interviews from date')
         }
     }
+
+    async deleteByApplicationId(applicationId: Types.ObjectId): Promise<void> {
+        try {
+            await this.model.deleteOne({ applicationId })
+        } catch (err) {
+            console.error(err)
+            throw new Error('Error while deleting interview by application id')
+        }
+    }
 }
 
 export default new InterviewRepository()

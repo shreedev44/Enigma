@@ -78,7 +78,7 @@ const ApplicationSchema = new Schema<IApplicationSchema>(
         status: {
             type: String,
             required: true,
-            enum: ['received', 'shortlisted'],
+            enum: ['received', 'shortlisted', 'interview requested', 'accepted', 'rejected'],
             default: 'received',
         },
         resume: {

@@ -66,6 +66,7 @@ const ApplicationDetails = () => {
 			meetingTime,
 			candidateEmail: application.email,
 			jobId: state.jobId,
+			applicationId: state.applicationId
 		});
 
 		if (response.success) {
@@ -358,8 +359,8 @@ const ApplicationDetails = () => {
 								}
 								onClick={handleSchedule}
 							/>
-							<p className="text-red-500 ml-3">{error}</p>
 						</div>
+							<p className="text-red-500 ml-3">{error}</p>
 					</CardContent>
 				</Card>
 			</div>

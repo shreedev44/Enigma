@@ -47,8 +47,8 @@ const SKILLS = (skills: string[]) => {
 const EXPERIENCE = (experience: { company: string; title: string; location: string; dates: string }[]) => {
     const companyRegex = /^[a-zA-Z0-9\s.,&-]{3,100}$/
     const titleRegex = /^[a-zA-Z0-9\s.,&-]{2,50}$/
-    const locationRegex = /^[a-zA-Z\s,/\-.]{2,100}$/
-    const datesRegex = /^[a-zA-Z0-9\s,/.\\-]{5,50}$/
+    const locationRegex = /^(N\/A|n\/a|[a-zA-Z\s,/\-.]{2,100})$/
+    const datesRegex = /^(N\/A|n\/a|[a-zA-Z0-9\s,/.\\-]{5,50})$/
 
     return experience.every(
         (exp) =>
