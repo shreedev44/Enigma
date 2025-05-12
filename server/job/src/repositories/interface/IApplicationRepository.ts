@@ -32,4 +32,5 @@ export interface IApplicationRepository extends IBaseRepository<IApplicationSche
     findResumeKey(applicationId: Types.ObjectId): Promise<string | null>
     findByEmail(email: string): Promise<IApplicationSchema | null>
     getJobApplicationStats(): Promise<{ applicationsPerJob: number }>
+    getApplicationsPerDay(userId: Types.ObjectId): Promise<{ date: string; count: number }[]>
 }

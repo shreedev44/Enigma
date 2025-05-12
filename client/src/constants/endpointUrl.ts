@@ -45,6 +45,9 @@ export const recruiterEndpoints = {
 	GET_SUBSCRIPTION: "/job/subscription/subscription-details",
 	BLACKLIST: "/job/blacklist",
 	REMOVE_BLACKLIST: "/job/blacklist/remove",
+	TOTAL_JOBS: "/job/total-jobs",
+	TOTAL_INTERVIEWS: "/job/interview/total-interviews",
+	APPLICATIONS_PER_DATE: "/job/application/applications-per-date",
 };
 
 export const adminEndpoints = {
@@ -63,7 +66,7 @@ export const adminEndpoints = {
 	SUBSCRIPTION_PLAN: "/job/subscription-plan",
 	UNLIST_PLAN: "/job/subscription-plan/unlist",
 	LIST_PLAN: "/job/subscription-plan/list",
-	JOB_STATS: "/job/job-stats"
+	JOB_STATS: "/job/job-stats",
 };
 
 export const commonEndpoints = {

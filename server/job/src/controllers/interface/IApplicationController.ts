@@ -14,4 +14,5 @@ export interface IApplicationController {
     getApplicationStats(req: Request, res: Response, next: NextFunction): Promise<void>
     acceptSchedule(req: Request, res: Response, next: NextFunction): Promise<void>
     rejectSchedule(req: Request, res: Response, next: NextFunction): Promise<void>
+    applicationsPerDate(req: Request, res: Response, next: NextFunction): Promise<void>
 }

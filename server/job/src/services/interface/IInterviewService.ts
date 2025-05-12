@@ -9,4 +9,5 @@ export interface IInterviewService {
         applicationId: string
     ): Promise<string>
     getAllInterviews(userId: string): Promise<IInterviewSchema[]>
+    getTotalInterviews(userId: string): Promise<number>
 }

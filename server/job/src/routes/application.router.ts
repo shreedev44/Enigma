@@ -79,5 +79,10 @@ applicationRouter.patch(
     validateRole('student'),
     applicationController.rejectSchedule.bind(applicationController)
 )
+applicationRouter.get(
+    '/applications-per-date',
+    validateRole('recruiter'),
+    applicationController.applicationsPerDate.bind(applicationController)
+)
 
 export default applicationRouter

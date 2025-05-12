@@ -144,6 +144,15 @@ class JobRepository extends BaseRepository<IJobSchema> implements IJobRepository
             throw new Error('Error getting jobs stats')
         }
     }
+
+    async getTotalJobsById(userId: Types.ObjectId): Promise<number> {
+        try {
+            return await this.model.countDocuments({ userId })
+        } catch (err) {
+            console.error(err)
+            throw new Error('Error getting total jobs posted')
+        }
+    }
 }
 
 export default new JobRepository()

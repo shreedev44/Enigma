@@ -8,4 +8,5 @@ export interface IJobController {
     getAllJobs(req: Request, res: Response, next: NextFunction): Promise<void>
     getJobDetails(req: Request, res: Response, next: NextFunction): Promise<void>
     getJobStats(req: Request, res: Response, next: NextFunction): Promise<void>
+    getTotalJobsPosted(req: Request, res: Response, next: NextFunction): Promise<void>
 }

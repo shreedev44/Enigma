@@ -251,4 +251,9 @@ export class ApplicationService implements IApplicationService {
         await this._applicationRepository.changeStatusById(new Types.ObjectId(applicationId), 'rejected')
         await this._interviewRepository.deleteByApplicationId(new Types.ObjectId(applicationId))
     }
+
+    async getApplicationsPerDate(userId: string): Promise<{ date: string; count: number }[]> {
+        const result = await this._applicationRepository.getApplicationsPerDay(new Types.ObjectId(userId))
+        return result
+    }
 }

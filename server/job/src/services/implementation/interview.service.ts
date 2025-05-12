@@ -81,4 +81,9 @@ export class InterviewService implements IInterviewService {
 
         return interviews
     }
+
+    async getTotalInterviews(userId: string): Promise<number> {
+        const count = await this._interviewRepository.totalInterviewsById(new Types.ObjectId(userId))
+        return count
+    }
 }

@@ -92,4 +92,9 @@ export class JobService implements IJobService {
         const result = await this._jobRepository.getJobStats()
         return result
     }
+
+    async getTotalJobsPosted(userId: string): Promise<number> {
+        const count = await this._jobRepository.getTotalJobsById(new Types.ObjectId(userId))
+        return count
+    }
 }

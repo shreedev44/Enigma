@@ -336,6 +336,45 @@ export const removeFromBlacklist = async (applicantId: string) => {
 		return { success: false, error: message };
 	}
 };
+
+export const getTotalJobs = async () => {
+	try {
+		const { data } = await Api.get(recruiterEndpoints.TOTAL_JOBS, {
+			headers,
+		});
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
+
+export const getTotalInterviews = async () => {
+	try {
+		const { data } = await Api.get(recruiterEndpoints.TOTAL_INTERVIEWS, {
+			headers,
+		});
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
+
+export const getApplicationsPerDate = async () => {
+	try {
+		const { data } = await Api.get(recruiterEndpoints.APPLICATIONS_PER_DATE, {
+			headers,
+		});
+		return { success: true, data };
+	} catch (err) {
+		const error = err as any;
+		const message = error.response?.data?.error || "An error occured";
+		return { success: false, error: message };
+	}
+};
 // export const logout = async () => {
 // 	try {
 // 		const { data } = await Api.get(commonEndpoints.LOGOUT, {

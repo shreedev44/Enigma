@@ -248,6 +248,55 @@ class ApplicationRepository extends BaseRepository<IApplicationSchema> implement
             throw new Error('Error getting stats')
         }
     }
+
+    async getApplicationsPerDay(userId: Types.ObjectId): Promise<{ date: string; count: number }[]> {
+        try {
+            const result = await this.model.aggregate([
+                {
+                    $match: {
+                        createdAt: {
+                            $gte: new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
+                        },
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'Jobs',
+                        localField: 'jobId',
+                        foreignField: '_id',
+                        as: 'job',
+                    },
+                },
+                {
+                    $match: {
+                        'job.userId': userId,
+                    },
+                },
+                {
+                    $group: {
+                        _id: {
+                            $dateToString: { format: '%Y-%m-%d', date: '$createdAt' },
+                        },
+                        count: { $sum: 1 },
+                    },
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        date: '$_id',
+                        count: 1,
+                    },
+                },
+                {
+                    $sort: { date: 1 },
+                },
+            ])
+            return result
+        } catch (err) {
+            console.error(err)
+            throw new Error('Error while getting applications per day')
+        }
+    }
 }
 
 export default new ApplicationRepository()

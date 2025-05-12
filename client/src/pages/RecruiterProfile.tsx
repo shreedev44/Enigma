@@ -18,6 +18,7 @@ import {
 import { getProfile } from "@/api/recruiter";
 import EditProfileModal from "@/components/recruiterComponents/EditProfileModal";
 import { forgotPassword } from "@/api/common";
+import { Dashboard } from "@/components/recruiterComponents/Dashboard";
 
 const Profile = () => {
   useEffect(() => {
@@ -84,6 +85,7 @@ const Profile = () => {
           { component: "Profile" },
         ]}
       />
+      <Dashboard />
       <div className="my-10 flex mx-7 md:mx-44 rounded-xl bg-zinc-300 dark:bg-zinc-800 px-5 md:px-20 py-3 md:py-6">
         <div className="flex flex-col justify-center">
           <div className="flex justify-start items-center">

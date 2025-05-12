@@ -174,7 +174,6 @@ export class JobController implements IJobController {
 
             if (!Types.ObjectId.isValid(jobId)) {
                 res.status(_HttpStatus.BAD_REQUEST).json({ error: Messages.INVALID_ID })
-                console.log('---------------------------------getjobdetails')
                 return
             }
 
@@ -188,6 +187,16 @@ export class JobController implements IJobController {
     async getJobStats(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const result = await this._jobService.getJobStats()
+            res.status(_HttpStatus.OK).json({ result })
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    async getTotalJobsPosted(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const { id: userId } = JSON.parse(req.headers['x-user-payload'] as string)
+            const result = await this._jobService.getTotalJobsPosted(userId)
             res.status(_HttpStatus.OK).json({ result })
         } catch (err) {
             next(err)

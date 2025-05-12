@@ -293,4 +293,14 @@ export class ApplicationController implements IApplicationController {
             next(err)
         }
     }
+
+    async applicationsPerDate(req: Request, res: Response, next: NextFunction): Promise<void> {
+        try {
+            const { id: userId } = JSON.parse(req.headers['x-user-payload'] as string)
+            const result = await this._applicationService.getApplicationsPerDate(userId)
+            res.status(_HttpStatus.OK).json({ result })
+        } catch (err) {
+            next(err)
+        }
+    }
 }

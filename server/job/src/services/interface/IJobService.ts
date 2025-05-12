@@ -16,4 +16,5 @@ export interface IJobService {
     ): Promise<InstanceType<typeof JobDTO.Jobs>>
     getJobDetails(jobId: string): Promise<InstanceType<typeof JobDTO.JobInfo>>
     getJobStats(): Promise<{ date: Date; count: number }[]>
+    getTotalJobsPosted(userId: string): Promise<number>
 }

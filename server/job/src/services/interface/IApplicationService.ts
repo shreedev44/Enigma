@@ -23,4 +23,5 @@ export interface IApplicationService {
     acceptShedule(applicationId: string, userId: string): Promise<void>
     rejectShedule(applicationId: string, userId: string): Promise<void>
     getStats(): Promise<{ applicationsPerJob: number }>
+    getApplicationsPerDate(userId: string): Promise<{ date: string; count: number }[]>
 }

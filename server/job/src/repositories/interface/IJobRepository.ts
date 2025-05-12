@@ -21,4 +21,5 @@ export interface IJobRepository extends IBaseRepository<IJobSchema> {
     findByJobIdAndUserId(jobId: Types.ObjectId, userId: Types.ObjectId): Promise<IJobSchema | null>
     findByJobId(jobId: Types.ObjectId): Promise<IJobSchema | null>
     getJobStats(): Promise<{ date: Date; count: number }[]>
+    getTotalJobsById(userId: Types.ObjectId): Promise<number>
 }

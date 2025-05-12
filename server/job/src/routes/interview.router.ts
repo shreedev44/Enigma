@@ -23,5 +23,10 @@ interviewRouter.get(
     validateRole('recruiter'),
     interviewController.getInterviews.bind(interviewController)
 )
+interviewRouter.get(
+    '/total-interviews',
+    validateRole('recruiter'),
+    interviewController.getTotalInterviews.bind(interviewController)
+)
 
 export default interviewRouter
