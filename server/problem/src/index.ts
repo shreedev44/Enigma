@@ -6,7 +6,7 @@ import path from 'path'
 dotenv.config({ path: path.resolve(__dirname, '../.env') })
 
 //* Importing configs, loggers and initializers
-import { connectDB, env } from '@configs'
+import { connectDB, env, initRedisClient } from '@configs'
 import { validateEnv } from '@utils'
 import { errorHandler, notFoundHandler } from '@middlewares'
 import morganLogger from '@loggers/morgan.logger'
@@ -57,6 +57,7 @@ class App {
 
     private initializeDatabase(): void {
         connectDB()
+        initRedisClient()
     }
 
     public listen(): void {

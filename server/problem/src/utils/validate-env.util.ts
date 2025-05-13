@@ -13,4 +13,7 @@ export function validateEnv() {
     if (!env.LOKI_HOST) {
         throw new Error('LOKI_HOST is not found in the env')
     }
+    if (!env.REDIS_URL) {
+        throw new Error('REDIS_URL is not found in the env')
+    }
 }

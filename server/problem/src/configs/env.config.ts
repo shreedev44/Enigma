@@ -11,4 +11,7 @@ export const env = {
     get LOKI_HOST() {
         return process.env.LOKI_HOST!
     },
+    get REDIS_URL() {
+        return process.env.REDIS_URL!
+    },
 }
