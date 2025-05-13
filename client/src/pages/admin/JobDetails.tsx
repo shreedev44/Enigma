@@ -89,6 +89,7 @@ const JobDetails = () => {
 			},
 			{ component: 'Job details' },
 		]);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (

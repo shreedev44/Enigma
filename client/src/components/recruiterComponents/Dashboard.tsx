@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import {
 	Card,
@@ -70,6 +70,7 @@ export function Dashboard() {
 			}
 		};
 		fetchStats();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
