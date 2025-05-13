@@ -41,7 +41,7 @@ export class LeaderboardService implements ILeaderboardService {
             }
             return new LeaderboardDTO.LeaderboardInfo({
                 totalPages: Number(totalPages),
-                leaderboardData: leaderboardData,
+                leaderboard: leaderboardData.slice(startIndex, endIndex),
             })
         } else {
             const leaderboardData = await this._leaderboardRepository.getLeaderboard()
