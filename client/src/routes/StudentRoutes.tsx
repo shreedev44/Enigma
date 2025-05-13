@@ -18,6 +18,7 @@ import Jobs from "@/pages/student/Jobs";
 import JobDetails from "@/pages/student/JobDetails";
 import Interview from "@/pages/student/Interview";
 import Leaderboard from "@/pages/student/Leaderboard";
+import NotFound from "@/pages/NotFound";
 
 const StudentRoutes = () => {
 	const ProtectRoute = ({ children }: { children: JSX.Element }) => {
@@ -135,6 +136,7 @@ const StudentRoutes = () => {
 					path={studentRoutes.LEADERBOARD}
 					element={<Leaderboard />}
 				/>
+				<Route path={"/*"} element={<NotFound userLevel="student" />} />
 			</Routes>
 		</>
 	);

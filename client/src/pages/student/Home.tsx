@@ -3,7 +3,6 @@ import { studentRoutes } from "@/constants/routeUrl";
 import cardImage1 from "../../assets/home_card1.png";
 import cardImage2 from "../../assets/home card.png";
 import cardImage3 from "../../assets/home_card3.png";
-import communityImage from "../../assets/community.jpg";
 import codeIconBlack from "../../assets/code-black.png";
 import codeIconFleace from "../../assets/code-fleace.png";
 import interviewImage from "../../assets/interview.png";
@@ -84,41 +83,17 @@ const Home = () => {
 						className="rounded-3xl w-fit"
 					/>
 					<div className="text-lg/5 font-bold my-7 text-center">
-						A community for coders to learn, grow, and share
-						knowledge.
+					Hone your coding skills, rise to the top, and compete on the Leaderboard.
 					</div>
 					<div className="flex justify-center mb-3">
 						<Button
 							className="text-white dark:text-black dark:hover:text-white bg-fleace rounded-full font-bold font-mono"
 							variant={"outline"}
+							onClick={() => navigate(studentRoutes.LEADERBOARD)}
 						>
-							Explore Community <MoveRight />
+							View Leaderboard <MoveRight />
 						</Button>
 					</div>
-				</div>
-			</section>
-
-			<section className="px-24 my-10 mt-20 hidden md:block">
-				<div className="flex rounded-3xl bg-white border border-black">
-					<div className="flex flex-col gap-7 justify-center">
-						<span className="text-black text-4xl font-bold font-mono text-center">
-							Gain valuable insights and clear coding doubts with
-							a community of experts.
-						</span>
-						<div className="flex justify-center">
-							<Button
-								className="rounded-full border border-black max-w-1/2 bg-black text-white hover:text-black font-bold font-mono"
-								size={"lg"}
-							>
-								Go to Community <MoveRight />
-							</Button>
-						</div>
-					</div>
-					<img
-						src={communityImage}
-						alt="img"
-						className="w-1/2 rounded-3xl mt-10"
-					/>
 				</div>
 			</section>
 
