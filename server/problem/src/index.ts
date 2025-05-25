@@ -26,6 +26,7 @@ class App {
         this.app = express()
         validateEnv()
 
+        this.healthCheckup()
         this.initializeMiddlewares()
         this.initializeRoutes()
         this.initializeDatabase()
@@ -44,6 +45,12 @@ class App {
         this.app.use('/leaderboard', leaderboardRouter)
         this.app.use(notFoundHandler)
         this.app.use(errorHandler)
+    }
+
+    private healthCheckup(): void {
+        this.app.get('/health', (req, res) => {
+            res.status(200).send('Healthy')
+        })
     }
 
     private initializeConsumers(): void {

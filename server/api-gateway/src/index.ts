@@ -12,7 +12,6 @@ import { createProxyMiddleware } from "http-proxy-middleware";
 import verifyToken from "./middleware/verify-token.middleware";
 import { initRedisClient } from "./configs/redis.config";
 
-
 const app = express();
 
 const services = [
@@ -44,10 +43,13 @@ app.use(
 				callback(new Error("Not allowed by CORS"));
 			}
 		},
-		// origin: '*',
 		credentials: true,
 	})
 );
+
+app.get("/health", (req, res) => {
+	res.status(200).send("Healthy");
+});
 
 app.use((req, res, next) => {
 	verifyToken(req, res, next);

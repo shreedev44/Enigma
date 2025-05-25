@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: problem-service
+  namespace: enigma
+  labels:
+    app: problem-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: problem-service
+  template:
+    metadata:
+      labels:
+        app: problem-service
+    spec:
+      containers:
+        - name: problem-service
+          volumeMounts:
+            - name: shared-temp
+              mountPath: /app/temp
+          image: shreedev44/enigma-problem:v1.0.1
+          ports:
+            - containerPort: 3002
+          envFrom:
+            - secretRef:
+                name: problem-secret-env
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3002
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3002
+            initialDelaySeconds: 25
+            periodSeconds: 20
+      volumes:
+        - name: shared-temp
+          persistentVolumeClaim:
+            claimName: shared-temp-pvc

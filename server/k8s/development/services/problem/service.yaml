@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: problem-service
+  namespace: enigma
+  labels:
+    app: problem-service
+spec:
+  selector:
+    app: problem-service
+  ports:
+    - port: 3002
+      targetPort: 3002
+  type: ClusterIP

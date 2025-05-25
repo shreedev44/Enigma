@@ -2,8 +2,8 @@
   "compilerOptions": {
     "target": "es6",
     "module": "NodeNext",
-    "outDir": "./dist",
-    "rootDir": "../../",
+    "outDir": "dist",
+    "rootDir": "src",
     "strict": true,
     "esModuleInterop": true,
     "moduleResolution": "nodenext",

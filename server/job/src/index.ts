@@ -28,6 +28,7 @@ class App {
 
         this.app = express()
 
+        this.healthCheckup()
         this.initializeWebhookRoutes()
         this.initializeMiddlewares()
         this.initializeRoutes()
@@ -49,6 +50,12 @@ class App {
         this.app.use('/blacklist', blacklistRouter)
         this.app.use(notFoundHandler)
         this.app.use(errorHandler)
+    }
+
+    private healthCheckup(): void {
+        this.app.get('/health', (req, res) => {
+            res.status(200).send('Healthy')
+        })
     }
 
     private initializeWebhookRoutes(): void {

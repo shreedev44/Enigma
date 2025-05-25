@@ -6,7 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "dev": "nodemon -r tsconfig-paths/register src/index.ts",
-    "start": "node dist/index.js",
+    "start": "node -r module-alias/register dist/index.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
@@ -25,6 +25,7 @@
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "kafkajs": "^2.2.4",
+    "module-alias": "^2.2.3",
     "mongoose": "^8.9.3",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
@@ -55,5 +56,24 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.26.1"
+  },
+  "_moduleAliases": {
+    "@configs": "dist/configs/index",
+    "@constants": "dist/constants/index",
+    "@middlewares": "dist/middlewares/index",
+    "@utils": "dist/utils/index",
+    "@types": "dist/types/index",
+    "@controllers/implementation": "dist/controllers/implementation/index",
+    "@controllers/interface": "dist/controllers/interface/index",
+    "@services/implementation": "dist/services/implementation/index",
+    "@services/interface": "dist/services/interface/index",
+    "@repositories/implementation": "dist/repositories/implementation",
+    "@repositories/interface": "dist/repositories/interface/index",
+    "@routes": "dist/routes",
+    "@models": "dist/models",
+    "@dtos": "dist/dtos/index",
+    "@entities": "dist/entities/index",
+    "@loggers": "dist/loggers",
+    "@producers": "dist/kafka/producers/index"
   }
 }

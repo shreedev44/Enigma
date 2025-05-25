@@ -4,9 +4,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
+    "build": "tsc && npm run copy-assets",
+    "copy-assets": "cp src/constants/languages.constant.json dist/constants/languages.constant.json",
     "dev": "nodemon -r tsconfig-paths/register src/index.ts",
-    "start": "node -r tsconfig-paths/register dist/index.js",
+    "start": "node -r module-alias/register dist/index.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
@@ -41,6 +42,7 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "kafkajs": "^2.2.4",
+    "module-alias": "^2.2.3",
     "mongoose": "^8.10.0",
     "morgan": "^1.10.0",
     "nanoid": "^5.1.2",
@@ -48,5 +50,24 @@
     "tsconfig-paths": "^4.2.0",
     "winston": "^3.17.0",
     "winston-loki": "^6.1.3"
+  },
+  "_moduleAliases": {
+    "@configs": "dist/configs/index",
+    "@constants": "dist/constants/index",
+    "@controllers/implementation": "dist/controllers/implementation/index",
+    "@controllers/interface": "dist/controllers/interface/index",
+    "@middlewares": "dist/middlewares/index",
+    "@models": "dist/models",
+    "@repositories/interface": "dist/repositories/interface/index",
+    "@repositories/implementation": "dist/repositories/implementation",
+    "@routes": "dist/routes",
+    "@services/implementation": "dist/services/implementation/index",
+    "@services/interface": "dist/services/interface/index",
+    "@types": "dist/types/index",
+    "@utils": "dist/utils/index",
+    "@dtos": "dist/dtos/index",
+    "@entities": "dist/entities/index",
+    "@loggers": "dist/loggers",
+    "@consumers": "dist/kafka/consumers/index"
   }
 }

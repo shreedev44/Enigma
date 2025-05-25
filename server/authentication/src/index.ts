@@ -26,6 +26,7 @@ class App {
 
         this.app = express()
 
+        this.healthCheckup()
         this.initializeMiddlewares()
         this.initializeRoutes()
         this.initializeDatabase()
@@ -45,6 +46,12 @@ class App {
         this.app.use('/admin', adminRouter)
         this.app.use(notFoundHandler)
         this.app.use(errorHandler)
+    }
+
+    private healthCheckup(): void {
+        this.app.get('/health', (req, res) => {
+            res.status(200).send('Healthy')
+        })
     }
 
     private initializeDatabase(): void {
