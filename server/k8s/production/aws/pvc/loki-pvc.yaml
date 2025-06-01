@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: shared-temp-pvc
+  name: loki-pvc
   namespace: enigma
 spec:
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
-  storageClassName: standard
+      storage: 400Mi
+  storageClassName: gp2

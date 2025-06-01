@@ -1,0 +1,29 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: enigma-cluster-v3
+  region: ap-south-1
+
+vpc:
+  id: vpc-0ab552b80194cd476
+  subnets:
+    private:
+      ap-south-1a:
+        id: subnet-068940d08e9f541cb
+      ap-south-1b:
+        id: subnet-0e61d14c656db89d0
+      ap-south-1c:
+        id: subnet-0ce41184e04209992
+
+managedNodeGroups:
+  - name: ng-workers
+    instanceType: t3.medium
+    privateNetworking: true
+    desiredCapacity: 2
+    minSize: 1
+    maxSize: 3
+    ssh:
+      enableSsm: true
+      allow: true
+      publicKeyName: enigma-ng

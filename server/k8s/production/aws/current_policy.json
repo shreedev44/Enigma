@@ -1,0 +1,20 @@
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Action": [
+				"elasticfilesystem:DescribeAccessPoints",
+				"elasticfilesystem:CreateAccessPoint",
+				"elasticfilesystem:DeleteAccessPoint",
+				"elasticfilesystem:DescribeFileSystems",
+				"elasticfilesystem:DescribeMountTargets",
+				"elasticfilesystem:CreateTags",
+				"elasticfilesystem:DescribeTags",
+				"elasticfilesystem:DescribeMountTargetSecurityGroups",
+				"elasticfilesystem:ModifyMountTargetSecurityGroups"
+			],
+			"Resource": "*"
+		}
+	]
+}

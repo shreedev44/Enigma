@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: redis-pvc
+  name: loki-pvc
   namespace: enigma
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 200Mi
-  storageClassName: standard
+      storage: 400Mi
+  storageClassName: gp2
