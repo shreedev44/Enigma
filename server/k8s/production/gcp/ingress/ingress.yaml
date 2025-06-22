@@ -5,10 +5,16 @@ metadata:
   namespace: enigma
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$1
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   ingressClassName: nginx
+  tls:
+    - hosts:
+        - enigma-api.shreedev.space
+      secretName: enigma-api-tls
   rules:
-    - host: zeitkraftwatches.shop
+    - host: enigma-api.shreedev.space
       http:
         paths:
           - path: /api/?(.*)
@@ -16,5 +22,12 @@ spec:
             backend:
               service:
                 name: api-gateway
+                port:
+                  number: 3000
+          - path: /grafana/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: grafana
                 port:
                   number: 3000

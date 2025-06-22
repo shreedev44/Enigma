@@ -41,4 +41,7 @@ export const env = {
     get STRIPE_CANCEL_URL() {
         return process.env.STRIPE_CANCEL_URL!
     },
+    get TEST_DB_URI() {
+        return process.env.TEST_DB_URI!
+    },
 }

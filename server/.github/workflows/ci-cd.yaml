@@ -1,0 +1,11 @@
+name: CI/CD Pipeline
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'server/**'
+      - '!server/k8s/**'
+      - '!server/docker-compose.yml'

@@ -41,4 +41,7 @@ export const env = {
     get LOKI_HOST() {
         return process.env.LOKI_HOST!
     },
+    get TEST_DB_URI() {
+        return process.env.TEST_DB_URI!
+    },
 }

@@ -15,6 +15,8 @@ spec:
       labels:
         app: zookeeper
     spec:
+      securityContext:
+        fsGroup: 1000
       containers:
         - name: zookeeper
           image: bitnami/zookeeper:3.9

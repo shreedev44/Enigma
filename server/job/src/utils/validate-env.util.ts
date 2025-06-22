@@ -43,4 +43,7 @@ export function validateEnv() {
     if (!env.STRIPE_CANCEL_URL) {
         throw new Error('STRIPE_CANCEL_URL is not found in the env')
     }
+    if (!env.TEST_DB_URI) {
+        throw new Error('TEST_DB_URI is not found in the env')
+    }
 }

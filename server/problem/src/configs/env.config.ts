@@ -14,4 +14,7 @@ export const env = {
     get REDIS_URL() {
         return process.env.REDIS_URL!
     },
+    get TEST_DB_URI() {
+        return process.env.TEST_DB_URI!
+    },
 }

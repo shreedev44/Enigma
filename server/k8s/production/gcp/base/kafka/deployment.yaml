@@ -16,19 +16,48 @@ spec:
       securityContext:
         fsGroup: 1001
       initContainers:
-      - name: volume-permissions
-        image: busybox
+      - name: copy-config-templates
+        image: bitnami/kafka:3.7
         command:
           - sh
           - -c
           - |
-            echo "Fixing permissions on /opt/bitnami/kafka/data"
-            chown -R 1001:1001 /opt/bitnami/kafka/data
-            ls -ld /opt/bitnami/kafka/data
-            ls -l /opt/bitnami/kafka/data
+            echo "Copying Kafka config templates to writable volume..."
+            cp -Rv /opt/bitnami/kafka/config/. /mnt/config-writable/
+            echo "Finished copying config templates."
+        volumeMounts:
+          - name: kafka-config-writable
+            mountPath: /mnt/config-writable
+
+      - name: volume-permissions
+        image: busybox:latest
+        command:
+          - sh
+          - -c
+          - |
+            set -x
+            echo "Starting volume-permissions initContainer."
+            
+            echo "Contents of /bitnami/kafka/data BEFORE cleanup and chown:"
+            ls -al /bitnami/kafka/data || true
+            
+            if [ -d "/bitnami/kafka/data/lost+found" ]; then
+              echo "Found unexpected /bitnami/kafka/data/lost+found directory. Deleting it."
+              rm -rf /bitnami/kafka/data/lost+found
+            fi
+            
+            echo "Fixing permissions on /bitnami/kafka/data"
+            chown -R 1001:1001 /bitnami/kafka/data
+            
+            echo "Contents of /bitnami/kafka/data AFTER cleanup and chown:"
+            ls -al /bitnami/kafka/data
+            
+            echo "Finished volume-permissions initContainer."
+            echo "Contents of /opt/bitnami/kafka/data in image context (if applicable):"
+            ls -al /opt/bitnami/kafka/data || true
         volumeMounts:
           - name: kafka-storage
-            mountPath: /opt/bitnami/kafka/data
+            mountPath: /bitnami/kafka/data
       containers:
       - name: kafka
         image: bitnami/kafka:3.7
@@ -50,13 +79,15 @@ spec:
           value: "1"
         - name: ALLOW_PLAINTEXT_LISTENER
           value: "yes"
-        command: ["/bin/bash", "-c"]
-        args:
-          - |
-            export KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://${POD_IP}:9092 && /opt/bitnami/scripts/kafka/entrypoint.sh /opt/bitnami/scripts/kafka/run.sh
+        - name: KAFKA_CFG_ADVERTISED_LISTENERS
+          value: "PLAINTEXT://$(POD_IP):9092"
+        - name: KAFKA_CFG_LOG_DIRS
+          value: "/bitnami/kafka/data"
         volumeMounts:
         - name: kafka-storage
-          mountPath: /opt/bitnami/kafka/data
+          mountPath: /bitnami/kafka/data
+        - name: kafka-config-writable
+          mountPath: /opt/bitnami/kafka/config
         livenessProbe:
           tcpSocket:
             port: 9092
@@ -75,3 +106,5 @@ spec:
       - name: kafka-storage
         persistentVolumeClaim:
           claimName: kafka-pvc
+      - name: kafka-config-writable
+        emptyDir: {}

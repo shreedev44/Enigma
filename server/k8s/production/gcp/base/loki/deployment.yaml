@@ -13,6 +13,8 @@ spec:
       labels:
         app: loki
     spec:
+      securityContext:
+        fsGroup: 1000
       containers:
         - name: loki
           image: grafana/loki:3.5

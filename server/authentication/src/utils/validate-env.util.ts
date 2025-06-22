@@ -43,4 +43,7 @@ export function validateEnv() {
     if (!env.LOKI_HOST) {
         throw new Error('LOKI_HOST is not found in the env')
     }
+    if (!env.TEST_DB_URI) {
+        throw new Error('TEST_DB_URI is not found in the env')
+    }
 }
