@@ -1,11 +1,64 @@
 name: CI/CD Pipeline
 
 on:
-  workflow_dispatch:
   push:
-    branches:
-      - main
-    paths:
-      - 'server/**'
-      - '!server/k8s/**'
-      - '!server/docker-compose.yml'
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      GKE_PROJECT: ${{ secrets.GKE_PROJECT }}
+      GKE_CLUSTER: ${{ secrets.GKE_CLUSTER }}
+      GKE_ZONE: ${{ secrets.GKE_ZONE }}
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Docker Login
+      run: |
+        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+    - name: Build and Push Docker Images for All Services
+      run: |
+        MODULES=("api-gateway" "authentication" "problem" "job" "notification")
+
+        for MODULE in "${MODULES[@]}"; do
+          if [ -f "$MODULE/VERSION" ]; then
+            VERSION=$(cat "$MODULE/VERSION")
+            IMAGE="${{ secrets.DOCKER_USERNAME }}/$MODULE:v$VERSION"
+
+            echo "🚀 Building $IMAGE"
+            docker build -t "$IMAGE" "$MODULE"
+            docker push "$IMAGE"
+          else
+            echo "⚠️ Skipping $MODULE — VERSION file not found."
+          fi
+        done
+
+    - name: Set up GCloud CLI
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        project_id: ${{ secrets.GKE_PROJECT }}
+        service_account_key: ${{ secrets.GKE_SA_KEY }}
+        export_default_credentials: true
+
+    - name: Get GKE Credentials
+      run: |
+        gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE" --project "$GKE_PROJECT"
+
+    - name: Apply Kubernetes Deployments
+      run: |
+        for MODULE in api-gateway authentication problem job notification; do
+          YAML="k8s/production/gcp/services/$MODULE/deployment.yaml"
+          if [ -f "$YAML" ]; then
+            echo "📦 Applying $YAML"
+            kubectl apply -f "$YAML"
+          else
+            echo "❌ No deployment.yaml for $MODULE at $YAML"
+          fi
+        done
