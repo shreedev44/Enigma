@@ -41,12 +41,17 @@ jobs:
           fi
         done
 
-    - name: Set up GCloud CLI
+    - name: Install GCloud SDK
       uses: google-github-actions/setup-gcloud@v1
       with:
         project_id: ${{ secrets.GKE_PROJECT }}
-        service_account_key: ${{ secrets.GKE_SA_KEY }}
-        export_default_credentials: true
+
+    - name: Manually Authenticate with Service Account Key
+      run: |
+        echo "${{ secrets.GKE_SA_KEY }}" > key.json
+        gcloud auth activate-service-account --key-file=key.json
+        gcloud config set project "${{ secrets.GKE_PROJECT }}"
+        gcloud auth list
 
     - name: Debug List active gcloud account
       run: |
