@@ -46,17 +46,11 @@ jobs:
       with:
         project_id: ${{ secrets.GKE_PROJECT }}
 
-    - name: Manually Authenticate with Service Account Key
+    - name: Authenticate with GCP (via base64 key)
       run: |
-        echo "${{ secrets.GKE_SA_KEY }}" > key.json
+        echo "${{ secrets.GKE_SA_KEY_BASE64 }}" | base64 -d > key.json
         gcloud auth activate-service-account --key-file=key.json
-        gcloud config set project "${{ secrets.GKE_PROJECT }}"
-        gcloud auth list
-
-    - name: Debug List active gcloud account
-      run: |
-        echo "🧪 Listing gcloud config and auth:"
-        gcloud config list
+        gcloud config set project "${GKE_PROJECT}"
         gcloud auth list
 
     - name: Get GKE Credentials
