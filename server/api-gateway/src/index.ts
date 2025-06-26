@@ -32,6 +32,7 @@ const services = [
 const allowedOrigins = [
 	"http://localhost:5173",
 	"https://enigma-riddles.vercel.app",
+	"https://enigma.shreedev.space"
 ];
 
 app.use(
