@@ -55,10 +55,12 @@ jobs:
 
     - name: Get GKE Credentials
       run: |
+        export USE_GKE_GCLOUD_AUTH_PLUGIN=False
         gcloud container clusters get-credentials "$GKE_CLUSTER" --region "$GKE_ZONE" --project "$GKE_PROJECT"
 
     - name: Apply Kubernetes Deployments
       run: |
+        export USE_GKE_GCLOUD_AUTH_PLUGIN=False
         for MODULE in api-gateway authentication problem job notification; do
           YAML="server/k8s/production/gcp/services/$MODULE/deployment.yaml"
           if [ -f "$YAML" ]; then
