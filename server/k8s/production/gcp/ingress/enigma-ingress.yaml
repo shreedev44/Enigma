@@ -25,10 +25,3 @@ spec:
                 name: api-gateway
                 port:
                   number: 3000
-          - path: /stats/?(.*)
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: grafana
-                port:
-                  number: 3000
