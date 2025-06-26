@@ -31,7 +31,7 @@ jobs:
           MODULE_PATH="server/$MODULE"
           if [ -f "$MODULE_PATH/VERSION" ]; then
             VERSION=$(cat "$MODULE_PATH/VERSION")
-            IMAGE="${{ secrets.DOCKER_USERNAME }}/$MODULE:v$VERSION"
+            IMAGE="${DOCKER_USERNAME}/enigma-$MODULE:v$VERSION"
 
             echo "🚀 Building $IMAGE"
             docker build -f "$MODULE_PATH/Dockerfile.production" -t "$IMAGE" "$MODULE_PATH"
