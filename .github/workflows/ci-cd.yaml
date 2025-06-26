@@ -28,15 +28,16 @@ jobs:
         MODULES=("api-gateway" "authentication" "problem" "job" "notification")
 
         for MODULE in "${MODULES[@]}"; do
-          if [ -f "$MODULE/VERSION" ]; then
-            VERSION=$(cat "$MODULE/VERSION")
+          MODULE_PATH="server/$MODULE"
+          if [ -f "$MODULE_PATH/VERSION" ]; then
+            VERSION=$(cat "$MODULE_PATH/VERSION")
             IMAGE="${{ secrets.DOCKER_USERNAME }}/$MODULE:v$VERSION"
 
             echo "🚀 Building $IMAGE"
-            docker build -t "$IMAGE" "$MODULE"
+            docker build -f "$MODULE_PATH/Dockerfile.production" -t "$IMAGE" "$MODULE_PATH"
             docker push "$IMAGE"
           else
-            echo "⚠️ Skipping $MODULE — VERSION file not found."
+            echo "⚠️ Skipping $MODULE — VERSION file not found at $MODULE_PATH"
           fi
         done
 
@@ -49,12 +50,12 @@ jobs:
 
     - name: Get GKE Credentials
       run: |
-        gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE" --project "$GKE_PROJECT"
+        gcloud container clusters get-credentials "$GKE_CLUSTER" --region "$GKE_ZONE" --project "$GKE_PROJECT"
 
     - name: Apply Kubernetes Deployments
       run: |
         for MODULE in api-gateway authentication problem job notification; do
-          YAML="k8s/production/gcp/services/$MODULE/deployment.yaml"
+          YAML="server/k8s/production/gcp/services/$MODULE/deployment.yaml"
           if [ -f "$YAML" ]; then
             echo "📦 Applying $YAML"
             kubectl apply -f "$YAML"
