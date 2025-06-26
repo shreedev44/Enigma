@@ -49,7 +49,10 @@ jobs:
         export_default_credentials: true
 
     - name: Debug List active gcloud account
-      run: gcloud auth list
+      run: |
+        echo "🧪 Listing gcloud config and auth:"
+        gcloud config list
+        gcloud auth list
 
     - name: Get GKE Credentials
       run: |
