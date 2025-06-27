@@ -15,8 +15,7 @@ for MODULE in "${MODULES[@]}"; do
   # Check if any changed file belongs to this module
   MATCH=false
   while read -r file; do
-    IFS='/' read -ra PARTS <<< "$file"
-    if [[ "${PARTS[0]}" == "$MODULE" ]]; then
+    if [[ "$file" == server/$MODULE/* ]]; then
       MATCH=true
       break
     fi
@@ -26,16 +25,18 @@ for MODULE in "${MODULES[@]}"; do
   if $MATCH; then
     echo "📝 Detected changes in $MODULE. Preparing to bump version..."
 
-    if [ ! -d "$MODULE" ]; then
-      echo "❌ Error: '$MODULE' directory not found."
+    MODULE_PATH="server/$MODULE"
+
+    if [ ! -d "$MODULE_PATH" ]; then
+      echo "❌ Error: '$MODULE_PATH' directory not found."
       continue
     fi
 
-    cd "$MODULE" || continue
+    cd "$MODULE_PATH" || continue
 
     if [ ! -f "VERSION" ]; then
       echo "❌ Error: VERSION file missing in $MODULE. Please create it with an initial version like 1.0.0"
-      cd ..
+      cd - > /dev/null
       continue
     fi
 
@@ -43,7 +44,7 @@ for MODULE in "${MODULES[@]}"; do
 
     if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
       echo "❌ Error: Invalid version format in $MODULE. Found '$VERSION'."
-      cd ..
+      cd - > /dev/null
       continue
     fi
 
@@ -78,12 +79,12 @@ for MODULE in "${MODULES[@]}"; do
     echo "$NEW_VERSION" > VERSION
     echo "✅ Updated version of $MODULE: v$NEW_VERSION"
 
-    cd ..
+    cd - > /dev/null
 
-    DEPLOY_PATH="k8s/production/gcp/services/$MODULE/deployment.yaml"
+    DEPLOY_PATH="server/k8s/production/gcp/services/$MODULE/deployment.yaml"
     if [ -f "$DEPLOY_PATH" ]; then
       echo "📦 Updating image tag in $DEPLOY_PATH"
-      sed -i -E "s|(image: .*/$MODULE:)(v?[0-9]+\.[0-9]+\.[0-9]+)|\1v$NEW_VERSION|" "$DEPLOY_PATH"
+      sed -i -E "s|(image:\s*.*enigma-$MODULE:)(v?[0-9]+\.[0-9]+\.[0-9]+)|\1v$NEW_VERSION|" "$DEPLOY_PATH"
       echo "✅ Image tag updated in deployment file."
     else
       echo "⚠️ Deployment file not found at $DEPLOY_PATH. Skipping image tag update."
@@ -93,4 +94,4 @@ for MODULE in "${MODULES[@]}"; do
   fi
 done
 
-echo -e "\n🎉 Version updated"
+echo -e "\n🎉 Version update script completed!"
