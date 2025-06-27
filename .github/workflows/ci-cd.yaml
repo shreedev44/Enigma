@@ -5,6 +5,54 @@ on:
     branches: [main]
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    - name: Install and Lint Each Module
+      run: |
+        MODULES=("api-gateway" "authentication" "problem" "job")
+
+        for MODULE in "${MODULES[@]}"; do
+          echo "🔍 Linting $MODULE"
+          cd server/$MODULE
+          npm ci
+          npm run lint
+          cd ../..
+        done
+
+  format:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    - name: Check Code Formatting with Prettier
+      run: |
+        MODULES=("api-gateway" "authentication" "problem" "job")
+
+        for MODULE in "${MODULES[@]}"; do
+          echo "🎨 Formatting code in $MODULE"
+          cd server/$MODULE
+          npm ci
+          npm run format
+          cd ../..
+        done
+
   deploy:
     runs-on: ubuntu-latest
 
