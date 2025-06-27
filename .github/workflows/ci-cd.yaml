@@ -49,11 +49,12 @@ jobs:
           echo "🎨 Formatting code in $MODULE"
           cd server/$MODULE
           npm ci
-          npm run format
+          npm run format:check
           cd ../..
         done
 
   deploy:
+    needs: [lint, format]
     runs-on: ubuntu-latest
 
     env:
