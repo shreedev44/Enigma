@@ -46,7 +46,7 @@ jobs:
         MODULES=("authentication" "problem" "job")
 
         for MODULE in "${MODULES[@]}"; do
-          echo "🎨 Formatting code in $MODULE"
+          echo "🎨 Checking code format in $MODULE"
           cd server/$MODULE
           npm ci
           npm run format:check

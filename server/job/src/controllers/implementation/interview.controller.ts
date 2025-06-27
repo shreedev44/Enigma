@@ -1,4 +1,4 @@
-import { application, NextFunction, Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { _HttpStatus, Messages } from '@constants'
 import { IInterviewService } from '@services/interface'
 import { IInterviewController } from '@controllers/interface'
