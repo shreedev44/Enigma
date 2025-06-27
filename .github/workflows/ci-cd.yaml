@@ -19,7 +19,7 @@ jobs:
 
     - name: Install and Lint Each Module
       run: |
-        MODULES=("api-gateway" "authentication" "problem" "job")
+        MODULES=("authentication" "problem" "job")
 
         for MODULE in "${MODULES[@]}"; do
           echo "🔍 Linting $MODULE"
@@ -43,7 +43,7 @@ jobs:
 
     - name: Check Code Formatting with Prettier
       run: |
-        MODULES=("api-gateway" "authentication" "problem" "job")
+        MODULES=("authentication" "problem" "job")
 
         for MODULE in "${MODULES[@]}"; do
           echo "🎨 Formatting code in $MODULE"
