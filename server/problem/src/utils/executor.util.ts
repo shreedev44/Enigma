@@ -3,6 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import { Language } from '@types'
 import { ContainerPool } from '@utils'
+import winstonLogger from '@loggers/winston.logger'
 
 const CODE_DIR = '/app/temp'
 const EXECUTION_TIMEOUT = 3000
@@ -40,6 +41,10 @@ export const executeCode = async (language: Language, code: string) => {
     cmd += `${execCommand} > /app/Main.out 2>&1`
 
     console.log(`Running command in container: ${cmd}`)
+    winstonLogger.info('Program execution', {
+        command: cmd,
+        language,
+    })
 
     let container: Docker.Container | null = null
     let pooledContainer = false
