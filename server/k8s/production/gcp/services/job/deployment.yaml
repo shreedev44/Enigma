@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: job-service
-          image: shreedev44/enigma-job:v1.0.2
+          image: shreedev44/enigma-job:v1.0.3
           ports:
             - containerPort: 3003
           envFrom:

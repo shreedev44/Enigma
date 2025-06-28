@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: authentication-service
-        image: shreedev44/enigma-authentication:v1.0.1
+        image: shreedev44/enigma-authentication:v1.0.2
         ports:
           - containerPort: 3001
         envFrom:

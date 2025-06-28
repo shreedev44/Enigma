@@ -20,7 +20,7 @@ spec:
           volumeMounts:
             - name: shared-temp
               mountPath: /app/temp
-          image: shreedev44/enigma-problem:v1.0.2
+          image: shreedev44/enigma-problem:v1.0.3
           ports:
             - containerPort: 3002
           envFrom:

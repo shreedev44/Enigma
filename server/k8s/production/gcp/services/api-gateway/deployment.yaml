@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: api-gateway
-          image: shreedev44/enigma-api-gateway:v1.0.1
+          image: shreedev44/enigma-api-gateway:v1.0.2
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
