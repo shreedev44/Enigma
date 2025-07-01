@@ -8,6 +8,6 @@ spec:
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
-  commonName: enigma.shreedev.space
+  commonName: enigma-api.shreedev.space
   dnsNames:
-    - enigma.shreedev.space
+    - enigma-api.shreedev.space

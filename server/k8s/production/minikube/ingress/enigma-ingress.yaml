@@ -12,10 +12,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - enigma.shreedev.space
+        - enigma-api.shreedev.space
       secretName: enigma-tls
   rules:
-    - host: enigma.shreedev.space
+    - host: enigma-api.shreedev.space
       http:
         paths:
           - path: /app/?(.*)
