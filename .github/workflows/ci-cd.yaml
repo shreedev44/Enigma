@@ -138,6 +138,7 @@ jobs:
         gcloud compute ssh ${{ secrets.GCE_INSTANCE_NAME }} \
           --zone=${{ secrets.GCE_ZONE }} \
           --project=${{ secrets.GCE_PROJECT }} \
+          --ssh-flag="-l" --ssh-flag="shreedev44" \
           --command="sudo chown -R \$USER:\$USER /home/shreedev44/enigma && \
           cd /home/shreedev44/enigma/server && \
           git config --global --add safe.directory /home/shreedev44/enigma && \
