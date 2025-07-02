@@ -4,7 +4,7 @@
 git pull origin main
 
 for MODULE in api-gateway authentication problem job notification; do
-    YAML="server/k8s/production/minikube/services/$MODULE/deployment.yaml"
+    YAML="k8s/production/minikube/services/$MODULE/deployment.yaml"
     if [ -f "$YAML" ]; then
     echo "📦 Applying $YAML"
     kubectl apply -f "$YAML"
