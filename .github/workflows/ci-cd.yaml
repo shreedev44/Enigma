@@ -53,16 +53,13 @@ jobs:
           cd ../..
         done
 
-  deploy:
+  build:
     needs: [lint, format]
     runs-on: ubuntu-latest
 
     env:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      GKE_PROJECT: ${{ secrets.GKE_PROJECT }}
-      GKE_CLUSTER: ${{ secrets.GKE_CLUSTER }}
-      GKE_ZONE: ${{ secrets.GKE_ZONE }}
 
     steps:
     - name: Checkout Code
@@ -90,6 +87,16 @@ jobs:
           fi
         done
 
+  deploy:
+    needs: [build]
+    runs-on: ubuntu-latest
+
+    env:
+      GKE_PROJECT: ${{ secrets.GKE_PROJECT }}
+      GKE_CLUSTER: ${{ secrets.GKE_CLUSTER }}
+      GKE_ZONE: ${{ secrets.GKE_ZONE }}
+
+    steps:
     - name: Install GCloud SDK
       uses: google-github-actions/setup-gcloud@v1
       with:
@@ -131,5 +138,5 @@ jobs:
         gcloud compute ssh ${{ secrets.GCE_INSTANCE_NAME }} \
           --zone=${{ secrets.GCE_ZONE }} \
           --project=${{ secrets.GCE_PROJECT }} \
-          --command="cd /home/shreedev44/enigma && ./scripts/deploy.sh \
+          --command="cd /home/shreedev44/enigma && ./scripts/deploy.sh" \
           --quiet
