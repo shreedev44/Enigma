@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #Pull latest deployment from remote repository
+echo "⬇️ Pulling from remote repository"
 git pull origin main
 
 for MODULE in api-gateway authentication problem job notification; do
