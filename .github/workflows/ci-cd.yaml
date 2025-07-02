@@ -135,7 +135,7 @@ jobs:
 
     - name: Deploy via SSH
       run: |
-        gcloud compute ssh ${{ secrets.GCE_INSTANCE_NAME }} \
+        gcloud compute ssh shreedev44@${{ secrets.GCE_INSTANCE_NAME }} \
           --zone=${{ secrets.GCE_ZONE }} \
           --project=${{ secrets.GCE_PROJECT }} \
           --ssh-flag="-l" --ssh-flag="shreedev44" \
