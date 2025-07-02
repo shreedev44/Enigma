@@ -138,7 +138,7 @@ jobs:
         gcloud compute ssh ${{ secrets.GCE_INSTANCE_NAME }} \
           --zone=${{ secrets.GCE_ZONE }} \
           --project=${{ secrets.GCE_PROJECT }} \
-          --command="sudo chown -R \$USER:\$USER /home/shreedev44/enigma \
+          --command="sudo chown -R \$USER:\$USER /home/shreedev44/enigma && \
           cd /home/shreedev44/enigma/server && \
           git config --global --add safe.directory /home/shreedev44/enigma && \
           git pull origin main && \
