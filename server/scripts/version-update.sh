@@ -81,13 +81,24 @@ for MODULE in "${MODULES[@]}"; do
 
     cd - > /dev/null
 
-    DEPLOY_PATH="server/k8s/production/gcp/services/$MODULE/deployment.yaml"
-    if [ -f "$DEPLOY_PATH" ]; then
-      echo "📦 Updating image tag in $DEPLOY_PATH"
-      sed -i -E "s|(image:\s*.*enigma-$MODULE:)(v?[0-9]+\.[0-9]+\.[0-9]+)|\1v$NEW_VERSION|" "$DEPLOY_PATH"
+    DEPLOY_PATH_GCP="server/k8s/production/gcp/services/$MODULE/deployment.yaml"
+    DEPLOY_PATH_MKB="server/k8s/production/minikube/services/$MODULE/deployment.yaml"
+    #Updating in gcp deployment
+    if [ -f "$DEPLOY_PATH_GCP" ]; then
+      echo "📦 Updating image tag in $DEPLOY_PATH_GCP"
+      sed -i -E "s|(image:\s*.*enigma-$MODULE:)(v?[0-9]+\.[0-9]+\.[0-9]+)|\1v$NEW_VERSION|" "$DEPLOY_PATH_GCP"
       echo "✅ Image tag updated in deployment file."
     else
-      echo "⚠️ Deployment file not found at $DEPLOY_PATH. Skipping image tag update."
+      echo "⚠️ Deployment file not found at $DEPLOY_PATH_GCP. Skipping image tag update."
+    fi
+
+    #Updating in minikube deployment
+    if [ -f "$DEPLOY_PATH_MKB" ]; then
+      echo "📦 Updating image tag in $DEPLOY_PATH_MKB"
+      sed -i -E "s|(image:\s*.*enigma-$MODULE:)(v?[0-9]+\.[0-9]+\.[0-9]+)|\1v$NEW_VERSION|" "$DEPLOY_PATH_MKB"
+      echo "✅ Image tag updated in deployment file."
+    else
+      echo "⚠️ Deployment file not found at $DEPLOY_PATH_MKB. Skipping image tag update."
     fi
   else
     echo "🟢 No changes detected in $MODULE. Skipping version update."

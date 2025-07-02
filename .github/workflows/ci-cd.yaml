@@ -110,18 +110,26 @@ jobs:
         gcloud config set project "${GKE_PROJECT}"
         gcloud auth list
 
-    - name: Get GKE Credentials
-      run: |
-        gcloud container clusters get-credentials "$GKE_CLUSTER" --region "$GKE_ZONE" --project "$GKE_PROJECT"
+    # - name: Get GKE Credentials
+    #   run: |
+    #     gcloud container clusters get-credentials "$GKE_CLUSTER" --region "$GKE_ZONE" --project "$GKE_PROJECT"
 
-    - name: Apply Kubernetes Deployments
+    # - name: Apply Kubernetes Deployments
+    #   run: |
+    #     for MODULE in api-gateway authentication problem job notification; do
+    #       YAML="server/k8s/production/gcp/services/$MODULE/deployment.yaml"
+    #       if [ -f "$YAML" ]; then
+    #         echo "📦 Applying $YAML"
+    #         kubectl apply -f "$YAML"
+    #       else
+    #         echo "❌ No deployment.yaml for $MODULE at $YAML"
+    #       fi
+    #     done
+
+    - name: Deploye via SSH
       run: |
-        for MODULE in api-gateway authentication problem job notification; do
-          YAML="server/k8s/production/gcp/services/$MODULE/deployment.yaml"
-          if [ -f "$YAML" ]; then
-            echo "📦 Applying $YAML"
-            kubectl apply -f "$YAML"
-          else
-            echo "❌ No deployment.yaml for $MODULE at $YAML"
-          fi
-        done
+        gcloud compute ssh ${{ secrets.GCE_INSTANCE_NAME }} \
+          --zone=${{ secrets.GCE_ZONE }} \
+          --project=${{ secrets.GCE_PROJECT }} \
+          --command="cd enigma && git pull origin main && kubectl apply -f server/k8s/production/minikube/services/ --recursive" \
+          --quiet
