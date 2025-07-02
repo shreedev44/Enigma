@@ -126,10 +126,10 @@ jobs:
     #       fi
     #     done
 
-    - name: Deploye via SSH
+    - name: Deploy via SSH
       run: |
         gcloud compute ssh ${{ secrets.GCE_INSTANCE_NAME }} \
           --zone=${{ secrets.GCE_ZONE }} \
           --project=${{ secrets.GCE_PROJECT }} \
-          --command="cd enigma && git pull origin main && kubectl apply -f server/k8s/production/minikube/services/ --recursive" \
+          --command="ls && cd enigma && git pull origin main && kubectl apply -f server/k8s/production/minikube/services/ --recursive" \
           --quiet
