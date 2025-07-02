@@ -131,5 +131,5 @@ jobs:
         gcloud compute ssh ${{ secrets.GCE_INSTANCE_NAME }} \
           --zone=${{ secrets.GCE_ZONE }} \
           --project=${{ secrets.GCE_PROJECT }} \
-          --command="ls && cd enigma && git pull origin main && kubectl apply -f server/k8s/production/minikube/services/ --recursive" \
+          --command="cd /home/shreedev44/enigma && ./scripts/deploy.sh \
           --quiet
