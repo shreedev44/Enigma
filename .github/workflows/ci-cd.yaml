@@ -138,5 +138,5 @@ jobs:
         gcloud compute ssh ${{ secrets.GCE_INSTANCE_NAME }} \
           --zone=${{ secrets.GCE_ZONE }} \
           --project=${{ secrets.GCE_PROJECT }} \
-          --command="cd /home/shreedev44/enigma/server && git pull origin main && ./scripts/deploy.sh" \
+          --command="cd /home/shreedev44/enigma/server && git config --global --add safe.directory "$(pwd)" && git pull origin main && ./scripts/deploy.sh" \
           --quiet
