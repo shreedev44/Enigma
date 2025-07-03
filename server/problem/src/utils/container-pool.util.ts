@@ -2,6 +2,7 @@
 import Docker from 'dockerode'
 import path from 'path'
 import fs from 'fs'
+import winstonLogger from '@loggers/winston.logger'
 
 const LANGUAGES = JSON.parse(fs.readFileSync(path.join(__dirname, '../constants/languages.constant.json'), 'utf8'))
 
@@ -15,6 +16,35 @@ export class ContainerPool {
     constructor(docker: Docker) {
         this.docker = docker
         this.initialze()
+
+        this.docker.getEvents(
+            {
+                filters: { type: ['container'] },
+            },
+            (err, stream) => {
+                if (err) {
+                    console.error('Error connecting to Docker events:', err)
+                    winstonLogger.error('Docker Error: ', { details: err })
+                    return
+                }
+
+                stream?.on('data', (chunk) => {
+                    const event = JSON.parse(chunk.toString())
+                    const [action, ...cmdParts] = event.Action.split(':')
+                    winstonLogger.info(`Container ${event.id} ${event.from}`, {
+                        details: {
+                            action: action.trim(),
+                            command: cmdParts.join(':').trim(),
+                            container_id: event.id,
+                            exec_id: event.Actor?.Attributes?.execID || null,
+                            image: event.Actor?.Attributes?.image || null,
+                            container_name: event.Actor?.Attributes?.name || null,
+                            status: event.status,
+                        },
+                    })
+                })
+            }
+        )
     }
 
     async initialze() {
